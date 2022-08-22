@@ -4,7 +4,7 @@ date: 2022-08-22 21:57:36
 tags:
 ---
 
-![ZooKeeper](../images/Apache_ZooKeeper_logo.svg)
+![ZooKeeper](/images/Apache_ZooKeeper_logo.svg)
 
 ## 客户端构造
 
