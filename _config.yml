@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 渺渺之身
-subtitle: ''
+title: 技术回忆录
+subtitle: '那些逝去的青春，终将被人遗忘'
 description: ''
 keywords: 运维
 author: 维苏威的血
 language: en
-timezone: ''
+timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://willmao.github.io/blog
+url: https://www.maoguangqing.site/blog/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -104,4 +104,11 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+- type: rsync
+  host: aliyun-web-01
+  user: root
+  root: /root/deploy/portal/portal/blog
+  port: 22
+  delete: true
+  verbose: true
+  ignore_errors: false
