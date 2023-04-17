@@ -107,7 +107,7 @@ deploy:
 - type: rsync
   host: aliyun-web-01
   user: root
-  root: /root/deploy/portal/portal/blog
+  root: /root/deploy/openwaf/portal/blog
   port: 22
   delete: true
   verbose: true
