@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha256-xejo6yLi6vGtAjcMIsY8BHdKsLg7QynVlFMzdQgUuy8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.maoguangqing.site","root":"/blog/","images":"/blog/images","scheme":"Muse","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/blog/js/config.js"></script>
+
+    <meta name="description" content="公司电商系统基本上都放在阿里云上，2022年经济情况极度恶化，公司对研发部进行了大规模裁员，剩下的十几个人确保系统可以运行即可。2023年不忙，我仔细研究了一下我们用到的阿里云产品的计费方案，对成本大的产品进行了优化，取得了一定的效果，下面会按阿里云产品来记录一下做了哪些优化。  ECSECS是我们成本中占比最大的一项，除了应用系统服务器和自建K8s基建服务器外，存在很多中间件服务器如Kafka">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里云降本增效">
+<meta property="og:url" content="https://www.maoguangqing.site/blog/2023/04/17/aliyun-cost-down/index.html">
+<meta property="og:site_name" content="技术回忆录">
+<meta property="og:description" content="公司电商系统基本上都放在阿里云上，2022年经济情况极度恶化，公司对研发部进行了大规模裁员，剩下的十几个人确保系统可以运行即可。2023年不忙，我仔细研究了一下我们用到的阿里云产品的计费方案，对成本大的产品进行了优化，取得了一定的效果，下面会按阿里云产品来记录一下做了哪些优化。  ECSECS是我们成本中占比最大的一项，除了应用系统服务器和自建K8s基建服务器外，存在很多中间件服务器如Kafka">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-04-17T22:45:25.000Z">
+<meta property="article:modified_time" content="2023-04-18T00:30:11.424Z">
+<meta property="article:author" content="维苏威的血">
+<meta property="article:tag" content="阿里云">
+<meta property="article:tag" content="降本增效">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.maoguangqing.site/blog/2023/04/17/aliyun-cost-down/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.maoguangqing.site/blog/2023/04/17/aliyun-cost-down/","path":"2023/04/17/aliyun-cost-down/","title":"阿里云降本增效"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>阿里云降本增效 | 技术回忆录</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">技术回忆录</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">那些逝去的青春，终将被人遗忘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ECS"><span class="nav-number">1.</span> <span class="nav-text">ECS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDS"><span class="nav-number">2.</span> <span class="nav-text">RDS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Datahub"><span class="nav-number">3.</span> <span class="nav-text">Datahub</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dataworks"><span class="nav-number">4.</span> <span class="nav-text">Dataworks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Max-Compute"><span class="nav-number">5.</span> <span class="nav-text">Max Compute</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">维苏威的血</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.maoguangqing.site/blog/2023/04/17/aliyun-cost-down/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="维苏威的血">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="阿里云降本增效 | 技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          阿里云降本增效
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-04-18 06:45:25 / Modified: 08:30:11" itemprop="dateCreated datePublished" datetime="2023-04-18T06:45:25+08:00">2023-04-18</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>公司电商系统基本上都放在阿里云上，2022年经济情况极度恶化，公司对研发部进行了大规模裁员，剩下的十几个人确保系统可以运行即可。2023年不忙，我仔细研究了一下我们用到的阿里云产品的计费方案，对成本大的产品进行了优化，取得了一定的效果，下面会按阿里云产品来记录一下做了哪些优化。</p>
+</blockquote>
+<h2 id="ECS"><a href="#ECS" class="headerlink" title="ECS"></a>ECS</h2><p>ECS是我们成本中占比最大的一项，除了应用系统服务器和自建K8s基建服务器外，存在很多中间件服务器如Kafka&#x2F;ES&#x2F;Hadoop集群。在业务扩张期间，为了降低被其他业务干扰和提升系统稳定性，业务方都想独占一套集群，这也埋下了高成本的种子。</p>
+<p>这么做主要有以下缺点：</p>
+<ul>
+<li>资源利用率低 有的ES里只有一两个索引，一天的绝大部分时间都不忙</li>
+<li>费用成本大 费用不光是服务器本身的费用，阿里云安全中心是按服务器数量付费的，服务器越多费用越大</li>
+<li>运维成本大 运维需要搭建更多的集群，需要更多的监控指标、报警规则和应用系统配置</li>
+</ul>
+<p>以下是一些ECS配置的建议：</p>
+<ul>
+<li>应用服务器满足性能要求的情况下尽量选择高配服务器 减少服务器数量可以减少磁盘&#x2F;备份和云安全中心等方面的费用</li>
+<li>满足性能要求的情况下尽量复用集群 业务初期代码不稳定的时候可以升级集群来提升稳定性，代码优化之后稳定了还能降配来缩减成本</li>
+<li>测试环境可以考虑使用突发性能实例 测试环境大部分都不忙，突发实力基本可以满足要求，积分一般都用不完</li>
+</ul>
+<h2 id="RDS"><a href="#RDS" class="headerlink" title="RDS"></a>RDS</h2><p>RDS在我们应用系统费用中占比第二，业务扩张期间因为出现过部分关键服务数据库被打爆了，所以进行了大规模拆库，将业务库分拆到多个RDS实例上。</p>
+<p>这么做有如下缺点：</p>
+<ul>
+<li>资源利用率低 有的RDS上的数据只有几个GB，读写也不频繁，数据库放大大实例上也不会带来很大的使用率提升</li>
+<li>费用成本大 线上系统为了保证可靠性都是高可用版本，而且还配置了只读实例，为了满足审计要求还要开启14天备份和180天全量SQL审计功能</li>
+<li>大数据相关配置更多、费用更高 大数据计算不能影响业务实例，所以用DTS同步数据到数仓里，DTS一个实例只能从同步一个RDS实例，最低费用一个月1700块</li>
+<li>运维成本更大 运维需要配置更多的连接字符串、数据库用户和权限</li>
+</ul>
+<p>以下是一些RDS配置的建议：</p>
+<ul>
+<li>综合考虑性能和成本，非核心系统尽量放一个大实例上，核心系统为了保障可靠性可以单独配置实例</li>
+<li>关注RDS实例磁盘利用率，RDS使用的是SSD磁盘，费用高，一般保证可用空间比最大表大就可以了，就可以满足大表DDL操作</li>
+<li>DTS实时同步成本高，可以考虑从只读实例离线抽取数据</li>
+</ul>
+<h2 id="Datahub"><a href="#Datahub" class="headerlink" title="Datahub"></a>Datahub</h2><p>Datahub的成本主要在于存储成本和shard租用费用，单个shard最大写入数据5MB&#x2F;s，每个shard每天租用费用0.04元，满足性能要求的情况下尽可能降低shard数量，利用率低的shard可以考虑用api合并shard来减少shard</p>
+<h2 id="Dataworks"><a href="#Dataworks" class="headerlink" title="Dataworks"></a>Dataworks</h2><p>Dataworks成本主要在于公共调度资源组费用，阿里云公共调度资源组和数据集成资源组只是用来做测试，不提供SLA。</p>
+<p>阿里云公共调度资源组阶梯收费：</p>
+<ul>
+<li>0到10个任务免费</li>
+<li>11到500个任务每天0.99元</li>
+<li>501到5000个任务每天60元</li>
+<li>5001到20000个任务每天150元</li>
+</ul>
+<p>独享资源组4核8G每个月492元，调度并发16个，完全可以调度数千个任务，如果每天任务数超过500则使用独享调度资源组更划算。</p>
+<ul>
+<li>任务应该尽可能的快，这样调度吞吐量更大</li>
+<li>任务应该合理错峰运行</li>
+<li>独享数据集成资源组同步任务并发应该根据表的数据量来合理配置，小表一个并发就行了，这样线程干活的时间占比才更多</li>
+</ul>
+<h2 id="Max-Compute"><a href="#Max-Compute" class="headerlink" title="Max Compute"></a>Max Compute</h2><p>Max Compute主要费用为数据存储费用和任务执行费用，主要有以下建议：</p>
+<ul>
+<li>合理设置分区表的生命周期，有些数仓数据不需要永久保存，永久存储浪费存储费用</li>
+<li>定期检查ODPS SQL中耗时的SQL并进行优化，SQL计费主要是扫描的数量量，查询要合理剪枝，减少数据扫描量</li>
+<li>独享CU最低也要50个CU，一个月7500元，所以除非任务实效性要求特别高或者平时任务就很多，否则按量计费更划算</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" rel="tag"># 阿里云</a>
+              <a href="/blog/tags/%E9%99%8D%E6%9C%AC%E5%A2%9E%E6%95%88/" rel="tag"># 降本增效</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/2022/08/23/zookeeper-recipes/" rel="prev" title="zookeeper常用场景">
+                  <i class="fa fa-chevron-left"></i> zookeeper常用场景
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备2023007354号-1 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">维苏威的血</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/motion.js"></script><script src="/blog/js/schemes/muse.js"></script><script src="/blog/js/next-boot.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"version":"7.1.2","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.3/mermaid.min.js","integrity":"sha256-TIYL00Rhw/8WaoUhYTLX9SKIEFdXxg+yMWSLVUbhiLg="}}</script>
+  <script src="/blog/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
