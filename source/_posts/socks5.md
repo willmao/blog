@@ -4,7 +4,7 @@ date: 2023-10-11 17:16:10
 tags:
 ---
 
-![SOCKS5](../images/SOCKS5_logo.jpg)
+![SOCKS5](/images/SOCKS5_logo.jpg)
 
 SOCKS5协议是一种网络传输协议，主要用于客户端和外网服务器之间通讯的传递。比如公司的防火墙拒绝客户端直接访问外网，而允许SOCKS5服务器访问，那客户端就可以通过将请求先发送给SOCKS5服务器，
 让它代替客户端发送请求并把响应返回给客户端，以达到穿透防火墙的效果。
@@ -96,7 +96,7 @@ REP中0x00为成功，还有表示错误的其他状态码
 
 由此可见，SOCKS5协议比较简单，对转发的内容也不进行加密。
 
-![SOCKS5 CROSS FIREWALL](../images/SOCKS5_demo.jpg)
+![SOCKS5 CROSS FIREWALL](/images/SOCKS5_demo.jpg)
 
 # Lua实现SOCKS5服务器
 
