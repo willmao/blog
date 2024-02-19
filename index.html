@@ -118,12 +118,12 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/blog/archives/">
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -152,6 +152,88 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.maoguangqing.site/blog/2024/02/19/get-client-ip/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="维苏威的血">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/blog/2024/02/19/get-client-ip/" class="post-title-link" itemprop="url">代理获取客户端真实IP</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2024-02-19 14:15:37 / Modified: 14:29:35" itemprop="dateCreated datePublished" datetime="2024-02-19T14:15:37+08:00">2024-02-19</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>应用程序部署时一般都会部署在高性能代理服务器后面，如HAProxy和Nginx，由这些代理服务器统一处理TLS握手、IP校验等工作。如何获取客户端真实IP是一个常见的问题，本文将简要叙述如何在HAProxy中获取客户端真实IP地址。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>常见应用程序部署结构如下：</p>
+<p>client &#x3D;&gt; [proxy1 &#x3D;&gt; proxy2 &#x3D;&gt; proxy3 &#x3D;&gt;] HAProxy</p>
+<p>因为客户端到HAProxy之间可能存在若干个代理服务器，所以按照如下方法获取客户端IP，</p>
+<ul>
+<li>如果客户端和服务器之间不存在代理服务器，直接用客户端IP作为真实IP</li>
+<li>如果客户端和服务器之间存在代理服务器，从X-FORWARDED-FOR头中获取我们信任的最远的代理服务器（从后向前推）客户端IP作为真实IP</li>
+</ul>
+<p>从X-FORWARDED-FOR头中提取真实IP时，一定要验证直接连接到HAProxy的客户端IP，因为非信任代理可以随意HTTP头。也要相信了解各个中间代理对HTTP头</p>
+<p>的修改行为。</p>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>以部署在阿里云环境中的一个应用系统为例，流量请求流程如下：</p>
+<p>client &#x3D;&gt; waf &#x3D;&gt; slb &#x3D;&gt; HAProxy &#x3D;&gt; application</p>
+<p>因为waf和slb都会自动在请求头X-FORWARDED-FOR中添加客户端IP，所以我们可以通过如下HAPROXY规则获取客户端真实IP并保存到X-REAL-IP头中并打印到日志中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 阿里云slb地址范围为100.64.0.0/10</span><br><span class="line">acl from_slb src 100.64.0.0/10</span><br><span class="line"># /usr/local/etc/haproxy/waf_ip.list文件中包含waf回源IP地址列表</span><br><span class="line">acl from_waf req.hdr_ip(X-Forwarded-For,-1) -f /usr/local/etc/haproxy/waf_ip.list</span><br><span class="line">http-request set-header X-Real-IP %[req.hdr(X-Forwarded-For,-2)] if from_slb from_waf</span><br><span class="line">http-request set-header X-Real-IP %[req.hdr(X-Forwarded-For,-1)] if from_slb !from_waf</span><br><span class="line">http-request set-header X-Real-IP %[src] if !from_slb</span><br><span class="line">http-request capture hdr(X-Real-IP) len 15</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -197,7 +279,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-12 14:37:28" itemprop="dateModified" datetime="2023-10-12T14:37:28+08:00">2023-10-12</time>
+      <time title="Modified: 2024-02-19 14:29:35" itemprop="dateModified" datetime="2024-02-19T14:29:35+08:00">2024-02-19</time>
     </span>
 
   
@@ -456,7 +538,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-12 14:37:28" itemprop="dateModified" datetime="2023-10-12T14:37:28+08:00">2023-10-12</time>
+      <time title="Modified: 2024-02-19 14:29:35" itemprop="dateModified" datetime="2024-02-19T14:29:35+08:00">2024-02-19</time>
     </span>
 
   
@@ -582,7 +664,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-12 14:37:28" itemprop="dateModified" datetime="2023-10-12T14:37:28+08:00">2023-10-12</time>
+      <time title="Modified: 2024-02-19 14:29:35" itemprop="dateModified" datetime="2024-02-19T14:29:35+08:00">2024-02-19</time>
     </span>
 
   
@@ -672,7 +754,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-12 14:37:28" itemprop="dateModified" datetime="2023-10-12T14:37:28+08:00">2023-10-12</time>
+      <time title="Modified: 2024-02-19 14:29:35" itemprop="dateModified" datetime="2024-02-19T14:29:35+08:00">2024-02-19</time>
     </span>
 
   
@@ -771,7 +853,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-12 14:37:28" itemprop="dateModified" datetime="2023-10-12T14:37:28+08:00">2023-10-12</time>
+      <time title="Modified: 2024-02-19 14:29:35" itemprop="dateModified" datetime="2024-02-19T14:29:35+08:00">2024-02-19</time>
     </span>
 
   
@@ -907,7 +989,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
