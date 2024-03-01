@@ -105,9 +105,9 @@ theme: next
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
 - type: rsync
-  host: aliyun-web-01
-  user: root
-  root: /root/deploy/openwaf/portal/blog
+  host: aliyun-web-02
+  user: devops
+  root: /data/portal/blog
   port: 22
   delete: true
   verbose: true
