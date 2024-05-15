@@ -20,9 +20,7 @@ client => [proxy1 => proxy2 => proxy3 =>] HAProxy
 - 如果客户端和服务器之间不存在代理服务器，直接用客户端IP作为真实IP
 - 如果客户端和服务器之间存在代理服务器，从X-FORWARDED-FOR头中获取我们信任的最远的代理服务器（从后向前推）客户端IP作为真实IP
 
-从X-FORWARDED-FOR头中提取真实IP时，一定要验证直接连接到HAProxy的客户端IP，因为非信任代理可以随意HTTP头。也要相信了解各个中间代理对HTTP头
-
-的修改行为。
+从X-FORWARDED-FOR头中提取真实IP时，一定要验证直接连接到HAProxy的客户端IP，因为非信任代理可以随意设置HTTP头，同时也要了解各个中间代理对HTTP头的修改行为。
 
 ## 案例
 
