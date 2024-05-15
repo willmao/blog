@@ -7,8 +7,7 @@ tags:
 - ssh dynamic port forwarding
 ---
 
-ssh是服务器管理中常用的一种远程工具，它可以在不安全的链路上提供一定程度的安全访问。它背后是建立在The Secure Shell Protocol上的，ssh协议主要包含Transport、Authentication和Connection三个子RFC构成。因为ssh协议比较普及，而且它提供了一定的安全访问链路，
-所以ssh协议也常被用来穿透网络。本文主要介绍ssh协议中的端口转发功能并重点介绍动态端口转发的实现方式。
+ssh是服务器管理中常用的一种远程工具，它可以在不安全的链路上提供一定程度的安全访问。它是建立在The Secure Shell Protocol上的，ssh协议主要包含Transport、Authentication和Connection三个子RFC。因为ssh协议比较普及，而且它提供了一定的安全访问链路，所以ssh协议也常被用来穿透网络。本文主要介绍ssh协议中的端口转发功能并重点介绍动态端口转发的实现方式。
 
 
 ## ssh转发方式
@@ -169,6 +168,6 @@ func sshProxy(l net.Listener, config *ssh.ServerConfig, done chan bool) {
 }
 ```
 
-上述代码实现了一个ssh代理服务器中一个小需求，即如果服务器上有多个网卡有公网IP，则ssh流量从哪个网卡进入，就通过哪个网卡转发。上述代码通过判断ssh连接连接到ssh服务器的本机IP（即网卡地址）来使用其对应的地址来建立代理连接。这样可以让一个代理服务器拥有多个公网IP，减少服务器成本，毕竟代理服务器的负载很低。
+上述代码实现了一个ssh代理服务器中一个常见的小需求，即如果服务器上有多个网卡有公网IP，则希望ssh流量从哪个网卡进入，就通过哪个网卡转发。上述代码通过判断ssh连接连接到ssh服务器的本机IP（即网卡地址）来使用其对应的地址来建立代理连接。这样可以让一个代理服务器拥有多个公网IP，减少服务器成本，毕竟代理服务器的负载很低。
 
-这个需求也可以根据用户ID来修改路由表实现，参考: https://superuser.com/questions/1585398/how-can-i-configure-the-source-ip-to-use-for-ssh-dynamic-forwards
+这个需求也可以根据用户ID来修改路由表实现，参考: [Per-UID routing](https://superuser.com/questions/1585398/how-can-i-configure-the-source-ip-to-use-for-ssh-dynamic-forwards)
