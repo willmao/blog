@@ -180,7 +180,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2024-05-15 22:06:06 / Modified: 23:23:33" itemprop="dateCreated datePublished" datetime="2024-05-15T22:06:06+08:00">2024-05-15</time>
+      <time title="Created: 2024-05-15 22:06:06 / Modified: 23:26:07" itemprop="dateCreated datePublished" datetime="2024-05-15T22:06:06+08:00">2024-05-15</time>
     </span>
 
   
@@ -273,7 +273,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-15 23:23:33" itemprop="dateModified" datetime="2024-05-15T23:23:33+08:00">2024-05-15</time>
+      <time title="Modified: 2024-05-15 23:26:07" itemprop="dateModified" datetime="2024-05-15T23:26:07+08:00">2024-05-15</time>
     </span>
 
   
@@ -294,8 +294,7 @@
 <li>如果客户端和服务器之间不存在代理服务器，直接用客户端IP作为真实IP</li>
 <li>如果客户端和服务器之间存在代理服务器，从X-FORWARDED-FOR头中获取我们信任的最远的代理服务器（从后向前推）客户端IP作为真实IP</li>
 </ul>
-<p>从X-FORWARDED-FOR头中提取真实IP时，一定要验证直接连接到HAProxy的客户端IP，因为非信任代理可以随意HTTP头。也要相信了解各个中间代理对HTTP头</p>
-<p>的修改行为。</p>
+<p>从X-FORWARDED-FOR头中提取真实IP时，一定要验证直接连接到HAProxy的客户端IP，因为非信任代理可以随意设置HTTP头，同时也要了解各个中间代理对HTTP头的修改行为。</p>
 <h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>以部署在阿里云环境中的一个应用系统为例，流量请求流程如下：</p>
 <p>client &#x3D;&gt; waf &#x3D;&gt; slb &#x3D;&gt; HAProxy &#x3D;&gt; application</p>
 <p>因为waf和slb都会自动在请求头X-FORWARDED-FOR中添加客户端IP，所以我们可以通过如下HAPROXY规则获取客户端真实IP并保存到X-REAL-IP头中并打印到日志中。</p>
@@ -361,7 +360,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-15 23:23:33" itemprop="dateModified" datetime="2024-05-15T23:23:33+08:00">2024-05-15</time>
+      <time title="Modified: 2024-05-15 23:26:07" itemprop="dateModified" datetime="2024-05-15T23:26:07+08:00">2024-05-15</time>
     </span>
 
   
@@ -619,7 +618,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-15 23:23:33" itemprop="dateModified" datetime="2024-05-15T23:23:33+08:00">2024-05-15</time>
+      <time title="Modified: 2024-05-15 23:26:07" itemprop="dateModified" datetime="2024-05-15T23:26:07+08:00">2024-05-15</time>
     </span>
 
   
@@ -745,7 +744,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-15 23:23:33" itemprop="dateModified" datetime="2024-05-15T23:23:33+08:00">2024-05-15</time>
+      <time title="Modified: 2024-05-15 23:26:07" itemprop="dateModified" datetime="2024-05-15T23:26:07+08:00">2024-05-15</time>
     </span>
 
   
@@ -835,7 +834,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-15 23:23:33" itemprop="dateModified" datetime="2024-05-15T23:23:33+08:00">2024-05-15</time>
+      <time title="Modified: 2024-05-15 23:26:07" itemprop="dateModified" datetime="2024-05-15T23:26:07+08:00">2024-05-15</time>
     </span>
 
   
@@ -934,7 +933,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-15 23:23:33" itemprop="dateModified" datetime="2024-05-15T23:23:33+08:00">2024-05-15</time>
+      <time title="Modified: 2024-05-15 23:26:07" itemprop="dateModified" datetime="2024-05-15T23:26:07+08:00">2024-05-15</time>
     </span>
 
   
