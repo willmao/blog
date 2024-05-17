@@ -119,13 +119,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/blog/archives/">
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/blog/tags/">
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -142,6 +142,104 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.maoguangqing.site/blog/2024/05/17/hls-disguise/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="维苏威的血">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/blog/2024/05/17/hls-disguise/" class="post-title-link" itemprop="url">HLS文件生成与伪造</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2024-05-17 14:08:36 / Modified: 16:16:40" itemprop="dateCreated datePublished" datetime="2024-05-17T14:08:36+08:00">2024-05-17</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>HLS(HTTP Live Streaming)是视频点播和直播应用很普遍的技术，2022年发生过服务器被灰产上传大量伪造的PNG格式的图片，图片实际内容包含了HLS视频流TS文件。这样盗版网站就可以用我们服务器的流量来做他们的盗版业务，真是无本万利。最近研究了一下为啥图片内容被修改播放器还能播放的问题。</p>
+</blockquote>
+<h2 id="HLS文件格式"><a href="#HLS文件格式" class="headerlink" title="HLS文件格式"></a>HLS文件格式</h2><p>HLS通过把视频内容拆分成多个小文件来避免传统的MP4格式文件头很大、首次加载很慢的问题。HLS包含两种文件，一个是视频索引文件m3u8，可以分多级索引，二级索引可以包含不同码率的TS（Transport Stream）文件。</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/162947124">HLS的M3U8文件介绍</a></p>
+<p>使用ffmpeg可以很方便的将视频文件生成HLS需要的m3u8索引文件和TS文件，命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将video.mp4的前一分钟视频拆分，大概每5秒一个文件</span></span><br><span class="line">ffmpeg -i data/video.mp4 -to 00:01:00 \</span><br><span class="line">    -c:v copy -c:a copy -f segment \</span><br><span class="line">    -segment_time 5 -map 0 \</span><br><span class="line">    -segment_list video.m3u8 \</span><br><span class="line">    video_%03d.ts</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件伪装"><a href="#文件伪装" class="headerlink" title="文件伪装"></a>文件伪装</h2><p>灰产往往将TS文件伪装成正常的图片文件（PNG&#x2F;JPG），然后寻找互联网上各种系统的上传漏洞，将这些TS文件上传上去，制作一个成对应的m3u8索引文件。高端一点的还会把m3u8文件也上传到另一些公司的系统里，盗版视频网站通过这些m3u8地址提供盗版视频的播放，当然用的是受害公司的服务器或者CDN流量，简直不要太坏！</p>
+<p>一般来说直接将TS文件追加到图片文件之后就可以让很多软件正常打开图片了，或者将TS数据伪装成正常图片数据块应该也可以做到。</p>
+<p>参考：<a href="./image-formats-and-disguise.md">浅谈图片格式</a></p>
+<h2 id="视频播放"><a href="#视频播放" class="headerlink" title="视频播放"></a>视频播放</h2><p>我来一直很奇怪为啥被篡改的PNG&#x2F;JPG在视频播放器里可以正常解码播放视频，看了HLS播放器<a target="_blank" rel="noopener" href="https://github.com/video-dev/hls.js">hls.js</a>的源代码并进行DEBUG之后稍微了解了一点。</p>
+<p>TS文件流中包含一个Segment，每个段包含若干个Packet，每个Packet以0x47开始，长度为188个字节，一般来说Segment中的前两个包是两种固定格式的包，分别为PAT和PMT，所以hls.js在读取TS视频流进行解码时，会将读取指针seek到Segment起始位置，忽略掉前面的数据。寻找Segment起始地址的主要判断条件是<code>data[i] == 0x47 &amp;&amp; data[i + 188] == 0x47</code>。</p>
+<p>详情见源码: </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/video-dev/hls.js/blob/master/src/demux/tsdemuxer.ts#L97">hls.js SeekOffset</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/video-dev/hls.js/blob/master/src/demux/tsdemuxer.ts#L259">hls.js</a></li>
+</ul>
+<p>从上面的代码可以看出，如果图片原始的数据中相隔188字节出现0x47的话，很容易让hls.js认为发现了Segment，而如果其后面的数据不是连续的Packet则会返回-1，相当于没有找到，解码的时候就会从0开始，这种情况解码的时候就会出现错误。</p>
+<p>所以并不是任意的图片都可以用来伪造TS文件，有几个办法来规避这个问题：</p>
+<ul>
+<li>图片尺寸尽量小，比如1X1，如果图片大小小于188字节，则根本不会出现间隔188字节出现两个0x47</li>
+<li>手动消除掉图片中的0x47值，如果图片不压缩，可以手动把图片像素中值中的0x47给替换掉，然后重新编码生成新图片</li>
+</ul>
+<p>在测试hls.js的时候，发现小图片比较容易正常工作，大图片会导致Chrome浏览器的一些appendBuffer操作失败，具体原因还不知道，或许图片数据没有被完全跳过导致的。</p>
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/6919464519387332616">HLS M3U8 TS</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -181,7 +279,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2024-05-17 11:06:03 / Modified: 14:04:38" itemprop="dateCreated datePublished" datetime="2024-05-17T11:06:03+08:00">2024-05-17</time>
+      <time title="Created: 2024-05-17 11:06:03 / Modified: 16:16:40" itemprop="dateCreated datePublished" datetime="2024-05-17T11:06:03+08:00">2024-05-17</time>
     </span>
 
   
@@ -310,7 +408,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-17 14:04:38" itemprop="dateModified" datetime="2024-05-17T14:04:38+08:00">2024-05-17</time>
+      <time title="Modified: 2024-05-17 16:16:40" itemprop="dateModified" datetime="2024-05-17T16:16:40+08:00">2024-05-17</time>
     </span>
 
   
@@ -342,93 +440,6 @@
 <p>上述代码实现了一个ssh代理服务器中一个常见的小需求，即如果服务器上有多个网卡有公网IP，则希望ssh流量从哪个网卡进入，就通过哪个网卡转发。上述代码通过判断ssh连接连接到ssh服务器的本机IP（即网卡地址）来使用其对应的地址来建立代理连接。这样可以让一个代理服务器拥有多个公网IP，减少服务器成本，毕竟代理服务器的负载很低。</p>
 <p>这个需求也可以根据用户ID来修改路由表实现，参考: <a target="_blank" rel="noopener" href="https://superuser.com/questions/1585398/how-can-i-configure-the-source-ip-to-use-for-ssh-dynamic-forwards">Per-UID routing</a></p>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://www.maoguangqing.site/blog/2024/02/19/get-client-ip/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.jpg">
-      <meta itemprop="name" content="维苏威的血">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="技术回忆录">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 技术回忆录">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2024/02/19/get-client-ip/" class="post-title-link" itemprop="url">HaProxy获取客户端真实IP</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2024-02-19 14:15:37" itemprop="dateCreated datePublished" datetime="2024-02-19T14:15:37+08:00">2024-02-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-17 14:04:38" itemprop="dateModified" datetime="2024-05-17T14:04:38+08:00">2024-05-17</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>应用程序部署时一般都会部署在高性能代理服务器后面，如HAProxy和Nginx，由这些代理服务器统一处理TLS握手、IP校验等工作。如何获取客户端真实IP是一个常见的问题，本文将简要叙述如何在HAProxy中获取客户端真实IP地址。</p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>常见应用程序部署结构如下：</p>
-<p>client &#x3D;&gt; [proxy1 &#x3D;&gt; proxy2 &#x3D;&gt; proxy3 &#x3D;&gt;] HAProxy</p>
-<p>因为客户端到HAProxy之间可能存在若干个代理服务器，所以按照如下方法获取客户端IP，</p>
-<ul>
-<li>如果客户端和服务器之间不存在代理服务器，直接用客户端IP作为真实IP</li>
-<li>如果客户端和服务器之间存在代理服务器，从X-FORWARDED-FOR头中获取我们信任的最远的代理服务器（从后向前推）客户端IP作为真实IP</li>
-</ul>
-<p>从X-FORWARDED-FOR头中提取真实IP时，一定要验证直接连接到HAProxy的客户端IP，因为非信任代理可以随意设置HTTP头，同时也要了解各个中间代理对HTTP头的修改行为。</p>
-<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>以部署在阿里云环境中的一个应用系统为例，流量请求流程如下：</p>
-<p>client &#x3D;&gt; waf &#x3D;&gt; slb &#x3D;&gt; HAProxy &#x3D;&gt; application</p>
-<p>因为waf和slb都会自动在请求头X-FORWARDED-FOR中添加客户端IP，所以我们可以通过如下HAPROXY规则获取客户端真实IP并保存到X-REAL-IP头中并打印到日志中。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 阿里云slb地址范围为100.64.0.0/10</span><br><span class="line">acl from_slb src 100.64.0.0/10</span><br><span class="line"># /usr/local/etc/haproxy/waf_ip.list文件中包含waf回源IP地址列表</span><br><span class="line">acl from_waf req.hdr_ip(X-Forwarded-For,-1) -f /usr/local/etc/haproxy/waf_ip.list</span><br><span class="line">http-request set-header X-Real-IP %[req.hdr(X-Forwarded-For,-2)] if from_slb from_waf</span><br><span class="line">http-request set-header X-Real-IP %[req.hdr(X-Forwarded-For,-1)] if from_slb !from_waf</span><br><span class="line">http-request set-header X-Real-IP %[src] if !from_slb</span><br><span class="line">http-request capture hdr(X-Real-IP) len 15</span><br></pre></td></tr></table></figure>
       
     </div>
 
