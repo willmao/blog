@@ -27,7 +27,7 @@
 <meta property="og:description" content="2022年服务器中被上传了不少恶意伪装的图片，虽然文件看起来是1x1的PNG格式图片并且浏览器里也能正常显示，但是这些文件大小却从数百KB到数MB不等。分析访问日志后发现这些图片其实是伪造的，其内部包含了MPEG-2格式的视频片段。最近又遇到了类似情况，索性研究一下各种图片格式的编码结构。  图片基本概念颜色深度 位图中用于表示每一个像素的颜色所用的二进制比特位数，常用单位为位&#x2F;像素（">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-05-17T03:06:03.000Z">
-<meta property="article:modified_time" content="2024-05-17T05:50:25.454Z">
+<meta property="article:modified_time" content="2024-05-17T05:51:41.669Z">
 <meta property="article:author" content="维苏威的血">
 <meta property="article:tag" content="Image Formats">
 <meta property="article:tag" content="Image Disguise">
@@ -190,7 +190,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2024-05-17 11:06:03 / Modified: 13:50:25" itemprop="dateCreated datePublished" datetime="2024-05-17T11:06:03+08:00">2024-05-17</time>
+      <time title="Created: 2024-05-17 11:06:03 / Modified: 13:51:41" itemprop="dateCreated datePublished" datetime="2024-05-17T11:06:03+08:00">2024-05-17</time>
     </span>
 
   
@@ -222,7 +222,6 @@
 <li>GIF</li>
 <li>BMP</li>
 </ul>
-<p>下面将逐个介绍各个视频格式的简要编码方法及其伪造方法。</p>
 <h3 id="JPEG"><a href="#JPEG" class="headerlink" title="JPEG"></a>JPEG</h3><p>由联合图像专家小组(Joint Photographic Experts Group)开发的一种有损压缩的图片格式，文件名常见后缀<code>.jpeg</code>和<code>.jpg</code>。它将RGB格式的颜色转换成YUV（亮度、色调和饱和度）格式的色彩空间，因为人眼对亮度变化的敏感度比颜色变化要高，所以YUV三个分量可以按照不同比例进行抽样，UV可以采用更低的抽样比例，从而达到压缩图片的效果。</p>
 <p>JPEG适合颜色平滑变化的图片，因为这中情况下在保证图片质量的情况下，可以大幅度压缩。它不适合线条绘图，容易导致图片失真。</p>
 <p>在微信中发送图片，如果不选择原图发送，则默认微信会使用JPEG格式发送，会导致图片被压缩而失真。</p>
