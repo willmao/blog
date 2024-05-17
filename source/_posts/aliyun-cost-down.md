@@ -2,6 +2,8 @@
 title: 阿里云降本增效
 date: 2023-04-18 06:45:25
 tags:
+- Alibaba Cloud
+- FinOps
 - 阿里云
 - 降本增效
 ---

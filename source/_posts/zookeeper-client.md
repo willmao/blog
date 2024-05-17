@@ -2,6 +2,8 @@
 title: ZooKeeper客户端基本使用
 date: 2022-08-22 21:57:36
 tags:
+- Software
+- Zookeeper
 ---
 
 ![ZooKeeper](/images/Apache_ZooKeeper_logo.svg)

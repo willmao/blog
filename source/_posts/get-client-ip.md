@@ -1,10 +1,10 @@
 ---
-title: 代理获取客户端真实IP
+title: HaProxy获取客户端真实IP
 date: 2024-02-19 14:15:37
 tags:
+- Network
+- HTTP
 - HAProxy
-- 代理
-- 客户端真实IP
 ---
 
 应用程序部署时一般都会部署在高性能代理服务器后面，如HAProxy和Nginx，由这些代理服务器统一处理TLS握手、IP校验等工作。如何获取客户端真实IP是一个常见的问题，本文将简要叙述如何在HAProxy中获取客户端真实IP地址。

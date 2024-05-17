@@ -2,6 +2,8 @@
 title: zookeeper常用场景
 date: 2022-08-23 21:08:54
 tags:
+- Software
+- Zookeeper
 ---
 
 ## 同步屏障Barrier
