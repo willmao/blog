@@ -119,12 +119,12 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/blog/archives/">
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -141,6 +141,128 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.maoguangqing.site/blog/2024/05/17/image-formats-and-disguise/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="维苏威的血">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/blog/2024/05/17/image-formats-and-disguise/" class="post-title-link" itemprop="url">浅谈图片格式</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2024-05-17 11:06:03 / Modified: 13:44:49" itemprop="dateCreated datePublished" datetime="2024-05-17T11:06:03+08:00">2024-05-17</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>2022年服务器中被上传了不少恶意伪装的图片，虽然文件看起来是1x1的PNG格式图片并且浏览器里也能正常显示，但是这些文件大小却从数百KB到数MB不等。分析访问日志后发现这些图片其实是伪造的，其内部包含了MPEG-2格式的视频片段。最近又遇到了类似情况，索性研究一下各种图片格式的编码结构。</p>
+</blockquote>
+<h2 id="图片基本概念"><a href="#图片基本概念" class="headerlink" title="图片基本概念"></a>图片基本概念</h2><h3 id="颜色深度"><a href="#颜色深度" class="headerlink" title="颜色深度"></a>颜色深度</h3><p>位图中用于表示每一个像素的颜色所用的二进制比特位数，常用单位为位&#x2F;像素（bpp）。颜色深度越高，可用色彩越多。常见的有以下几种：</p>
+<ul>
+<li>1位 2中颜色，黑白两色</li>
+<li>8位 256中颜色，其中特殊情况为灰阶图像，RGB三个颜色相同，如（200，200，200）</li>
+<li>24位 16777216种颜色，超过人眼能识别的颜色种类，所以又叫真彩色</li>
+<li>32位 基于24，增加8位支持Alpha通道，支持图像透明显示</li>
+</ul>
+<h3 id="颜色亮度"><a href="#颜色亮度" class="headerlink" title="颜色亮度"></a>颜色亮度</h3><p>表示人眼对发光体或被照射物体表面的发光或反射光强度实际感受的物理量, 单位烛光每平方米（cd&#x2F;m2），旧称尼特（nit）</p>
+<h2 id="常见图片格式"><a href="#常见图片格式" class="headerlink" title="常见图片格式"></a>常见图片格式</h2><p>目前，我们常见的图片格式主要有以下几种：</p>
+<ul>
+<li>JPEG</li>
+<li>PNG</li>
+<li>GIF</li>
+<li>BMP</li>
+</ul>
+<p>下面将逐个介绍各个视频格式的简要编码方法及其伪造方法。</p>
+<h2 id="JPEG"><a href="#JPEG" class="headerlink" title="JPEG"></a>JPEG</h2><p>由联合图像专家小组(Joint Photographic Experts Group)开发的一种有损压缩的图片格式，文件名常见后缀<code>.jpeg</code>和<code>.jpg</code>。它将RGB格式的颜色转换成YUV（亮度、色调和饱和度）格式的色彩空间，因为人眼对亮度变化的敏感度比颜色变化要高，所以YUV三个分量可以按照不同比例进行抽样，UV可以采用更低的抽样比例，从而达到压缩图片的效果。</p>
+<p>JPEG适合颜色平滑变化的图片，因为这中情况下在保证图片质量的情况下，可以大幅度压缩。它不适合线条绘图，容易导致图片失真。</p>
+<p>在微信中发送图片，如果不选择原图发送，则默认微信会使用JPEG格式发送，会导致图片被压缩而失真。</p>
+<h2 id="PNG"><a href="#PNG" class="headerlink" title="PNG"></a>PNG</h2><p>便携式网络图形（Portable Network Graphics）由W3C提出的支持无损压缩的位图图形格式。因为它支持无损压缩，所以一般PNG图片比JPEG格式的要大。PNG编码格式比较简单，主要包含文件头和多个数据块，文件头固定为<code>0x89504e470d0a1a0a</code>，数据块格式如下：</p>
+<ul>
+<li>长度(Length) 四个字节，最大为2G-1个字节</li>
+<li>数据块类型 四个字节，数据块类型ASCII码的字节表示，数据块类型为四个字符</li>
+<li>数据块数据 可变长度，存储数据块实际数据</li>
+<li>CRC码 四个字节，用来存储校验码</li>
+</ul>
+<p>PNG数据块有两种，一种是必须包含、读写软件都必须要支持的关键块，另一种是辅助块。为了向前兼容，PNG规范中允许软件忽略它不认识的附加块。</p>
+<h3 id="GIF"><a href="#GIF" class="headerlink" title="GIF"></a>GIF</h3><p>图像互换格式（Graphics Interchange Format），是一种位图图形文件格式。互联网早起带宽小的时候提出来的无损压缩图片格式，只能表示256中颜色。可以通过插入多帧图片实现动画效果。</p>
+<h3 id="BMP"><a href="#BMP" class="headerlink" title="BMP"></a>BMP</h3><p>微软开发的位图格式，一般不压缩，图片存储格式比较简单。</p>
+<h2 id="图片伪造"><a href="#图片伪造" class="headerlink" title="图片伪造"></a>图片伪造</h2><p>基于上面的信息，如何构造一个可以正常打开而又包含我们向塞入的额外数据呢，</p>
+<p>方法一：直接向文件默认追加数据</p>
+<p>一般软件在读取文件时，读取到EOF时就停止了，额外数据直接被忽略掉，图片也能正常打开。这种办法的一个缺点是你想读取额外数据的时候可能需要特殊处理，因为一些编程语言的IO库也是读取到EOF终止读取了。</p>
+<p>方法二：构造合法的数据块存入文件中</p>
+<p>以PNG格式为例，PNG格式中可以定义辅助数据块，只要按照格式计算好CRC循环校验码即可构造出一个合法的辅助块，将此辅助块插入PNG支持的位置即可。构造PNG数据块的Go语言示例如下：</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">generatePngChunk</span><span class="params">(name <span class="type">string</span>, data []<span class="type">byte</span>)</span></span> ([]<span class="type">byte</span>, <span class="type">error</span>) &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(name) != <span class="number">4</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, errors.New(<span class="string">&quot;IDAT type name must be 4 letters&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// name := &quot;fRAc&quot;</span></span><br><span class="line">	n := <span class="type">uint32</span>(<span class="built_in">len</span>(data))</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> <span class="type">int</span>(n) != <span class="built_in">len</span>(data) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, errors.New(name + <span class="string">&quot; chunk is too large: &quot;</span> + strconv.Itoa(<span class="built_in">len</span>(data)))</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	header := <span class="built_in">make</span>([]<span class="type">byte</span>, <span class="number">8</span>)</span><br><span class="line">	footer := <span class="built_in">make</span>([]<span class="type">byte</span>, <span class="number">4</span>)</span><br><span class="line">	binary.BigEndian.PutUint32(header[:<span class="number">4</span>], n)</span><br><span class="line">	header[<span class="number">4</span>] = name[<span class="number">0</span>]</span><br><span class="line">	header[<span class="number">5</span>] = name[<span class="number">1</span>]</span><br><span class="line">	header[<span class="number">6</span>] = name[<span class="number">2</span>]</span><br><span class="line">	header[<span class="number">7</span>] = name[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">	crc := crc32.NewIEEE()</span><br><span class="line">	crc.Write(header[<span class="number">4</span>:<span class="number">8</span>])</span><br><span class="line">	crc.Write(data)</span><br><span class="line">	binary.BigEndian.PutUint32(footer[:<span class="number">4</span>], crc.Sum32())</span><br><span class="line"></span><br><span class="line">	result := <span class="built_in">make</span>([]<span class="type">byte</span>, <span class="number">0</span>)</span><br><span class="line">	result = <span class="built_in">append</span>(result, header...)</span><br><span class="line">	result = <span class="built_in">append</span>(result, data...)</span><br><span class="line">	result = <span class="built_in">append</span>(result, footer...)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> result, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述函数中的数据块名称要填写PNG标准中支持的值，否则一些软件会直接报告文件损坏。上述方法想要从文件中获取额外数据也需要自己写客户端实现。</p>
+<h2 id="图片格式检测"><a href="#图片格式检测" class="headerlink" title="图片格式检测"></a>图片格式检测</h2><ol>
+<li>检测图片文件头信息中的文件格式是否和文件后缀匹配</li>
+<li>检验图片文件大小是否和图片长宽估算的文件大小匹配</li>
+<li>检验图片尾块后是否还有数据，比如PNG格式文件尾块12个字节为<code>0x0000000049454e44ae426082</code></li>
+<li>检验图片中是否包含异常数据块</li>
+</ol>
+<p>参考:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/JPEG">JPEG</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/PNG">PNG</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GIF">GIF</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-cn/BMP">BMP</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -178,9 +300,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2024-05-15 22:06:06 / Modified: 23:35:46" itemprop="dateCreated datePublished" datetime="2024-05-15T22:06:06+08:00">2024-05-15</time>
+      <time title="Created: 2024-05-15 22:06:06" itemprop="dateCreated datePublished" datetime="2024-05-15T22:06:06+08:00">2024-05-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-05-17 13:44:49" itemprop="dateModified" datetime="2024-05-17T13:44:49+08:00">2024-05-17</time>
     </span>
 
   
@@ -255,7 +383,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2024/02/19/get-client-ip/" class="post-title-link" itemprop="url">代理获取客户端真实IP</a>
+          <a href="/blog/2024/02/19/get-client-ip/" class="post-title-link" itemprop="url">HaProxy获取客户端真实IP</a>
         </h2>
 
         <div class="post-meta-container">
@@ -273,7 +401,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-15 23:35:46" itemprop="dateModified" datetime="2024-05-15T23:35:46+08:00">2024-05-15</time>
+      <time title="Modified: 2024-05-17 13:44:49" itemprop="dateModified" datetime="2024-05-17T13:44:49+08:00">2024-05-17</time>
     </span>
 
   
@@ -360,7 +488,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-15 23:35:46" itemprop="dateModified" datetime="2024-05-15T23:35:46+08:00">2024-05-15</time>
+      <time title="Modified: 2024-05-17 13:44:49" itemprop="dateModified" datetime="2024-05-17T13:44:49+08:00">2024-05-17</time>
     </span>
 
   
@@ -618,7 +746,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-15 23:35:46" itemprop="dateModified" datetime="2024-05-15T23:35:46+08:00">2024-05-15</time>
+      <time title="Modified: 2024-05-17 13:44:49" itemprop="dateModified" datetime="2024-05-17T13:44:49+08:00">2024-05-17</time>
     </span>
 
   
@@ -744,7 +872,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-15 23:35:46" itemprop="dateModified" datetime="2024-05-15T23:35:46+08:00">2024-05-15</time>
+      <time title="Modified: 2024-05-17 13:44:49" itemprop="dateModified" datetime="2024-05-17T13:44:49+08:00">2024-05-17</time>
     </span>
 
   
@@ -834,7 +962,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-15 23:35:46" itemprop="dateModified" datetime="2024-05-15T23:35:46+08:00">2024-05-15</time>
+      <time title="Modified: 2024-05-17 13:44:49" itemprop="dateModified" datetime="2024-05-17T13:44:49+08:00">2024-05-17</time>
     </span>
 
   
@@ -933,7 +1061,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-15 23:35:46" itemprop="dateModified" datetime="2024-05-15T23:35:46+08:00">2024-05-15</time>
+      <time title="Modified: 2024-05-17 13:44:49" itemprop="dateModified" datetime="2024-05-17T13:44:49+08:00">2024-05-17</time>
     </span>
 
   
