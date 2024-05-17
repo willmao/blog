@@ -117,9 +117,18 @@ func generatePngChunk(name string, data []byte) ([]byte, error) {
 上述函数中的数据块名称要填写PNG标准中支持的值，否则一些软件会直接报告文件损坏。上述方法想要从文件中获取额外数据也需要自己写客户端实现。
 
 
-# 图片格式检测
+## 图片格式检测
 
 1. 检测图片文件头信息中的文件格式是否和文件后缀匹配
 2. 检验图片文件大小是否和图片长宽估算的文件大小匹配
 3. 检验图片尾块后是否还有数据，比如PNG格式文件尾块12个字节为`0x0000000049454e44ae426082`
 4. 检验图片中是否包含异常数据块
+
+
+
+参考:
+
+- [JPEG](https://zh.wikipedia.org/wiki/JPEG)
+- [PNG](https://zh.wikipedia.org/wiki/PNG)
+- [GIF](https://zh.wikipedia.org/wiki/GIF)
+- [BMP](https://zh.wikipedia.org/zh-cn/BMP)
