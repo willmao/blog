@@ -19,32 +19,24 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"www.maoguangqing.site","root":"/blog/","images":"/blog/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/blog/js/config.js"></script>
 
-    <meta name="description" content="SOCKS5协议是一种网络传输协议，主要用于客户端和外网服务器之间通讯的传递。比如公司的防火墙拒绝客户端直接访问外网，而允许SOCKS5服务器访问，那客户端就可以通过将请求先发送给SOCKS5服务器，让它代替客户端发送请求并把响应返回给客户端，以达到穿透防火墙的效果。 SOCKS5协议工作在OSI七层模型的会话层，在传输层TCP&#x2F;UDP协议之上。 SOCKS5协议处理流程认证方法协商SO">
-<meta property="og:type" content="article">
-<meta property="og:title" content="SOCKS5协议">
-<meta property="og:url" content="https://www.maoguangqing.site/blog/2023/10/11/socks5/index.html">
+    <meta property="og:type" content="website">
+<meta property="og:title" content="技术回忆录">
+<meta property="og:url" content="https://www.maoguangqing.site/blog/page/2/index.html">
 <meta property="og:site_name" content="技术回忆录">
-<meta property="og:description" content="SOCKS5协议是一种网络传输协议，主要用于客户端和外网服务器之间通讯的传递。比如公司的防火墙拒绝客户端直接访问外网，而允许SOCKS5服务器访问，那客户端就可以通过将请求先发送给SOCKS5服务器，让它代替客户端发送请求并把响应返回给客户端，以达到穿透防火墙的效果。 SOCKS5协议工作在OSI七层模型的会话层，在传输层TCP&#x2F;UDP协议之上。 SOCKS5协议处理流程认证方法协商SO">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://www.maoguangqing.site/blog/images/SOCKS5_demo.jpg">
-<meta property="article:published_time" content="2023-10-11T09:16:10.000Z">
-<meta property="article:modified_time" content="2024-05-17T05:50:25.454Z">
 <meta property="article:author" content="维苏威的血">
-<meta property="article:tag" content="Network">
-<meta property="article:tag" content="Socks">
-<meta property="article:tag" content="Socks5">
+<meta property="article:tag" content="运维">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.maoguangqing.site/blog/images/SOCKS5_demo.jpg">
 
 
-<link rel="canonical" href="https://www.maoguangqing.site/blog/2023/10/11/socks5/">
+<link rel="canonical" href="https://www.maoguangqing.site/blog/page/2/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.maoguangqing.site/blog/2023/10/11/socks5/","path":"2023/10/11/socks5/","title":"SOCKS5协议"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"en","comments":"","permalink":"","path":"page/2/index.html","title":""}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>SOCKS5协议 | 技术回忆录</title>
+<title>技术回忆录</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FPX9Q7GCF"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1FPX9Q7GCF","only_pageview":false,"measure_protocol_api_secret":null}</script>
@@ -77,7 +69,7 @@
 
     <a href="/blog/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">技术回忆录</p>
+      <h1 class="site-title">技术回忆录</h1>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">那些逝去的青春，终将被人遗忘</p>
@@ -100,7 +92,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -113,7 +105,6 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SOCKS5%E5%8D%8F%E8%AE%AE%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">SOCKS5协议处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A4%E8%AF%81%E6%96%B9%E6%B3%95%E5%8D%8F%E5%95%86"><span class="nav-number">1.1.</span> <span class="nav-text">认证方法协商</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E5%8D%8F%E5%95%86"><span class="nav-number">1.2.</span> <span class="nav-text">请求协商</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82"><span class="nav-number">1.3.</span> <span class="nav-text">发送请求</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lua%E5%AE%9E%E7%8E%B0SOCKS5%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">Lua实现SOCKS5服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -149,17 +140,16 @@
 
     </div>
 
-    <div class="main-inner post posts-expand">
+    <div class="main-inner index posts-expand">
 
-
-  
+    
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://www.maoguangqing.site/blog/2023/10/11/socks5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -173,13 +163,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="SOCKS5协议 | 技术回忆录">
+      <meta itemprop="name" content="undefined | 技术回忆录">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          SOCKS5协议
-        </h1>
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/blog/2023/10/11/socks5/" class="post-title-link" itemprop="url">SOCKS5协议</a>
+        </h2>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -208,7 +198,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>SOCKS5协议是一种网络传输协议，主要用于客户端和外网服务器之间通讯的传递。比如公司的防火墙拒绝客户端直接访问外网，而允许SOCKS5服务器访问，那客户端就可以通过将请求先发送给SOCKS5服务器，让它代替客户端发送请求并把响应返回给客户端，以达到穿透防火墙的效果。</p>
+    <div class="post-body" itemprop="articleBody">
+          <p>SOCKS5协议是一种网络传输协议，主要用于客户端和外网服务器之间通讯的传递。比如公司的防火墙拒绝客户端直接访问外网，而允许SOCKS5服务器访问，那客户端就可以通过将请求先发送给SOCKS5服务器，让它代替客户端发送请求并把响应返回给客户端，以达到穿透防火墙的效果。</p>
 <p>SOCKS5协议工作在OSI七层模型的会话层，在传输层TCP&#x2F;UDP协议之上。</p>
 <h1 id="SOCKS5协议处理流程"><a href="#SOCKS5协议处理流程" class="headerlink" title="SOCKS5协议处理流程"></a>SOCKS5协议处理流程</h1><h2 id="认证方法协商"><a href="#认证方法协商" class="headerlink" title="认证方法协商"></a>认证方法协商</h2><p>SOCKS5客户端和服务器建立TCP连接后就开始协商认证方法，流程如下:</p>
 <pre><code class="highlight mermaid">sequenceDiagram
@@ -392,6 +383,7 @@
 <li><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc1929">Username&#x2F;Password Authentication for SOCKS V5</a></li>
 </ul>
 
+      
     </div>
 
     
@@ -399,26 +391,8 @@
     
 
     <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/blog/tags/Network/" rel="tag"># Network</a>
-              <a href="/blog/tags/Socks/" rel="tag"># Socks</a>
-              <a href="/blog/tags/Socks5/" rel="tag"># Socks5</a>
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/blog/2023/04/17/aliyun-cost-down/" rel="prev" title="阿里云降本增效">
-                  <i class="fa fa-angle-left"></i> 阿里云降本增效
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/blog/2024/02/19/get-client-ip/" rel="next" title="HaProxy获取客户端真实IP">
-                  HaProxy获取客户端真实IP <i class="fa fa-angle-right"></i>
-                </a>
-            </div>
-          </div>
+        <div class="post-eof"></div>
+      
     </footer>
   </article>
 </div>
@@ -426,7 +400,225 @@
 
 
 
+    
 
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.maoguangqing.site/blog/2023/04/17/aliyun-cost-down/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="维苏威的血">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/blog/2023/04/17/aliyun-cost-down/" class="post-title-link" itemprop="url">阿里云降本增效</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-04-18 06:45:25" itemprop="dateCreated datePublished" datetime="2023-04-18T06:45:25+08:00">2023-04-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-05-17 13:50:25" itemprop="dateModified" datetime="2024-05-17T13:50:25+08:00">2024-05-17</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>公司电商系统基本上都放在阿里云上，2022年经济情况极度恶化，公司对研发部进行了大规模裁员，剩下的十几个人确保系统可以运行即可。2023年不忙，我仔细研究了一下我们用到的阿里云产品的计费方案，对成本大的产品进行了优化，取得了一定的效果，下面会按阿里云产品来记录一下做了哪些优化。</p>
+</blockquote>
+<h2 id="ECS"><a href="#ECS" class="headerlink" title="ECS"></a>ECS</h2><p>ECS是我们成本中占比最大的一项，除了应用系统服务器和自建K8s基建服务器外，存在很多中间件服务器如Kafka&#x2F;ES&#x2F;Hadoop集群。在业务扩张期间，为了降低被其他业务干扰和提升系统稳定性，业务方都想独占一套集群，这也埋下了高成本的种子。</p>
+<p>这么做主要有以下缺点：</p>
+<ul>
+<li>资源利用率低 有的ES里只有一两个索引，一天的绝大部分时间都不忙</li>
+<li>费用成本大 费用不光是服务器本身的费用，阿里云安全中心是按服务器数量付费的，服务器越多费用越大</li>
+<li>运维成本大 运维需要搭建更多的集群，需要更多的监控指标、报警规则和应用系统配置</li>
+</ul>
+<p>以下是一些ECS配置的建议：</p>
+<ul>
+<li>应用服务器满足性能要求的情况下尽量选择高配服务器 减少服务器数量可以减少磁盘&#x2F;备份和云安全中心等方面的费用</li>
+<li>满足性能要求的情况下尽量复用集群 业务初期代码不稳定的时候可以升级集群来提升稳定性，代码优化之后稳定了还能降配来缩减成本</li>
+<li>测试环境可以考虑使用突发性能实例 测试环境大部分都不忙，突发实例基本可以满足要求，积分一般都用不完</li>
+</ul>
+<h2 id="RDS"><a href="#RDS" class="headerlink" title="RDS"></a>RDS</h2><p>RDS在我们应用系统费用中占比第二，业务扩张期间因为出现过部分关键服务数据库被打爆了，所以进行了大规模拆库，将业务库分拆到多个RDS实例上。</p>
+<p>这么做有如下缺点：</p>
+<ul>
+<li>资源利用率低 有的RDS上的数据只有几个GB，读写也不频繁，数据库放到高配置实例上也不会带来很大的使用率提升</li>
+<li>费用成本大 线上系统为了保证可靠性都是高可用版本，而且还配置了只读实例，为了满足审计要求还要开启14天备份和180天全量SQL审计功能</li>
+<li>大数据相关配置更多、费用更高 大数据计算不能影响业务实例，所以用DTS同步数据到数仓里，DTS一个实例只能从同步一个RDS实例，最低费用一个月850块</li>
+<li>运维成本更大 运维需要配置更多的连接字符串、数据库用户和权限</li>
+</ul>
+<p>以下是一些RDS配置的建议：</p>
+<ul>
+<li>综合考虑性能和成本，非核心系统尽量放一个大实例上，核心系统为了保障可靠性可以单独配置实例</li>
+<li>关注RDS实例磁盘利用率，RDS使用的是SSD磁盘，费用高，一般保证可用空间比最大表大就可以了，就可以满足大表DDL操作</li>
+<li>DTS实时同步成本高，可以考虑从只读实例离线抽取数据</li>
+</ul>
+<h2 id="Datahub"><a href="#Datahub" class="headerlink" title="Datahub"></a>Datahub</h2><p>Datahub的成本主要在于存储成本和shard租用费用，单个shard最大写入数据5MB&#x2F;s，每个shard每天租用费用0.04元，满足性能要求的情况下尽可能降低shard数量，利用率低的shard可以考虑用api合并shard来减少shard</p>
+<h2 id="Dataworks"><a href="#Dataworks" class="headerlink" title="Dataworks"></a>Dataworks</h2><p>Dataworks成本主要在于公共调度资源组费用，阿里云公共调度资源组和数据集成资源组只是用来做测试，不提供SLA。</p>
+<p>阿里云公共调度资源组阶梯收费：</p>
+<ul>
+<li>0到10个任务免费</li>
+<li>11到500个任务每天0.99元</li>
+<li>501到5000个任务每天60元</li>
+<li>5001到20000个任务每天150元</li>
+</ul>
+<p>独享资源组4核8G每个月492元，调度并发16个，完全可以调度数千个任务，如果每天任务数超过500则使用独享调度资源组更划算。</p>
+<ul>
+<li>任务应该尽可能的快，这样调度吞吐量更大</li>
+<li>任务应该合理错峰运行</li>
+<li>独享数据集成资源组同步任务并发应该根据表的数据量来合理配置，小表一个并发就行了，这样线程干活的时间占比才更多</li>
+</ul>
+<h2 id="Max-Compute"><a href="#Max-Compute" class="headerlink" title="Max Compute"></a>Max Compute</h2><p>Max Compute主要费用为数据存储费用和任务执行费用，主要有以下建议：</p>
+<ul>
+<li>合理设置分区表的生命周期，有些数仓数据不需要永久保存，永久存储浪费存储费用</li>
+<li>定期检查ODPS SQL中耗时的SQL并进行优化，SQL计费主要是扫描的数据量，查询要合理剪枝，减少数据扫描量</li>
+<li>独享CU最低也要50个CU，一个月7500元，所以除非任务实效性要求特别高或者平时任务就很多，否则按量计费更划算</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.maoguangqing.site/blog/2022/08/23/zookeeper-recipes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="维苏威的血">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/blog/2022/08/23/zookeeper-recipes/" class="post-title-link" itemprop="url">zookeeper常用场景</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-08-23 21:08:54" itemprop="dateCreated datePublished" datetime="2022-08-23T21:08:54+08:00">2022-08-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-05-17 13:50:25" itemprop="dateModified" datetime="2024-05-17T13:50:25+08:00">2024-05-17</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="同步屏障Barrier"><a href="#同步屏障Barrier" class="headerlink" title="同步屏障Barrier"></a>同步屏障Barrier</h2><p>当同步屏障存在时，所有客户端都进行等待，直到屏障被删除客户端开始执行自己的逻辑。可以利用ZK的节点删除事件通知来实现它。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.will.zk;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.data.Stat;</span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.KeeperException.*;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.nio.charset.StandardCharsets;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.CompletableFuture;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.CountDownLatch;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutionException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ZKBarrier</span>&lt;T&gt; <span class="keyword">implements</span> <span class="title class_">AsyncCallback</span>.StatCallback &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Logger</span> <span class="variable">LOGGER</span> <span class="operator">=</span> LoggerFactory.getLogger(ZKBarrier.class);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ZooKeeper zk;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String path;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> CompletableFuture&lt;?&gt; future;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> needWatch;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ZKBarrier</span><span class="params">(ZooKeeper zk, String path, CompletableFuture&lt;?&gt; future)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.zk = zk;</span><br><span class="line">        <span class="built_in">this</span>.path = path;</span><br><span class="line">        <span class="built_in">this</span>.future = future;</span><br><span class="line">        <span class="built_in">this</span>.needWatch = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">watchBarrier</span><span class="params">()</span> &#123;</span><br><span class="line">        zk.exists(path, <span class="built_in">this</span>::process, <span class="built_in">this</span>, future);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">process</span><span class="params">(WatchedEvent event)</span> &#123;</span><br><span class="line">        LOGGER.info(<span class="string">&quot;接收到zk事件回调&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (needWatch) &#123;</span><br><span class="line">            watchBarrier();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (event.getType() == Watcher.Event.EventType.NodeDeleted) &#123;</span><br><span class="line">            LOGGER.info(<span class="string">&quot;node被删除&quot;</span>);</span><br><span class="line">            needWatch = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">processResult</span><span class="params">(<span class="type">int</span> rc, String path, Object ctx, Stat stat)</span> &#123;</span><br><span class="line">        <span class="type">Code</span> <span class="variable">code</span> <span class="operator">=</span> Code.get(rc);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (code == Code.NONODE) &#123;</span><br><span class="line">            CompletableFuture&lt;?&gt; future  = ctx <span class="keyword">instanceof</span> CompletableFuture&lt;?&gt; ? (CompletableFuture&lt;?&gt;) ctx: <span class="literal">null</span>;</span><br><span class="line">            <span class="keyword">if</span> (future != <span class="literal">null</span>) &#123;</span><br><span class="line">                future.complete(<span class="literal">null</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Thread <span class="title function_">createThread</span><span class="params">(ZooKeeper zk, String path, CountDownLatch latch)</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            CompletableFuture&lt;Integer&gt; future = <span class="keyword">new</span> <span class="title class_">CompletableFuture</span>&lt;&gt;();</span><br><span class="line">            ZKBarrier&lt;Integer&gt; barrier = <span class="keyword">new</span> <span class="title class_">ZKBarrier</span>&lt;&gt;(zk, path, future);</span><br><span class="line">            LOGGER.info(<span class="string">&quot;watch barrier&quot;</span>);</span><br><span class="line">            barrier.watchBarrier();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                future.get();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                Thread.currentThread().interrupt();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            LOGGER.info(<span class="string">&quot;barrier missing, begin to work&quot;</span>);</span><br><span class="line">            latch.countDown();</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        t.setDaemon(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> t;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException, KeeperException, IOException &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">servers</span> <span class="operator">=</span> <span class="string">&quot;localhost:2181&quot;</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">timeout</span> <span class="operator">=</span> <span class="number">1000</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">path</span> <span class="operator">=</span> <span class="string">&quot;/barriers/barrier-1&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">ZooKeeper</span> <span class="variable">zk</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ZooKeeper</span>(servers, timeout, event -&gt; &#123;&#125;);</span><br><span class="line">        <span class="type">ZKOperator</span> <span class="variable">zkOperator</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ZKOperator</span>(servers, timeout);</span><br><span class="line">        zkOperator.create(path, <span class="string">&quot;&quot;</span>.getBytes(StandardCharsets.UTF_8));</span><br><span class="line"></span><br><span class="line">        <span class="type">CountDownLatch</span> <span class="variable">latch</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CountDownLatch</span>(<span class="number">2</span>);</span><br><span class="line">        createThread(zk, path, latch).start();</span><br><span class="line">        createThread(zk, path, latch).start();</span><br><span class="line"></span><br><span class="line">        latch.await();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="分布式队列"><a href="#分布式队列" class="headerlink" title="分布式队列"></a>分布式队列</h2><p>主要利用ZK创建子节点时节点名称可以单调递增的特性，通过获取子节点对节点名称进行排序即可实现队列先进先出的行为。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.will.zk;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.zookeeper.data.ACL;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.nio.charset.StandardCharsets;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.CountDownLatch;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DistributedQueue</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Logger</span> <span class="variable">LOGGER</span> <span class="operator">=</span> LoggerFactory.getLogger(DistributedQueue.class);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ZooKeeper zk;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String queueName;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> List&lt;ACL&gt; acl = ZooDefs.Ids.OPEN_ACL_UNSAFE;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DistributedQueue</span><span class="params">(ZooKeeper zk, String queueName)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.zk = zk;</span><br><span class="line">        <span class="built_in">this</span>.queueName = queueName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String <span class="title function_">getQueuePath</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> String.format(<span class="string">&quot;/queues/%s&quot;</span>, queueName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> SortedSet&lt;String&gt; <span class="title function_">orderedChildren</span><span class="params">(Watcher watcher)</span> <span class="keyword">throws</span> InterruptedException, KeeperException &#123;</span><br><span class="line">        List&lt;String&gt; childNodeNames;</span><br><span class="line">        childNodeNames = zk.getChildren(getQueuePath(), watcher);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">TreeSet</span>&lt;&gt;(childNodeNames);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">LatchChildWatcher</span> <span class="keyword">implements</span> <span class="title class_">Watcher</span> &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> CountDownLatch latch;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">LatchChildWatcher</span><span class="params">()</span> &#123;</span><br><span class="line">            latch = <span class="keyword">new</span> <span class="title class_">CountDownLatch</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">process</span><span class="params">(WatchedEvent event)</span> &#123;</span><br><span class="line">            latch.countDown();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">            latch.await();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">offer</span><span class="params">(<span class="type">byte</span>[] data)</span> <span class="keyword">throws</span> InterruptedException, KeeperException &#123;</span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                zk.create(getQueuePath() + <span class="string">&quot;/&quot;</span>, data, acl, CreateMode.PERSISTENT_SEQUENTIAL);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (KeeperException.NoNodeException e) &#123;</span><br><span class="line">                zk.create(getQueuePath(), <span class="string">&quot;&quot;</span>.getBytes(StandardCharsets.UTF_8), acl, CreateMode.PERSISTENT);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">byte</span>[] take() <span class="keyword">throws</span> InterruptedException, KeeperException &#123;</span><br><span class="line">        SortedSet&lt;String&gt; sortedSet;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="type">LatchChildWatcher</span> <span class="variable">childWatcher</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LatchChildWatcher</span>();</span><br><span class="line">            sortedSet = orderedChildren(childWatcher);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (sortedSet.size() == <span class="number">0</span>) &#123;</span><br><span class="line">                childWatcher.await();</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="type">String</span> <span class="variable">firstChild</span> <span class="operator">=</span> sortedSet.first();</span><br><span class="line">            <span class="type">String</span> <span class="variable">zNode</span> <span class="operator">=</span> getQueuePath() + <span class="string">&quot;/&quot;</span> + firstChild;</span><br><span class="line">            LOGGER.info(<span class="string">&quot;get first znode of queue: &quot;</span> + zNode);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">byte</span>[] data = zk.getData(zNode, <span class="literal">false</span>, <span class="literal">null</span>);</span><br><span class="line">                zk.delete(zNode, -<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> data;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (KeeperException.NoNodeException e) &#123;</span><br><span class="line">                LOGGER.debug(<span class="string">&quot;node not exist, maybe deleted by another client&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException, KeeperException, IOException &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">servers</span> <span class="operator">=</span> <span class="string">&quot;localhost:2181&quot;</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">timeout</span> <span class="operator">=</span> <span class="number">1000</span>;</span><br><span class="line">        <span class="type">ZooKeeper</span> <span class="variable">zk</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ZooKeeper</span>(servers, timeout, event -&gt; &#123;&#125;);</span><br><span class="line">        <span class="type">String</span> <span class="variable">queueName</span> <span class="operator">=</span> <span class="string">&quot;queue-01&quot;</span>;</span><br><span class="line">        <span class="type">DistributedQueue</span> <span class="variable">queue</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DistributedQueue</span>(zk, queueName);</span><br><span class="line"></span><br><span class="line">        queue.offer(<span class="string">&quot;222&quot;</span>.getBytes(StandardCharsets.UTF_8));</span><br><span class="line"></span><br><span class="line">        <span class="type">byte</span>[] data = queue.take();</span><br><span class="line">        System.out.println(<span class="keyword">new</span> <span class="title class_">String</span>(data));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>ZooKeeper不适合做通用消息队列，主要有以下几个原因：</p>
+<ul>
+<li>ZK消息写入需要集群协商，写入速度较慢</li>
+<li>ZK数据全部存放在内存中，不能支撑大量消息</li>
+<li>ZK子节点太多时<code>getChildren</code>返回很慢</li>
+<li>ZK对节点数据大小存在硬性限制</li>
+</ul>
+<p>参考: <a target="_blank" rel="noopener" href="https://cwiki.apache.org/confluence/display/CURATOR/TN4">https://cwiki.apache.org/confluence/display/CURATOR/TN4</a></p>
+<h2 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h2><p>TODO</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/blog/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog/page/3/">3</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/blog/page/3/"><i class="fa fa-angle-right"></i></a>
+  </nav>
 
 </div>
   </main>
