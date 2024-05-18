@@ -27,6 +27,6 @@
     "hexo-theme-next": "^8.20.0"
   },
   "devDependencies": {
-    "hexo-deployer-rsync": "^2.0.0"
+    "hexo-deployer-rsync": "^3.0.0"
   }
 }
