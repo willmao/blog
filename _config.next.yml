@@ -101,7 +101,7 @@ menu:
   #categories: /categories/ || fa fa-th
   #archives: /archives/ || fa fa-archive
   #schedule: /schedule/ || fa fa-calendar
-  #sitemap: /sitemap.xml || fa fa-sitemap
+  sitemap: /sitemap.xml || fa fa-sitemap
   #commonweal: /404/ || fa fa-heartbeat
 
 # Enable / Disable menu icons / item badges.
@@ -478,7 +478,7 @@ exturl_icon: true
 
 # Google Webmaster tools verification.
 # See: https://developers.google.com/search
-google_site_verification:
+google_site_verification: kAMU49ugolq9eGexk62waD-GnFzceUrUp1lYNhfGQkM
 
 # Bing Webmaster tools verification.
 # See: https://www.bing.com/webmasters
@@ -490,7 +490,7 @@ yandex_site_verification:
 
 # Baidu Webmaster tools verification.
 # See: https://ziyuan.baidu.com/site
-baidu_site_verification:
+baidu_site_verification: codeva-qieQPzSCYK
 
 
 # ---------------------------------------------------------------
