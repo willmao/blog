@@ -1,6 +1,7 @@
 ---
 title: zookeeper常用场景
 date: 2022-08-23 21:08:54
+excertp: 本文简要叙述了ZooKeeper的一些常见实用场景，比如同步屏障、分布式队列
 tags:
 - Software
 - Zookeeper
@@ -229,7 +230,3 @@ ZooKeeper不适合做通用消息队列，主要有以下几个原因：
 - ZK对节点数据大小存在硬性限制
 
 参考: https://cwiki.apache.org/confluence/display/CURATOR/TN4
-
-## 分布式锁
-
-TODO
