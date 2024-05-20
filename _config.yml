@@ -8,13 +8,13 @@ subtitle: '那些逝去的青春，终将被人遗忘'
 description: ''
 keywords: 运维
 author: 维苏威的血
-language: en
+language: zh-CN
 timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
 url: https://www.maoguangqing.site/blog/
-permalink: :year/:month/:day/:title/
+permalink: :year-:month-:day/:title/
 permalink_defaults:
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks

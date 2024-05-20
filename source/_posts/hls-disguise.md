@@ -1,6 +1,7 @@
 ---
 title: HLS文件生成与伪造
 date: 2024-05-17 14:08:36
+excerpt: 本文介绍了使用ffmpeg工具分割视频制作m3u8文件和TS文件的方法，并研究了将TS文件伪装成图片的技术以及hls.js播放器解码伪造的TS文件的一些实现细节
 tags:
 - VIDEO
 - HLS

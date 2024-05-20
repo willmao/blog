@@ -1,6 +1,7 @@
 ---
 title: ssh协议动态代理
 date: 2024-05-15 22:06:06
+excerpt: 本文简要叙述了SSH协议端口转发的原理，并重点研究了SSH动态代理的实现机制，给出了一个Go语言实现的多网卡SSH协议动态代理的实现
 tags:
 - Networking
 - SSH

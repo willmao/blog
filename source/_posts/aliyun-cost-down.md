@@ -1,6 +1,7 @@
 ---
 title: 阿里云降本增效
 date: 2023-04-18 06:45:25
+excerpt: 本文简要叙述了降低阿里云使用成本的一些经验和心得
 tags:
 - Alibaba Cloud
 - FinOps
