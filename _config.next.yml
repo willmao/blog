@@ -28,7 +28,7 @@ custom_file_path:
   #bodyEnd: source/_data/body-end.njk
   #variable: source/_data/variables.styl
   #mixin: source/_data/mixins.styl
-  #style: source/_data/styles.styl
+  style: source/_data/styles.styl
 
 
 # ---------------------------------------------------------------
@@ -226,12 +226,11 @@ footer:
     enable: true
     icp: 沪ICP备2023007354号-1
     # The digit in the num of gongan beian.
-    gongan_id:
+    gongan_id: 31011702889371
     # The full num of gongan beian.
-    gongan_num:
+    gongan_num: 沪公网安备31011702889371
     # The icon for gongan beian. See: http://www.beian.gov.cn/portal/download
-    gongan_icon_url:
-
+    gongan_icon_url: /images/beian.png
 
 # ---------------------------------------------------------------
 # Post Settings
