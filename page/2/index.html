@@ -130,13 +130,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/blog/archives/">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/blog/tags/">
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -153,6 +153,99 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.maoguangqing.site/blog/2024/05/15/ssh-dynamic-proxy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="维苏威的血">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/blog/2024/05/15/ssh-dynamic-proxy/" class="post-title-link" itemprop="url">ssh协议动态代理</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-05-15 22:06:06" itemprop="dateCreated datePublished" datetime="2024-05-15T22:06:06+08:00">2024-05-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-05-20 08:10:23" itemprop="dateModified" datetime="2024-05-20T08:10:23+08:00">2024-05-20</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>ssh是服务器管理中常用的一种远程工具，它可以在不安全的链路上提供一定程度的安全访问。它是建立在The Secure Shell Protocol上的，ssh协议主要包含Transport、Authentication和Connection三个子RFC。因为ssh协议比较普及，而且它提供了一定的安全访问链路，所以ssh协议也常被用来穿透网络。本文主要介绍ssh协议中的端口转发功能并重点介绍动态端口转发的实现方式。</p>
+<h2 id="ssh转发方式"><a href="#ssh转发方式" class="headerlink" title="ssh转发方式"></a>ssh转发方式</h2><p>ssh有三种转发方式，分别是：</p>
+<ul>
+<li>本地转发，将本机端口映射到远程服务器的端口(不一定是ssh server)，访问本机的流量将通过ssh隧道转发到远程服务器端口上</li>
+<li>远程转发，将ssh服务器的端口映射到本地计算机的端口上(不一定是本机)，访问ssh服务器的端口的流量将通过ssh隧道转发到本地计算机的端口上</li>
+<li>动态转发，将本机指定端口的请求，都通过ssh隧道转发出去，因为目标地址不确定，所以叫做动态代理，常用于http&#x2F;https代理</li>
+</ul>
+<h2 id="ssh代理的实现"><a href="#ssh代理的实现" class="headerlink" title="ssh代理的实现"></a>ssh代理的实现</h2><p>不管哪种转发方式，都是在隧道基础上建立到目标服务器的连接，这时候代理服务器中存在一个连接对，一个是ssh的隧道连接，一个是到目标服务器指定端口的TCP连接，代理服务器只要转发这两个连接就行了。具体来说就是不停的读取输入方向的连接的数据，写入代理连接中，然后把代理连接的响应写入到输入连接中去即可。</p>
+<h2 id="ssh动态端口转发"><a href="#ssh动态端口转发" class="headerlink" title="ssh动态端口转发"></a>ssh动态端口转发</h2><p>ssh动态端口转发常用于HTTP&#x2F;HTTPS代理，ssh隧道建立命令一般如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -ND local-port user@server-ip # N为不执行命令 D为动态转发</span><br></pre></td></tr></table></figure>
+
+<p>ssh客户端会在本机local-port上启动一个socks代理服务器监听，然后将访问此端口的请求都通过这个端口发送到ssh server上去，ssh server会转发这些请求。</p>
+<p>那么问题来了，ssh server是怎么知道客户端连接的目标服务器呢？一种办法就是解析请求内容，HTTP请求中存在Host这个Header来标志目标服务器地址。这种办法在HTTPS上却不能工作，因为TLS连接建立之后，HTTP请求Header和Body都是通过加密传输的，ssh代理服务器也没有办法解析。<br>其实ssh协议中对于特定类型的请求，可以额外附带一些信息，ssh客户端就是通过额外信息来告诉ssh服务器自己的目标连接地址和端口。服务器解析<br>额外信息后即可获得目标地址，然后就可以建立到目标服务器的连接，接着就可以开始转发流量了。</p>
+<p>golang中提供了ssh server的基础包，用它来可以很容易实现连接监听、用户认证和流量转发功能。用golang实现的ssh动态代理核心代码如下：</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">processDirectTcpIpNewChannel</span><span class="params">(serverConn *ssh.ServerConn, newChannel ssh.NewChannel)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> payload forwardedTCPPayload</span><br><span class="line">	<span class="keyword">if</span> err := ssh.Unmarshal(newChannel.ExtraData(), &amp;payload); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Println(err)</span><br><span class="line">		newChannel.Reject(ssh.ConnectionFailed, <span class="string">&quot;can&#x27;t parse tcp forward payload&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	log.Printf(<span class="string">&quot;process tcp port forwarding, host: %s, port: %d, origial host: %s, original port: %d\n&quot;</span>, payload.Addr, payload.Port, payload.OriginAddr, payload.OriginPort)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// use server local address to dial for supporting multiple network interfaces</span></span><br><span class="line">	localAddr := serverConn.LocalAddr()</span><br><span class="line"></span><br><span class="line">	tcpAddr, _ := net.ResolveTCPAddr(localAddr.Network(), localAddr.String())</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> dialerIp net.IP</span><br><span class="line">	<span class="keyword">if</span> !tcpAddr.IP.IsLoopback() &#123;</span><br><span class="line">		dialerIp = tcpAddr.IP</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	log.Printf(<span class="string">&quot;server local addr: %s, dialer ip: %s\n&quot;</span>, localAddr.String(), tcpAddr.IP)</span><br><span class="line">	dialer := net.Dialer&#123;</span><br><span class="line">		LocalAddr: &amp;net.TCPAddr&#123;IP: dialerIp&#125;,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	remoteAddr := fmt.Sprintf(<span class="string">&quot;%s:%d&quot;</span>, payload.Addr, payload.Port)</span><br><span class="line">	conn, err := dialer.Dial(<span class="string">&quot;tcp&quot;</span>, remoteAddr)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Println(err)</span><br><span class="line">		newChannel.Reject(ssh.ConnectionFailed, <span class="string">&quot;connect to dest host failed&quot;</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	channel, requests, err := newChannel.Accept()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Println(err)</span><br><span class="line">		newChannel.Reject(ssh.ConnectionFailed, <span class="string">&quot;failed to accept&quot;</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(in &lt;-<span class="keyword">chan</span> *ssh.Request)</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> req := <span class="keyword">range</span> in &#123;</span><br><span class="line">			log.Println(req.Type)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;(requests)</span><br><span class="line"></span><br><span class="line">	done := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> forward(conn, channel, done)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> forward(channel, conn, done)</span><br><span class="line"></span><br><span class="line">	&lt;-done</span><br><span class="line">	&lt;-done</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sshProxyConnectionManager</span><span class="params">(nConn net.Conn, config *ssh.ServerConfig, conns <span class="keyword">map</span>[ssh.ServerConn]<span class="keyword">struct</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">	<span class="comment">// Before use, a handshake must be performed on the incoming</span></span><br><span class="line">	<span class="comment">// net.Conn.</span></span><br><span class="line">	conn, chans, reqs, err := ssh.NewServerConn(nConn, config)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Println(<span class="string">&quot;failed to handshake: &quot;</span>, err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> conn.Permissions == <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Printf(<span class="string">&quot;logged in with username %s&quot;</span>, conn.Conn.User())</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		log.Printf(<span class="string">&quot;logged in with key %s&quot;</span>, conn.Permissions.Extensions[<span class="string">&quot;username&quot;</span>])</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	conns[*conn] = <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		ssh.DiscardRequests(reqs)</span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Service the incoming Channel channel.</span></span><br><span class="line">	<span class="keyword">for</span> newChannel := <span class="keyword">range</span> chans &#123;</span><br><span class="line">		<span class="keyword">switch</span> newChannel.ChannelType() &#123;</span><br><span class="line">		<span class="keyword">case</span> DirectTcpIpChannelType:</span><br><span class="line">			<span class="keyword">go</span> processDirectTcpIpNewChannel(conn, newChannel)</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			newChannel.Reject(ssh.UnknownChannelType, ssh.UnknownChannelType.String())</span><br><span class="line">			<span class="keyword">continue</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sshProxy</span><span class="params">(l net.Listener, config *ssh.ServerConfig, done <span class="keyword">chan</span> <span class="type">bool</span>)</span></span> &#123;</span><br><span class="line">	running := <span class="literal">true</span></span><br><span class="line">	conns := <span class="built_in">make</span>(<span class="keyword">map</span>[ssh.ServerConn]<span class="keyword">struct</span>&#123;&#125;, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		&lt;-done</span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">len</span>(conns) &gt; <span class="number">0</span> &#123;</span><br><span class="line">			log.Println(<span class="string">&quot;begin to close all current connections&quot;</span>)</span><br><span class="line">			<span class="keyword">for</span> conn := <span class="keyword">range</span> conns &#123;</span><br><span class="line">				conn.Close()</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		log.Println(<span class="string">&quot;close listener&quot;</span>)</span><br><span class="line">		l.Close()</span><br><span class="line">		running = <span class="literal">false</span></span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	log.Println(<span class="string">&quot;begin to accept ssh connections&quot;</span>)</span><br><span class="line">	wg.Add(<span class="number">1</span>)</span><br><span class="line">	<span class="keyword">for</span> running &#123;</span><br><span class="line">		nConn, err := l.Accept()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> errors.Is(err, net.ErrClosed) &#123;</span><br><span class="line">				log.Println(<span class="string">&quot;listener closed, quit accept loop&quot;</span>)</span><br><span class="line">				wg.Done()</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				wg.Done()</span><br><span class="line">				log.Fatal(<span class="string">&quot;failed to accept incoming connection: &quot;</span>, err)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">go</span> sshProxyConnectionManager(nConn, config, conns)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码实现了一个ssh代理服务器中一个常见的小需求，即如果服务器上有多个网卡有公网IP，则希望ssh流量从哪个网卡进入，就通过哪个网卡转发。上述代码通过判断ssh连接连接到ssh服务器的本机IP（即网卡地址）来使用其对应的地址来建立代理连接。这样可以让一个代理服务器拥有多个公网IP，减少服务器成本，毕竟代理服务器的负载很低。</p>
+<p>这个需求也可以根据用户ID来修改路由表实现，参考: <a target="_blank" rel="noopener" href="https://superuser.com/questions/1585398/how-can-i-configure-the-source-ip-to-use-for-ssh-dynamic-forwards">Per-UID routing</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -198,7 +291,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-18 22:36:12" itemprop="dateModified" datetime="2024-05-18T22:36:12+08:00">2024-05-18</time>
+      <time title="Modified: 2024-05-20 08:10:23" itemprop="dateModified" datetime="2024-05-20T08:10:23+08:00">2024-05-20</time>
     </span>
 
   
@@ -285,7 +378,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-18 22:36:12" itemprop="dateModified" datetime="2024-05-18T22:36:12+08:00">2024-05-18</time>
+      <time title="Modified: 2024-05-20 08:10:23" itemprop="dateModified" datetime="2024-05-20T08:10:23+08:00">2024-05-20</time>
     </span>
 
   
@@ -499,134 +592,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://www.maoguangqing.site/blog/2023/04/17/aliyun-cost-down/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/blog/images/avatar.jpg">
-      <meta itemprop="name" content="维苏威的血">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="技术回忆录">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 技术回忆录">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/blog/2023/04/17/aliyun-cost-down/" class="post-title-link" itemprop="url">阿里云降本增效</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-04-18 06:45:25" itemprop="dateCreated datePublished" datetime="2023-04-18T06:45:25+08:00">2023-04-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-18 22:36:12" itemprop="dateModified" datetime="2024-05-18T22:36:12+08:00">2024-05-18</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>公司电商系统基本上都放在阿里云上，2022年经济情况极度恶化，公司对研发部进行了大规模裁员，剩下的十几个人确保系统可以运行即可。2023年不忙，我仔细研究了一下我们用到的阿里云产品的计费方案，对成本大的产品进行了优化，取得了一定的效果，下面会按阿里云产品来记录一下做了哪些优化。</p>
-</blockquote>
-<h2 id="ECS"><a href="#ECS" class="headerlink" title="ECS"></a>ECS</h2><p>ECS是我们成本中占比最大的一项，除了应用系统服务器和自建K8s基建服务器外，存在很多中间件服务器如Kafka&#x2F;ES&#x2F;Hadoop集群。在业务扩张期间，为了降低被其他业务干扰和提升系统稳定性，业务方都想独占一套集群，这也埋下了高成本的种子。</p>
-<p>这么做主要有以下缺点：</p>
-<ul>
-<li>资源利用率低 有的ES里只有一两个索引，一天的绝大部分时间都不忙</li>
-<li>费用成本大 费用不光是服务器本身的费用，阿里云安全中心是按服务器数量付费的，服务器越多费用越大</li>
-<li>运维成本大 运维需要搭建更多的集群，需要更多的监控指标、报警规则和应用系统配置</li>
-</ul>
-<p>以下是一些ECS配置的建议：</p>
-<ul>
-<li>应用服务器满足性能要求的情况下尽量选择高配服务器 减少服务器数量可以减少磁盘&#x2F;备份和云安全中心等方面的费用</li>
-<li>满足性能要求的情况下尽量复用集群 业务初期代码不稳定的时候可以升级集群来提升稳定性，代码优化之后稳定了还能降配来缩减成本</li>
-<li>测试环境可以考虑使用突发性能实例 测试环境大部分都不忙，突发实例基本可以满足要求，积分一般都用不完</li>
-</ul>
-<h2 id="RDS"><a href="#RDS" class="headerlink" title="RDS"></a>RDS</h2><p>RDS在我们应用系统费用中占比第二，业务扩张期间因为出现过部分关键服务数据库被打爆了，所以进行了大规模拆库，将业务库分拆到多个RDS实例上。</p>
-<p>这么做有如下缺点：</p>
-<ul>
-<li>资源利用率低 有的RDS上的数据只有几个GB，读写也不频繁，数据库放到高配置实例上也不会带来很大的使用率提升</li>
-<li>费用成本大 线上系统为了保证可靠性都是高可用版本，而且还配置了只读实例，为了满足审计要求还要开启14天备份和180天全量SQL审计功能</li>
-<li>大数据相关配置更多、费用更高 大数据计算不能影响业务实例，所以用DTS同步数据到数仓里，DTS一个实例只能从同步一个RDS实例，最低费用一个月850块</li>
-<li>运维成本更大 运维需要配置更多的连接字符串、数据库用户和权限</li>
-</ul>
-<p>以下是一些RDS配置的建议：</p>
-<ul>
-<li>综合考虑性能和成本，非核心系统尽量放一个大实例上，核心系统为了保障可靠性可以单独配置实例</li>
-<li>关注RDS实例磁盘利用率，RDS使用的是SSD磁盘，费用高，一般保证可用空间比最大表大就可以了，就可以满足大表DDL操作</li>
-<li>DTS实时同步成本高，可以考虑从只读实例离线抽取数据</li>
-</ul>
-<h2 id="Datahub"><a href="#Datahub" class="headerlink" title="Datahub"></a>Datahub</h2><p>Datahub的成本主要在于存储成本和shard租用费用，单个shard最大写入数据5MB&#x2F;s，每个shard每天租用费用0.04元，满足性能要求的情况下尽可能降低shard数量，利用率低的shard可以考虑用api合并shard来减少shard</p>
-<h2 id="Dataworks"><a href="#Dataworks" class="headerlink" title="Dataworks"></a>Dataworks</h2><p>Dataworks成本主要在于公共调度资源组费用，阿里云公共调度资源组和数据集成资源组只是用来做测试，不提供SLA。</p>
-<p>阿里云公共调度资源组阶梯收费：</p>
-<ul>
-<li>0到10个任务免费</li>
-<li>11到500个任务每天0.99元</li>
-<li>501到5000个任务每天60元</li>
-<li>5001到20000个任务每天150元</li>
-</ul>
-<p>独享资源组4核8G每个月492元，调度并发16个，完全可以调度数千个任务，如果每天任务数超过500则使用独享调度资源组更划算。</p>
-<ul>
-<li>任务应该尽可能的快，这样调度吞吐量更大</li>
-<li>任务应该合理错峰运行</li>
-<li>独享数据集成资源组同步任务并发应该根据表的数据量来合理配置，小表一个并发就行了，这样线程干活的时间占比才更多</li>
-</ul>
-<h2 id="Max-Compute"><a href="#Max-Compute" class="headerlink" title="Max Compute"></a>Max Compute</h2><p>Max Compute主要费用为数据存储费用和任务执行费用，主要有以下建议：</p>
-<ul>
-<li>合理设置分区表的生命周期，有些数仓数据不需要永久保存，永久存储浪费存储费用</li>
-<li>定期检查ODPS SQL中耗时的SQL并进行优化，SQL计费主要是扫描的数据量，查询要合理剪枝，减少数据扫描量</li>
-<li>独享CU最低也要50个CU，一个月7500元，所以除非任务实效性要求特别高或者平时任务就很多，否则按量计费更划算</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/blog/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog/page/3/">3</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/blog/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/blog/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/blog/page/3/">3</a><a class="page-number" href="/blog/page/4/">4</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/blog/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
