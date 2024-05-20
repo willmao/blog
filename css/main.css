@@ -1236,7 +1236,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #40165c;
+    background: #87ffb4;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -1639,6 +1639,11 @@ pre code {
   color: #f00;
   display: inline-block;
   margin: 0 5px;
+}
+.beian img {
+  display: inline-block;
+  margin: 0 3px;
+  vertical-align: middle;
 }
 @keyframes icon-animate {
   0%, 100% {
@@ -2624,5 +2629,87 @@ header.header {
 @media (min-width: 992px) and (max-width: 991px) {
   .sidebar {
     display: none;
+  }
+}
+.footer {
+  color: #999;
+  font-size: 0.875em;
+  padding: 20px 0;
+  transition: 0.2s ease-in-out;
+  transition-property: left, right;
+}
+.footer.footer-fixed {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+.footer-inner {
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  width: calc(100% - 20px);
+}
+@media (max-width: 767px) {
+  .footer-inner {
+    width: auto;
+  }
+}
+@media (min-width: 1200px) {
+  .footer-inner {
+    width: 1160px;
+  }
+}
+@media (min-width: 1600px) {
+  .footer-inner {
+    width: 73%;
+  }
+}
+.use-motion .footer {
+  opacity: 0;
+}
+.languages {
+  display: inline-block;
+  font-size: 1.125em;
+  position: relative;
+}
+.languages .lang-select-label span {
+  margin: 0 0.5em;
+}
+.languages .lang-select {
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+.with-love {
+  color: #f00;
+  display: inline-block;
+  margin: 0 5px;
+}
+.beian img {
+  display: inline-block;
+  margin: 0 3px;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+@keyframes icon-animate {
+  0%, 100% {
+    transform: scale(1);
+  }
+  10%, 30% {
+    transform: scale(0.9);
+  }
+  20%, 40%, 60%, 80% {
+    transform: scale(1.1);
+  }
+  50%, 70% {
+    transform: scale(1.1);
   }
 }
