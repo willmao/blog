@@ -198,7 +198,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-05-20 13:46:22" itemprop="dateModified" datetime="2024-05-20T13:46:22+08:00">2024-05-20</time>
+      <time title="修改时间：2024-05-20 13:51:07" itemprop="dateModified" datetime="2024-05-20T13:51:07+08:00">2024-05-20</time>
     </span>
 
   
@@ -211,100 +211,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p><img src="/blog/images/Apache_ZooKeeper_logo.svg" alt="Zookeeper"></p>
-<blockquote>
-<p>因为公司的ZooKeeper当年部署方式不当，导致运行两三年之后经常出现问题，所以最近稍微看了一下ZooKeeper源代码，理解了一下ZooKeeper启动流程，故作此文以志之。</p>
-</blockquote>
-<h2 id="端口介绍"><a href="#端口介绍" class="headerlink" title="端口介绍"></a>端口介绍</h2><p>ZooKeeper默认使用以下三个TCP端口：</p>
-<ul>
-<li>2181 用于接受客户端连接和读写请求</li>
-<li>2888 用于数据同步通信，只有Leader节点监听，Follower连接此端口接受通知</li>
-<li>3888 用于投票选举通信端口</li>
-</ul>
-<h2 id="重要概念"><a href="#重要概念" class="headerlink" title="重要概念"></a>重要概念</h2><p>ZooKeeper系统中有几个比较重要的数字:</p>
-<ul>
-<li>epoch 选举的代数，每次选举成功后会自动加1，此指也是选举判断Leader节点的一个首要依据</li>
-<li>zxid 事务ID，64位，前32位为Epoch，后32位为自增事物ID，此指也是选举时使用的一个重要依据</li>
-<li>myid 节点ID，标志ZooKeeper身份，此值在集群第一次启动时也会作为选举依据，值大的节点优先</li>
-</ul>
-<h2 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h2><p>ZooKeeper以集群方式部署时启动流程如下（部分不涉及主流程的线程图中忽略）</p>
-<pre><code class="highlight mermaid">flowchart TD
-  start_jvm[启动zkServer.sh]
-  start_jvm -- 读取配置文件 ---&gt; cnxn_factory[构造客户端监听线程]
-  cnxn_factory ---&gt; load_database[加载已有数据库]
-  load_database -- 获取epoch/zxid ---&gt; start_theads[启动监听线程2181/3888]
-  start_theads ---&gt; start_fast_leader_election[开始快速选举]
-  start_fast_leader_election -- 广播发送/接收投票信息 ---&gt; change_peer_state&#123;Is Leader?&#125;
-  change_peer_state ---&gt;|Yes| make_zk_leader[创建ZooKeeper Leader节点]
-  change_peer_state ---&gt; |No| make_zk_follower[创建ZooKeeper Follower节点]
-  make_zk_leader ---&gt; listen_leader_port[Leader启动监听2888]
-  make_zk_follower ---&gt; connect_to_leader[连接到Leader 2888端口]
-  listen_leader_port ---&gt; process_client_request[处理客户端请求]
-  connect_to_leader ---&gt; sync_from_leader[从Leader节点同步修改]</code></pre>
-
-<h2 id="选举算法"><a href="#选举算法" class="headerlink" title="选举算法"></a>选举算法</h2><p>ZooKeeper从磁盘文件中读取myid&#x2F;epoch&#x2F;zxid，使用FastLeaderElection算法进行投票选举，两个节点之间判断依据如下：</p>
-<ul>
-<li>epoch值大的节点获胜</li>
-<li>epoch相同，最新zxid值大的节点获胜</li>
-<li>epoch&#x2F;zxid相同，节点ID值大的节点获胜</li>
-</ul>
-<p>ZooKeeper集群第一次部署时，epoch和zxid都是0，下图描述了第一次集群选举过程</p>
-<pre><code class="highlight mermaid">sequenceDiagram
-  actor N1 as Node 1
-  actor N2 as Node 2
-  actor N3 as Node 3
-
-  par 第一轮
-    N1 --&gt;&gt; N2: MyID: 1, Epoch 0, Zxid 0, Leader: 1, State: LOOKING
-    N1 --&gt;&gt; N3: MyID: 1, Epoch 0, Zxid 0, Leader: 1, State: LOOKING
-    N2 --&gt;&gt; N1: MyID: 2, Epoch 0, Zxid 0, Leader: 2, State: LOOKING
-    N2 --&gt;&gt; N3: MyID: 2, Epoch 0, Zxid 0, Leader: 2, State: LOOKING
-    N3 --&gt;&gt; N1: MyID: 3, Epoch 0, Zxid 0, Leader: 3, State: LOOKING
-    N3 --&gt;&gt; N2: MyID: 3, Epoch 0, Zxid 0, Leader: 3, State: LOOKING
-  end
-
-  Note over N1,N3: Epoch/Zxid都相同，MyID最大的节点Node 3获胜
-
-  par 第二轮
-    N1 --&gt;&gt; N2: MyID: 1, Epoch 0, Zxid 0, Leader: 3, State: LOOKING
-    N1 --&gt;&gt; N3: MyID: 1, Epoch 0, Zxid 0, Leader: 3, State: LOOKING
-    N2 --&gt;&gt; N1: MyID: 2, Epoch 0, Zxid 0, Leader: 3, State: LOOKING
-    N2 --&gt;&gt; N3: MyID: 2, Epoch 0, Zxid 0, Leader: 3, State: LOOKING
-  end
-
-  Note over N1,N3: Node 3获得多数投票，成为Leader节点，Node 1/2成为Follower
-  par 第三轮
-    N1 --&gt;&gt; N2: MyID: 1, Epoch 0, Zxid 0, Leader: 3, State: FOLLOWING
-    N1 --&gt;&gt; N3: MyID: 1, Epoch 0, Zxid 0, Leader: 3, State: FOLLOWING
-    N2 --&gt;&gt; N1: MyID: 2, Epoch 0, Zxid 0, Leader: 3, State: FOLLOWING
-    N2 --&gt;&gt; N3: MyID: 2, Epoch 0, Zxid 0, Leader: 3, State: FOLLOWING
-    N3 --&gt;&gt; N1: MyID: 3, Epoch 0, Zxid 0, Leader: 3, State: LEADING
-    N3 --&gt;&gt; N2: MyID: 3, Epoch 0, Zxid 0, Leader: 3, State: LEADING
-  end
-
-  Note over N1,N3: 投票结束，Node 3打开2888端口，Node 1/2的连接此端口</code></pre>
-
-<h2 id="状态变化"><a href="#状态变化" class="headerlink" title="状态变化"></a>状态变化</h2><p>当ZooKeeper集群结束选举之后，各个节点进入对应的LEADING&#x2F;FOLLOWING&#x2F;OBSERVING状态并创建对应的ZooKeeper，集群进入稳定状态，节点开始处理客户端读写请求，如果发生异常情况，节点将会请求新一轮投票，<br>其状态变化如下图所示</p>
-<pre><code class="highlight mermaid">stateDiagram-v2
-    [*] --&gt; RUNNING
-
-    state RUNNING &#123;
-        [*] --&gt; LOOKING
-        LOOKING --&gt; LEADING
-        LOOKING --&gt; FOLLOWING
-        LOOKING --&gt; OBSERVING
-
-        LEADING --&gt; LOOKING
-        FOLLOWING --&gt; LOOKING
-        OBSERVING --&gt; LOOKING
-    &#125;
-
-    RUNNING --&gt; [*]</code></pre>
-
-<blockquote>
-<p>一般来说当Follower节点同步Leader节点失败的时候会触发新一轮投票，比如读写超时</p>
-</blockquote>
-
+          本文简要叙述了ZooKeeper启动流程
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/blog/2022-08-19/zookeeper_start/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
