@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="kAMU49ugolq9eGexk62waD-GnFzceUrUp1lYNhfGQkM">
+  <meta name="baidu-site-verification" content="codeva-qieQPzSCYK">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.maoguangqing.site","root":"/blog/","images":"/blog/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/blog/js/config.js"></script>
+
+    <meta name="description" content="本文介绍了使用ffmpeg工具分割视频制作m3u8文件和TS文件的方法，并研究了将TS文件伪装成图片的技术以及hls.js播放器解码伪造的TS文件的一些实现细节">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HLS文件生成与伪造">
+<meta property="og:url" content="https://www.maoguangqing.site/blog/2024-05-17/hls-disguise/index.html">
+<meta property="og:site_name" content="技术回忆录">
+<meta property="og:description" content="本文介绍了使用ffmpeg工具分割视频制作m3u8文件和TS文件的方法，并研究了将TS文件伪装成图片的技术以及hls.js播放器解码伪造的TS文件的一些实现细节">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-17T06:08:36.000Z">
+<meta property="article:modified_time" content="2024-05-20T04:24:00.797Z">
+<meta property="article:author" content="维苏威的血">
+<meta property="article:tag" content="VIDEO">
+<meta property="article:tag" content="HLS">
+<meta property="article:tag" content="HTTP LIVE STREAMING">
+<meta property="article:tag" content="视频床">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.maoguangqing.site/blog/2024-05-17/hls-disguise/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.maoguangqing.site/blog/2024-05-17/hls-disguise/","path":"2024-05-17/hls-disguise/","title":"HLS文件生成与伪造"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HLS文件生成与伪造 | 技术回忆录</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FPX9Q7GCF"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1FPX9Q7GCF","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/blog/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/blog/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?6337803c29e7f7d524a0b8785e79ead0"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">技术回忆录</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">那些逝去的青春，终将被人遗忘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-sitemap"><a href="/blog/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HLS%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">HLS文件格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E4%BC%AA%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">文件伪装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE"><span class="nav-number">3.</span> <span class="nav-text">视频播放</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="维苏威的血"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">维苏威的血</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.maoguangqing.site/blog/2024-05-17/hls-disguise/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="维苏威的血">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HLS文件生成与伪造 | 技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HLS文件生成与伪造
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-05-17 14:08:36" itemprop="dateCreated datePublished" datetime="2024-05-17T14:08:36+08:00">2024-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-05-20 12:24:00" itemprop="dateModified" datetime="2024-05-20T12:24:00+08:00">2024-05-20</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>HLS(HTTP Live Streaming)是视频点播和直播应用很普遍的技术，2022年发生过服务器被灰产上传大量伪造的PNG格式的图片，图片实际内容包含了HLS视频流TS文件。这样盗版网站就可以用我们服务器的流量来做他们的盗版业务，真是无本万利。最近研究了一下为啥图片内容被修改播放器还能播放的问题。</p>
+</blockquote>
+<h2 id="HLS文件格式"><a href="#HLS文件格式" class="headerlink" title="HLS文件格式"></a>HLS文件格式</h2><p>HLS通过把视频内容拆分成多个小文件来避免传统的MP4格式文件头很大、首次加载很慢的问题。HLS包含两种文件，一个是视频索引文件m3u8，可以分多级索引，二级索引可以包含不同码率的TS（Transport Stream）文件。</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/162947124">HLS的M3U8文件介绍</a></p>
+<p>使用ffmpeg可以很方便的将视频文件生成HLS需要的m3u8索引文件和TS文件，命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将video.mp4的前一分钟视频拆分，大概每5秒一个文件</span></span><br><span class="line">ffmpeg -i data/video.mp4 -to 00:01:00 \</span><br><span class="line">    -c:v copy -c:a copy -f segment \</span><br><span class="line">    -segment_time 5 -map 0 \</span><br><span class="line">    -segment_list video.m3u8 \</span><br><span class="line">    video_%03d.ts</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件伪装"><a href="#文件伪装" class="headerlink" title="文件伪装"></a>文件伪装</h2><p>灰产往往将TS文件伪装成正常的图片文件（PNG&#x2F;JPG），然后寻找互联网上各种系统的上传漏洞，将这些TS文件上传上去，制作一个成对应的m3u8索引文件。高端一点的还会把m3u8文件也上传到另一些公司的系统里，盗版视频网站通过这些m3u8地址提供盗版视频的播放，当然用的是受害公司的服务器或者CDN流量，简直不要太坏！</p>
+<p>一般来说直接将TS文件追加到图片文件之后就可以让很多软件正常打开图片了，或者将TS数据伪装成正常图片数据块应该也可以做到。</p>
+<p>参考：<a href="./image-formats-and-disguise.md">浅谈图片格式</a></p>
+<h2 id="视频播放"><a href="#视频播放" class="headerlink" title="视频播放"></a>视频播放</h2><p>我来一直很奇怪为啥被篡改的PNG&#x2F;JPG在视频播放器里可以正常解码播放视频，看了HLS播放器<a target="_blank" rel="noopener" href="https://github.com/video-dev/hls.js">hls.js</a>的源代码并进行DEBUG之后稍微了解了一点。</p>
+<p>TS文件流中包含一个Segment，每个段包含若干个Packet，每个Packet以0x47开始，长度为188个字节，一般来说Segment中的前两个包是两种固定格式的包，分别为PAT和PMT，所以hls.js在读取TS视频流进行解码时，会将读取指针seek到Segment起始位置，忽略掉前面的数据。寻找Segment起始地址的主要判断条件是<code>data[i] == 0x47 &amp;&amp; data[i + 188] == 0x47</code>。</p>
+<p>详情见源码: </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/video-dev/hls.js/blob/master/src/demux/tsdemuxer.ts#L97">hls.js SeekOffset</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/video-dev/hls.js/blob/master/src/demux/tsdemuxer.ts#L259">hls.js</a></li>
+</ul>
+<p>从上面的代码可以看出，如果图片原始的数据中相隔188字节出现0x47的话，很容易让hls.js认为发现了Segment，而如果其后面的数据不是连续的Packet则会返回-1，相当于没有找到，解码的时候就会从0开始，这种情况解码的时候就会出现错误。</p>
+<p>所以并不是任意的图片都可以用来伪造TS文件，有几个办法来规避这个问题：</p>
+<ul>
+<li>图片尺寸尽量小，比如1X1，如果图片大小小于188字节，则根本不会出现间隔188字节出现两个0x47</li>
+<li>手动消除掉图片中的0x47值，如果图片不压缩，可以手动把图片像素中值中的0x47给替换掉，然后重新编码生成新图片</li>
+</ul>
+<p>在测试hls.js的时候，发现小图片比较容易正常工作，大图片会导致Chrome浏览器的一些appendBuffer操作失败，具体原因还不知道，或许图片数据没有被完全跳过导致的。</p>
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/6919464519387332616">HLS M3U8 TS</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/VIDEO/" rel="tag"># VIDEO</a>
+              <a href="/blog/tags/HLS/" rel="tag"># HLS</a>
+              <a href="/blog/tags/HTTP-LIVE-STREAMING/" rel="tag"># HTTP LIVE STREAMING</a>
+              <a href="/blog/tags/%E8%A7%86%E9%A2%91%E5%BA%8A/" rel="tag"># 视频床</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/2024-05-17/image-formats-and-disguise/" rel="prev" title="浅谈图片格式">
+                  <i class="fa fa-angle-left"></i> 浅谈图片格式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/2024-05-19/ip-address-and-subnet/" rel="next" title="IP地址和IP子网划分">
+                  IP地址和IP子网划分 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备2023007354号-1 </a>
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">维苏威的血</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/motion.js"></script><script src="/blog/js/sidebar.js"></script><script src="/blog/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"version":"7.1.2","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js","integrity":"sha256-stuqcu2FrjYCXDOytWFA5SoUE/r3nkp6gTglzNSlavU="}}</script>
+  <script src="/blog/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
