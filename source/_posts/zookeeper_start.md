@@ -1,7 +1,7 @@
 ---
 title: zookeeper集群节点启动流程
 date: 2022-08-19 22:24:49
-excertp: 本文简要叙述了ZooKeeper启动流程
+excerpt: 本文简要叙述了ZooKeeper启动流程
 tags:
 - Software
 - Zookeeper
