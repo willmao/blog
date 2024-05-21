@@ -29,14 +29,14 @@
 <meta property="og:description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录IP数据包路由和投递分相关知识">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-20T23:53:19.000Z">
-<meta property="article:modified_time" content="2024-05-21T00:18:44.851Z">
+<meta property="article:modified_time" content="2024-05-21T07:33:24.045Z">
 <meta property="article:author" content="维苏威的血">
 <meta property="article:tag" content="Networking">
 <meta property="article:tag" content="计算机网络">
 <meta property="article:tag" content="IP Protocol">
-<meta property="article:tag" content="IP协议">
 <meta property="article:tag" content="IP Routing">
 <meta property="article:tag" content="IP Datagram Devlivery">
+<meta property="article:tag" content="IP协议">
 <meta property="article:tag" content="IP路由">
 <meta property="article:tag" content="IP数据包分发">
 <meta name="twitter:card" content="summary">
@@ -127,7 +127,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#IP%E8%B7%AF%E7%94%B1"><span class="nav-number">1.</span> <span class="nav-text">IP路由</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#IP%E8%B7%AF%E7%94%B1"><span class="nav-number">1.</span> <span class="nav-text">IP路由</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IP%E8%B7%AF%E7%94%B1%E8%A1%A8"><span class="nav-number">1.1.</span> <span class="nav-text">IP路由表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP%E8%B7%AF%E7%94%B1%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">IP路由算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%8A%95%E9%80%92%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">数据投递方法</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -205,7 +205,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2024-05-21 07:53:19 / 修改时间：08:18:44" itemprop="dateCreated datePublished" datetime="2024-05-21T07:53:19+08:00">2024-05-21</time>
+      <time title="创建时间：2024-05-21 07:53:19 / 修改时间：15:33:24" itemprop="dateCreated datePublished" datetime="2024-05-21T07:53:19+08:00">2024-05-21</time>
     </span>
 
   
@@ -220,7 +220,145 @@
     <div class="post-body" itemprop="articleBody"><blockquote>
 <p>本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录IP数据包路由和投递分相关知识</p>
 </blockquote>
-<h2 id="IP路由"><a href="#IP路由" class="headerlink" title="IP路由"></a>IP路由</h2>
+<h2 id="IP路由"><a href="#IP路由" class="headerlink" title="IP路由"></a>IP路由</h2><p>IP层的一个重要功能就是IP路由，它提供了机制让路由器和不同的物理网络进行连接，设备可以同时扮演普通主机和路由器的角色。</p>
+<p>路由器拥有四种目标地址的信息：</p>
+<ul>
+<li>路由器直接连接网络中的主机信息</li>
+<li>路由器中显示配置的主机或者网络信息</li>
+<li>路由器接收到ICMP重定向消息的主机或者网络信息</li>
+<li>一个对所有其它目标地址的默认信息</li>
+</ul>
+<p>有两种IP路由类型：</p>
+<ul>
+<li>直接路由 目标主机和源主机通过物理网络直接相连，可以把IP数据包封装成物理网络的帧直接交换，这里路由其实是数据链路层做的，也叫接口路由</li>
+<li>间接路由 目标主机和源主机没有通过物理网络直接相连，需要通过一个或者多个IP网关才能联通，源主机仅需要知道第一个IP网关的地址信息即可发送报文给目标主机</li>
+</ul>
+<blockquote>
+<p>在TCP&#x2F;IP协议术语中，<code>网关</code>和<code>路由器</code>可以交换使用，网关表示一个承担了路由器的职责的系统</p>
+</blockquote>
+<p>直接路由可以用下列方法实现：</p>
+<ul>
+<li>二层交换机，直接通过MAC地址快速转发数据帧，这是实现直接路由的最常见方式</li>
+<li>集线器 将收集到的数据帧广播到各个端口，方法低效且容易引起冲突</li>
+<li>主机用交叉网线直接连接，可以在没有其它设备参与的情况下直接路由</li>
+</ul>
+<blockquote>
+<p>交叉网线用于连接相同设备间的连接，一端的1&#x2F;2号线连接另一端的3&#x2F;6号线，1&#x2F;2号线是发送数据，3&#x2F;6号线是接收数据，现代网络设备支持MDI&#x2F;MDIX可以自动检测网线，不管是直通网线还是交叉网线都可以正常工作</p>
+</blockquote>
+<p>同一个物理网络中可能划分了多个子网，如果源主机和目标主机在同一个物理网络中的不同子网中，需要使用间接路由来完成这两个主机之间的通信，路由器需要转发不同子网之间的流量。</p>
+<pre><code class="highlight mermaid">flowchart
+    bus&#123;&#123;网络总线&#125;&#125;
+    network((子网络))
+
+    host_a[主机A 128.10.0.2]
+    host_b[主机B 128.10.0.3]
+    host_c[主机C 128.15.0.2]
+    host_d[主机D 128.15.0.3]
+
+    host_a --&gt; bus
+    host_b --&gt; bus
+    host_b --&gt; network
+    host_c --&gt; network
+    host_d --&gt; network
+
+    network --&gt; host_b
+    bus --&gt; host_b</code></pre>
+
+<p>如图，主机A和主机B通过物理线路直接连接，主机A需要通过B和主机C&#x2F;D通信。</p>
+<h3 id="IP路由表"><a href="#IP路由表" class="headerlink" title="IP路由表"></a>IP路由表</h3><p>每个主机保存了目标IP网络编号和下一跳网关的映射信息，这些信息被保存在一个表中，称为路由表。路由表中有三种类型的映射：</p>
+<ul>
+<li>连接到本地网络的直接路由信息</li>
+<li>通过一个或者多个网关可以直达的间接路由信息</li>
+<li>IP地址在上述两种类型路由表中不存时的默认路由信息</li>
+</ul>
+<p>上图中主机D的路由表示例如下：</p>
+<table>
+<thead>
+<tr>
+<th>Dest</th>
+<th>Router</th>
+<th>Interface</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>128.10.0.0</td>
+<td>B</td>
+<td>lan0</td>
+<td>间接路由</td>
+</tr>
+<tr>
+<td>128.15.0.0</td>
+<td>D</td>
+<td>lan0</td>
+<td>直接路由</td>
+</tr>
+<tr>
+<td>127.0.0.0</td>
+<td>loopback</td>
+<td>loo</td>
+<td>本机网络</td>
+</tr>
+</tbody></table>
+<h3 id="IP路由算法"><a href="#IP路由算法" class="headerlink" title="IP路由算法"></a>IP路由算法</h3><p>IP路由算法的核心是要区分目标IP所在网络是否与本机是否直接相连的本地网络，如果本地网络，则使用直接路由，否则通过将IP数据包通过网关发送。</p>
+<pre><code class="highlight mermaid">stateDiagram-v2
+    is_subnet: 是否子网划分
+    general_is_local: 目标IP网络编号=本机IP网络编号
+    subnet_is_local: 目标IP子网 = 本机IP子网
+
+    local: 本地网络
+    gateway: 非本地网络
+    general: 常规网络
+    subnet: 子网划分网络
+    [*] --&gt; is_subnet
+    is_subnet --&gt; general: No
+    is_subnet --&gt; subnet: Yes
+
+    general --&gt; general_is_local
+    subnet --&gt; subnet_is_local
+
+    general_is_local --&gt; local: Yes
+    general_is_local --&gt; gateway: No
+    subnet_is_local --&gt; local: Yes
+    subnet_is_local --&gt; gateway: No
+
+    direct_route: 直接路由发送
+    indirect_route: 网关发送
+
+    local --&gt; direct_route
+    gateway --&gt; indirect_route
+
+    direct_route --&gt; [*]
+    indirect_route --&gt; [*]</code></pre>
+
+<blockquote>
+<p>子网划分时判断是否是本地网络的运算为：<code>bitwise_AND(dest ip, subnet mask) = bitwise_AND(my ip, subnet mask)</code>，也就是IP网络编号和子网编号要相同</p>
+</blockquote>
+<p>子网划分刚提出来时，部分网关可能不支持子网划分，那么会发生如下情况：</p>
+<ul>
+<li>主机通过网关访问子网内其它主机时将会出现问题，因为网关将看到IP数据包的网络编号和网关自己一样，将会导致数据包不能正常路由</li>
+<li>主机通过网关访问其它划分了子网的网络将可以正常工作</li>
+</ul>
+<p>IP路由不仅网关使用，所有网络中的主机也会使用，这产生了两个要求：</p>
+<ul>
+<li>所有主机必须支持IP路由算法</li>
+<li>子网中的所有主机必须拥有相同的子网掩码</li>
+</ul>
+<p>如果主机不支持子网划分，那么将会发生以下的情况：主机可以正常和自己子网中的任何机器通信却不能和其它子网中的机器通信，这是因为主机看到网络中的其它主机网络编号都和自己相同，所有IP数据包都通过本地路由发送，而本来那些和其它子网的数据包需要通过网关发送</p>
+<h2 id="数据投递方法"><a href="#数据投递方法" class="headerlink" title="数据投递方法"></a>数据投递方法</h2><p>IP数据包投递存在以下几种方法：</p>
+<ul>
+<li>单播 Unicast 一对一发送数据包，这是最主要的方式</li>
+<li>广播 BroadCast 一对多发送数据包，广播地址不能作为源地址，包括两种地址：<ul>
+<li>受限广播地址：255.255.255.255，它将向当前子网中的所有主机广播，路由器一般不转发此类数据包。除非是BOOTP转发，它主要用于无磁盘工作站访问boot server</li>
+<li>直接网络广播地址：主要用于没有子网划分的环境，将IP地址的主机编号部分全部置为1，比如128.2.255.255，它将向网络中的所有主机广播，路由器需要转发这类消息以支持ARP协议</li>
+<li>子网广播地址：子网划分环境中将IP地址主机部分置为1，将向特定子网中所有主机广播数据包，需要路由器广播</li>
+<li>所有子网广播地址：子网划分环境中将本地部分全部置为1，将向特定网络的所有子网广播，一般用不到</li>
+</ul>
+</li>
+<li>多播 使用D类IP地址来选择一些主机进行广播，避免向子网中全部主机进行低效广播，需要网络中的主机监听多播地址</li>
+<li>任播 网络中有多个主机提供相同的服务，可以提供更快的响应时间和可靠性，可以用在DNS根服务器、CDN以及分布式服务中</li>
+</ul>
+
     </div>
 
     
@@ -232,9 +370,9 @@
               <a href="/blog/tags/Networking/" rel="tag"># Networking</a>
               <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
               <a href="/blog/tags/IP-Protocol/" rel="tag"># IP Protocol</a>
-              <a href="/blog/tags/IP%E5%8D%8F%E8%AE%AE/" rel="tag"># IP协议</a>
               <a href="/blog/tags/IP-Routing/" rel="tag"># IP Routing</a>
               <a href="/blog/tags/IP-Datagram-Devlivery/" rel="tag"># IP Datagram Devlivery</a>
+              <a href="/blog/tags/IP%E5%8D%8F%E8%AE%AE/" rel="tag"># IP协议</a>
               <a href="/blog/tags/IP%E8%B7%AF%E7%94%B1/" rel="tag"># IP路由</a>
               <a href="/blog/tags/IP%E6%95%B0%E6%8D%AE%E5%8C%85%E5%88%86%E5%8F%91/" rel="tag"># IP数据包分发</a>
           </div>
