@@ -1,5 +1,5 @@
 ---
-title: ip-routing-and-delivery
+title: IP路由和投递方法
 date: 2024-05-21 07:53:19
 excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录IP数据包路由和投递分相关知识
 tags:
