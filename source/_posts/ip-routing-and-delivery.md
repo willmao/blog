@@ -1,7 +1,7 @@
 ---
-title: IP路由和投递方法
+title: IP路由和数据传输方法
 date: 2024-05-21 07:53:19
-excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录IP数据报文路由和投递分相关知识
+excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录IP数据报文路由和数据传输部分相关知识
 tags:
 - Networking
 - IP Protocol
@@ -13,7 +13,7 @@ tags:
 - IP数据报文分发
 ---
 
-> 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录IP数据报文路由和投递方法相关知识
+> 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录IP数据报文路由和数据传输方法相关知识
 
 ## IP路由
 
@@ -134,9 +134,9 @@ IP路由不仅网关使用，所有网络中的主机也会使用，这产生了
 如果主机不支持子网划分，那么将会发生以下的情况：主机可以正常和自己子网中的任何机器通信却不能和其它子网中的机器通信，这是因为主机看到网络中的其它主机网络编号都和自己相同，所有IP数据报文都通过本地路由发送，而本来那些和其它子网的数据报文需要通过网关发送
 
 
-## 数据投递方法
+## 数据传输方法
 
-IP数据报文投递存在以下几种方法：
+IP数据报文传输存在以下几种方法：
 
 - 单播 Unicast 一对一发送数据报文，这是最主要的方式
 - 广播 BroadCast 一对多发送数据报文，广播地址不能作为源地址，包括两种地址：
