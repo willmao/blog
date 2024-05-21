@@ -13,7 +13,7 @@ tags:
 - IP数据包分发
 ---
 
-> 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录IP数据包路由和投递分相关知识
+> 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录IP数据包路由和投递方法相关知识
 
 ## IP路由
 
