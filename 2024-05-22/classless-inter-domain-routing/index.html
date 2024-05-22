@@ -29,12 +29,12 @@
 <meta property="og:description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录无类别域间路由（CIDR）相关知识">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-22T06:38:27.000Z">
-<meta property="article:modified_time" content="2024-05-22T07:58:03.761Z">
+<meta property="article:modified_time" content="2024-05-22T09:39:24.444Z">
 <meta property="article:author" content="维苏威的血">
 <meta property="article:tag" content="Networking">
+<meta property="article:tag" content="计算机网络">
 <meta property="article:tag" content="IP Protocol">
 <meta property="article:tag" content="CIDR">
-<meta property="article:tag" content="计算机网络">
 <meta property="article:tag" content="IP协议">
 <meta property="article:tag" content="无类别域间路由">
 <meta name="twitter:card" content="summary">
@@ -203,7 +203,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2024-05-22 14:38:27 / 修改时间：15:58:03" itemprop="dateCreated datePublished" datetime="2024-05-22T14:38:27+08:00">2024-05-22</time>
+      <time title="创建时间：2024-05-22 14:38:27 / 修改时间：17:39:24" itemprop="dateCreated datePublished" datetime="2024-05-22T14:38:27+08:00">2024-05-22</time>
     </span>
 
   
@@ -217,7 +217,7 @@
     
     <div class="post-body" itemprop="articleBody"><p>标准IP路由只理解A&#x2F;B&#x2F;C三类网络地址，在这些网络内部，子网划分可以提供更好的收敛。然而，没有方法来定义多个C类地址相关。这导致了一个被称为<code>路由表爆炸</code>的问题。比如一个有3000个主机的B类网络在主干网络上需要一条路由表记录，而同样主机数量的多个C类地址需要12条路由表记录（3000&#x2F;254 &#x3D; 11.8 ≈ 12）。互联网中有200多万个C类IP地址，如果每个C类IP地址在主干网中都有一条路由表记录，那路由表肯定得爆炸。不光是存储压力，查询这些路由表也需要消耗大量的时间，导致路由性能很差。</p>
 <p>为了缓解路由表爆炸的问题，专家组提出了无类别域间路由（Classless Inter-Domain Routing，简称CIDR）的概念。</p>
-<h2 id="CIDR"><a href="#CIDR" class="headerlink" title="CIDR"></a>CIDR</h2><p>CIDR不根据IP地址网络编号（也就是IP类型）来路由，它仅根据IP地址的高比特位来路由，这些比特位又被称为IP前缀。</p>
+<h2 id="CIDR"><a href="#CIDR" class="headerlink" title="CIDR"></a>CIDR</h2><p>CIDR不根据IP地址网络编号（也就是IP类型）来路由，它仅根据IP地址的高比特位来路由，这些比特位又被称为IP前缀。这种技术又被叫做可变长子网掩码（VLSM），一般来说，VLSM和CIDR是可以互相替换使用。</p>
 <p>每个CIDR路由表包含32位IP地址和32位网络掩码，通过它们可以计算出IP地址的位数和前缀。如果一组连续的地址它们拥有相同的IP地址前缀，则它们可以被看成同一个网络。比如：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">11000000 00100000 10001000 00000000 = 192.32.136.0 （C类IP地址）</span><br><span class="line">11111111 11111111 1111---- -------- = 255.255.248.0 （网络掩码）</span><br><span class="line">=================================================== 逻辑与</span><br><span class="line">11000000 00100000 1001---- -------- = 192.132.136   （IP前缀）</span><br><span class="line"></span><br><span class="line">11000000 00100000 10001111 00000000 = 192.32.143.0 （C类IP地址）</span><br><span class="line">11111111 11111111 1111---- -------- = 255.255.248.0 （网络掩码）</span><br><span class="line">=================================================== 逻辑与</span><br><span class="line">11000000 00100000 1001---- -------- = 192.132.136   （IP前缀）</span><br></pre></td></tr></table></figure>
 
@@ -238,9 +238,9 @@
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/blog/tags/Networking/" rel="tag"># Networking</a>
+              <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
               <a href="/blog/tags/IP-Protocol/" rel="tag"># IP Protocol</a>
               <a href="/blog/tags/CIDR/" rel="tag"># CIDR</a>
-              <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
               <a href="/blog/tags/IP%E5%8D%8F%E8%AE%AE/" rel="tag"># IP协议</a>
               <a href="/blog/tags/%E6%97%A0%E7%B1%BB%E5%88%AB%E5%9F%9F%E9%97%B4%E8%B7%AF%E7%94%B1/" rel="tag"># 无类别域间路由</a>
           </div>
