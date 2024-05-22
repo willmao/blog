@@ -29,7 +29,7 @@
 <meta property="og:description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录无类别域间路由（CIDR）相关知识">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-22T06:38:27.000Z">
-<meta property="article:modified_time" content="2024-05-22T07:55:47.697Z">
+<meta property="article:modified_time" content="2024-05-22T07:58:03.761Z">
 <meta property="article:author" content="维苏威的血">
 <meta property="article:tag" content="Networking">
 <meta property="article:tag" content="IP Protocol">
@@ -203,7 +203,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2024-05-22 14:38:27 / 修改时间：15:55:47" itemprop="dateCreated datePublished" datetime="2024-05-22T14:38:27+08:00">2024-05-22</time>
+      <time title="创建时间：2024-05-22 14:38:27 / 修改时间：15:58:03" itemprop="dateCreated datePublished" datetime="2024-05-22T14:38:27+08:00">2024-05-22</time>
     </span>
 
   
@@ -223,7 +223,7 @@
 
 <p>上述计算表明，C类IP地址段<code>192.32.136.0-192.32.143.0</code>拥有相同的IP地址前缀<code>192.32.136.0</code>，IP前缀共有20个比特位。</p>
 <p>把多个网络地址合并成一个网络又被叫做超网，超网通过比自然网络掩码更短的网络掩码来路由，它和子网划分正好相反，子网划分使用比自然网络掩码更长的子网掩码来划分网络。通过不断合并网络到更短的网络前缀，可以极大减少主干网路由器中的路由记录数量。同时，申请到A&#x2F;B类网络地址的机构进行对网络地址细分，分给更多的组织和机构，更加充分的利用IP地址资源。</p>
-<p>比如，阿里云上的服务器的公网IP地址很多是以8或47开头的A类IP地址，这类地址在互联网发展的早期就被机构分配了，阿里云应该是拿到了它继续分割之后的某个网段。</p>
+<p>比如，阿里云上的服务器的公网IP地址很多是以8或47开头的A类IP地址，这类地址在互联网发展的早期就被机构分配了，阿里云应该是拿到了这些A类地址通过IP前缀分割之后的若干个网段。</p>
 <p>随着互联网早期的爆炸式发展，分类路由的局限性很快就暴露出来了，所以目前互联网中已经使用CIDR替换了分类路由，分类路由应该早就不存在了吧。</p>
 <blockquote>
 <p>分类路由的局限性在于IP地址中不记录掩码长度，它必须要根据网络地址的类型，得出子网掩码是8位、16还是24位。在IPV6中吸取了这个教训，在IP地址中记录了掩码长度。</p>
