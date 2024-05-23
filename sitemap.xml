@@ -11,51 +11,6 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/2023-10-11/socks5/</loc>
-    
-    <lastmod>2024-05-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/2024-05-15/ssh-dynamic-proxy/</loc>
-    
-    <lastmod>2024-05-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/2022-08-22/zookeeper-client/</loc>
-    
-    <lastmod>2024-05-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/2022-08-23/zookeeper-recipes/</loc>
-    
-    <lastmod>2024-05-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/2022-08-19/zookeeper_start/</loc>
-    
-    <lastmod>2024-05-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.maoguangqing.site/blog/2023-04-17/aliyun-cost-down/</loc>
     
     <lastmod>2024-05-23</lastmod>
@@ -119,7 +74,61 @@
   </url>
   
   <url>
+    <loc>https://www.maoguangqing.site/blog/2024-05-23/ip-datagram-format/</loc>
+    
+    <lastmod>2024-05-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.maoguangqing.site/blog/2024-05-20/ip-routing-and-delivery/</loc>
+    
+    <lastmod>2024-05-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.maoguangqing.site/blog/2023-10-11/socks5/</loc>
+    
+    <lastmod>2024-05-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.maoguangqing.site/blog/2024-05-15/ssh-dynamic-proxy/</loc>
+    
+    <lastmod>2024-05-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.maoguangqing.site/blog/2022-08-22/zookeeper-client/</loc>
+    
+    <lastmod>2024-05-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.maoguangqing.site/blog/2022-08-23/zookeeper-recipes/</loc>
+    
+    <lastmod>2024-05-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.maoguangqing.site/blog/2022-08-19/zookeeper_start/</loc>
     
     <lastmod>2024-05-23</lastmod>
     
@@ -320,6 +329,20 @@
   
   <url>
     <loc>https://www.maoguangqing.site/blog/tags/%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2/</loc>
+    <lastmod>2024-05-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.maoguangqing.site/blog/tags/IP-Datagram-Format/</loc>
+    <lastmod>2024-05-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.maoguangqing.site/blog/tags/IP%E6%95%B0%E6%8D%AE%E6%8A%A5%E6%A0%BC%E5%BC%8F/</loc>
     <lastmod>2024-05-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="kAMU49ugolq9eGexk62waD-GnFzceUrUp1lYNhfGQkM">
+  <meta name="baidu-site-verification" content="codeva-qieQPzSCYK">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.maoguangqing.site","root":"/blog/","images":"/blog/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/blog/js/config.js"></script>
+
+    <meta name="description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录IP数据报格式相关知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IP数据报格式">
+<meta property="og:url" content="https://www.maoguangqing.site/blog/2024-05-23/ip-datagram-format/index.html">
+<meta property="og:site_name" content="技术回忆录">
+<meta property="og:description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录IP数据报格式相关知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-23T01:57:47.000Z">
+<meta property="article:modified_time" content="2024-05-23T09:06:46.771Z">
+<meta property="article:author" content="维苏威的血">
+<meta property="article:tag" content="Networking">
+<meta property="article:tag" content="IP Protocol">
+<meta property="article:tag" content="计算机网络">
+<meta property="article:tag" content="IP协议">
+<meta property="article:tag" content="IP Datagram Format">
+<meta property="article:tag" content="IP数据报格式">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.maoguangqing.site/blog/2024-05-23/ip-datagram-format/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.maoguangqing.site/blog/2024-05-23/ip-datagram-format/","path":"2024-05-23/ip-datagram-format/","title":"IP数据报格式"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>IP数据报格式 | 技术回忆录</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FPX9Q7GCF"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1FPX9Q7GCF","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/blog/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/blog/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?6337803c29e7f7d524a0b8785e79ead0"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">技术回忆录</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">那些逝去的青春，终将被人遗忘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-sitemap"><a href="/blog/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#IP%E6%95%B0%E6%8D%AE%E6%8A%A5%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">IP数据报格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP%E5%88%86%E6%AE%B5"><span class="nav-number">2.</span> <span class="nav-text">IP分段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP%E8%B7%AF%E7%94%B1%E9%80%89%E9%A1%B9"><span class="nav-number">3.</span> <span class="nav-text">IP路由选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="nav-number">4.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="维苏威的血"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">维苏威的血</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.maoguangqing.site/blog/2024-05-23/ip-datagram-format/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="维苏威的血">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="IP数据报格式 | 技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IP数据报格式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-05-23 09:57:47 / 修改时间：17:06:46" itemprop="dateCreated datePublished" datetime="2024-05-23T09:57:47+08:00">2024-05-23</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>IP网络的数据传输最小单元被称为IP数据报（IP Datagram），它包含IP头和数据两个部分，IP数据报作为数据会被封装进物理网络的帧中。如下面这张ER图所示：</p>
+<pre><code class="highlight mermaid">erDiagram
+    datagram[&quot;IP Datagram&quot;] &#123;
+        bytes header
+        bytes data
+    &#125;
+
+    frame[&quot;Physical Network Frame&quot;] &#123;
+        bytes header
+        Datagram data
+    &#125;
+
+    frame ||--|| datagram : &quot;encapsulte as data&quot;</code></pre>
+
+<p>IP协议可以提供分片（fragmentation）和重组（reassembly）的功能。IP数据报最大长度为65535个字节，所有IP主机必须实现不使用分片就能传输576个字节。每个数据报分片都拥有一个头，它是从原始数据报头中拷贝过来的。一个分片数据报被当作普通的IP数据报来处理并发送到目标地址。如果某一个分片丢失了，整个数据报都会被丢弃，因为IP层没有提供确认机制，目标主机会丢掉剩下的已经收到的分片数据报。</p>
+<h2 id="IP数据报格式"><a href="#IP数据报格式" class="headerlink" title="IP数据报格式"></a>IP数据报格式</h2><p>IP数据报至少有20个字节的头部，如下面这张ER图所示：</p>
+<pre><code class="highlight mermaid">erDiagram
+    datagram[&quot;IP Datagram&quot;] &#123;
+        bits VERS           &quot;版本号，4位&quot;
+        bits HLEN           &quot;头长度，4位，单位4字节&quot;
+        bits ServiceType    &quot;请求的QOS，8位&quot;
+        bits TL             &quot;总长度，16位&quot;
+        bits ID             &quot;数据报ID，16位&quot;
+        bits FLG            &quot;标志，3位&quot;
+        bits FragmentOffset &quot;分片偏移量，13位，单位8字节&quot;
+        bits TTL            &quot;生存时间，8位，单位秒&quot;
+        bits Protocol       &quot;应用层协议编号，8位&quot;
+        bits HeaderCheckSum &quot;数据报头校验和，16位&quot;
+        bits SourceIP       &quot;源IP，32位&quot;
+        bits DestIP         &quot;目标IP，32位&quot;
+        bits Options        &quot;IP传输选项，可变长度&quot;
+        bits Padding        &quot;存在选项时填充0来让数据报头4字节对齐，可变长度&quot;
+        bits Data           &quot;数据报数据部分，可变长度&quot;
+    &#125;
+
+    tos[&quot;ServiceType&quot;] &#123;
+        bits Precedence     &quot;优先级，3位&quot;
+        bits TOS            &quot;服务类型值，4位&quot;
+        bits MBZ            &quot;保留供将来使用，1位&quot;
+    &#125;
+
+    flag[&quot;FLG&quot;] &#123;
+        bits Reserved       &quot;保留，1位&quot;
+        bits DF             &quot;不分片标志，0允许分片，1禁止分片，1位&quot;
+        bits MF             &quot;更多分片标志，最后一个分片设置为0，其它为1，1位&quot;
+    &#125;
+
+    options[&quot;Options&quot;] &#123;
+        OptionType Type     &quot;IP选项类型，1个字节&quot;
+        byte Length         &quot;选项长度，可以没有，1个字节&quot;
+        bytes Data          &quot;选项数据，可以没有，length - 2个字节&quot;
+    &#125;
+
+    option_type[&quot;OptionType&quot;] &#123;
+        bits FlagCopy       &quot;分片时是否拷贝option配置，1拷贝，0不拷贝，1位&quot;
+        bits Class          &quot;选项类型，2位&quot;
+        bits OptionNumber   &quot;选项编号，5位&quot;
+    &#125;
+
+    datagram ||--|| tos : has
+    datagram ||--|| flag : has
+    datagram ||--|| options : has
+    options  ||--|&#123; option_type : contains</code></pre>
+
+<p>ServiceType中Precedence定义了数据报的优先级，取值如下：</p>
+<ul>
+<li>000 Routine 普通 表示常规流量</li>
+<li>001 Priority 优先 表示需要优先处理数据包</li>
+<li>010 Immediate 立即 需要立即处理的数据包</li>
+<li>011 Flash 闪电 需要快速传输的数据包</li>
+<li>100 Flash Override 闪电覆盖 覆盖闪电优先级的数据包</li>
+<li>101 Critical&#x2F;ECP 重要&#x2F;应急控制优先 关键或应急控制流量数据包，优先级非常高 </li>
+<li>110 Internetwork Control 网络控制 网络间控制信息，优先级极高，通常用于路由协议数据包</li>
+<li>111 Network Control 网络控制 用于网络间控制的信息，优先级最高，通常用于关键的网络管理和控制数据包</li>
+</ul>
+<p>这些优先级允许在网络设备资源优先的情况下，根据数据包的重要性进行流量管理和排队，从而优化网络性能和可靠性。</p>
+<p>TOS字段定义服务的值：</p>
+<ul>
+<li>1000 Minimize delay 最小化延迟</li>
+<li>0100 Maximize throughput 最大化吞吐</li>
+<li>0010 Maximize reliability 最大化稳定性</li>
+<li>0001 Minimize monetary cost 最小货币成本</li>
+<li>0000 Normal service 普通服务</li>
+</ul>
+<p>Fragment Offset字段被用来协助聚合全部数据报，其值表示在前一个分片中数据部分的位置，单位是8字节。比如MTU为1500，要发送2000字节的数据，就会产生两个分片：</p>
+<ul>
+<li>第一个分片头长度为20字节，数据部分为1480字节，DF&#x3D;0 表示分片传输，MF&#x3D;1表示会有更多分片，Offset为0</li>
+<li>第二个分片头长度为20字节，数据部分为2000-1480&#x3D;520个字节，DF&#x3D;0, MF&#x3D;0表示是最后一个分片，Offset为1480&#x2F;8&#x3D;160</li>
+</ul>
+<p>Time to Live（TTL）定义数据报被允许在网络上传输的时间，以秒为单位，取值范围为0到255。每个路由器理论上需要把这个值减去它处理数据报的时间，实际上因为每个路由器处理数据报的时间都小于1秒，所以路由器每次都会对TTL值减去1秒，TTL就变成了传输跳数的指标而不是时间指标。当TTL值达到0的时候，路由器就会认为数据报在环路中循环传输并且会丢弃它。ICMP协议的部分工具利用了这个特性，比如ping和traceroute。</p>
+<p>Protocol Number（协议编号）表示发送数据报的上层协议，它包括以下取值：</p>
+<ul>
+<li>0 Reserved 保留</li>
+<li>1 Internet Control Message Protocol(ICMP)互联网控制消息协议</li>
+<li>2 Internet Group Managment(IGMP) 互联网组管理协议</li>
+<li>3 Gateway-to-Gateway Protocol(GGP) 网关对网关协议</li>
+<li>4 IP(IP encapsulation) IP封装</li>
+<li>5 Stream 流</li>
+<li>6 Transmission Control Protocol(TCP) TCP协议</li>
+<li>8 Exterior Gateway Protocol(EGP) 外部网关协议</li>
+<li>9 Interior Gateway Protocol(IGP) 内部网关协议</li>
+<li>17 User Datagram Protocol(UDP) UDP协议</li>
+<li>41 Simple Internet Protocol(SIP) 简单互联网协议</li>
+<li>50 Encapsulating Security Payload(ESP) 封装安全载荷，IPSEC协议套件之一</li>
+<li>51 Authentication Header(AH) 认证头，IPSEC协议套件之一</li>
+<li>89 Open Shortest Path First(OSPT) IGP 最短路径优先内部网关协议</li>
+</ul>
+<p>IP Option有两种格式，两种格式的类型字节格式相同：</p>
+<ul>
+<li>只有一个类型字节</li>
+<li>包含一个类型字节，一个长度字节，还有长度-2个数据字节</li>
+</ul>
+<p>IP Option中Class取值如下：</p>
+<ul>
+<li>0 控制</li>
+<li>1 保留</li>
+<li>3 调试和测量</li>
+<li>3 保留</li>
+</ul>
+<p>IP Option中选项编号取值如下：</p>
+<ul>
+<li>0 End of Option， Option结束 fc&#x3D;0, class&#x3D;0</li>
+<li>1 No Operation，没有操作 fc&#x3D;0, class&#x3D;0</li>
+<li>2 Security，安全 fc&#x3D;1, class&#x3D;0 数据长度11，数据部分为8字节，这是美国国防部要求的安全信息</li>
+<li>3 Loose source routing，松散源路由 fc&#x3D;1, class&#x3D;0 有变长数据字段</li>
+<li>4 Internet timestamp 互联网时间戳 fc&#x3D;0, class&#x3D;2 有变长数据字段，最大40个字节</li>
+<li>7 Record route 记录路由 fc&#x3D;0, class&#x3D;0 有变长数据字段</li>
+<li>8 Stream ID 流编号 fc&#x3D;1, class&#x3D;0 长度为4，数据字段为一个字节</li>
+<li>9 Strict source routing 严格源路由 fc&#x3D;1, class&#x3D;0 有变长数据字段</li>
+</ul>
+<p>Padding的作用是当存在IP Option时，因为数据长度可变，可能会导致IP数据报头不是4字节(32个比特位)的整数倍，所以需要使用Padding来填充0让它满足4字节整数倍。</p>
+<h2 id="IP分段"><a href="#IP分段" class="headerlink" title="IP分段"></a>IP分段</h2><p>当IP数据报从一个主机送到另一个主机的时候，它会经过不同的物理网络。每个物理网络都有最大帧限制，叫做Maximum Transmission Unit(MTU)，它限制了可以一个物理帧中可以存放的IP数据报的长度。当数据报文长度超过MTU时进程就要通过创建一系列小于MTU的数据报来分段。接收方聚合产生原始数据报。IP协议要求数据链路层支持最小MTU为68个字节，这是最大IP头60字节和最小数据长度8个字节之和。如果网络的MTU比这个值小，在网卡层必须支持分段和聚合，并且这个过程要对IP层透明。IP协议不要求处理超过576字节的未分段数据报，但是实际上很多实现都支持更大的值。</p>
+<p>未分段数据报中的所有分段信息字段值都为0，也就是MF&#x3D;0, Offset&#x3D;0。</p>
+<p>IP分段步骤如下：</p>
+<ul>
+<li>检查DF标志，如果为1则不允许分段，丢掉数据报并且返回ICMP错误消息</li>
+<li>根据MTU值，将数据报中的数据拆分成多个数据部分，除了最后一个部分，其它部分必须是8字节的倍数</li>
+<li>每个数据部分都放入到IP数据报中，每个数据报的头都从原始数据报中拷贝并做相应的修改：<ul>
+<li>除了最后一个分段外其它分段MF设置成1</li>
+<li>根据分段数据起始字节在原始数据中的位置计算Fragment Offset值，单位是8字节</li>
+<li>根据IP Option信息第一个类型字节中fc的值决定是否拷贝原始IP Option信息到分段中</li>
+<li>重置IP数据报中的头长度</li>
+<li>重置IP数据报中的总长度</li>
+<li>重新计算IP数据报的CheckSum</li>
+</ul>
+</li>
+<li>把所有分段数据报像普通IP数据报一样发送出去，IP层对每个数据报都独立处理，这些分段数据报可以经过不同的路由器到达目的地。通过更小的MTU网络时，它们有可能被继续分段。</li>
+</ul>
+<p>在接收端，主机通过IP数据报的ID字段将分段数据报重组成原始数据报。当第一个数据分段到达时接收主机会分配一块缓冲区，接收主机会设置一个定时器，当后续数据报分段到达时，它们的数据将会根据偏移量Offset被拷贝到缓冲区的指定位置，当所有数据分段都到达时，原始未分段数据报就重组成功了。主机会把数据报当作未分段的来交给上层应用程序处理。</p>
+<p>如果定时器超时，数据报会被丢弃。定时器初始值为IP数据报中的TTL值。</p>
+<h2 id="IP路由选项"><a href="#IP路由选项" class="headerlink" title="IP路由选项"></a>IP路由选项</h2><p>IP数据报选项中提供了两个让数据发送方显式提供路由信息的方法，让IP数据报传输时可以选择走指定路由。</p>
+<ol>
+<li><p>Loose Source Routing（LSR 松散源路由）</p>
+<p> 允许数据包在通过指定路由器（节点）之间可以经过其他任意的路由器</p>
+<p> 适用于希望数据包通过特定的关键节点，但不要求严格的路径控制的场景</p>
+</li>
+<li><p>Strict Source Routing（SSR 严格源路由）</p>
+<p> 要求数据包严格按照指定的路由器顺序传输，不允许在指定路由器之间经过其他任何路由器</p>
+<p> 适用于对数据包传输路径有严格要求的场景，需要完全按照指定的路由器顺序传输数据</p>
+</li>
+</ol>
+<blockquote>
+<p>这两种源路由技术在一些特定的网络调试、管理和控制场景中可能会用到，但在现代网络中使用较少，特别是在 IPv6 环境中，这些选项已经被弃用。</p>
+</blockquote>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://www.tcpipguide.com/free/t_IPDatagramGeneralFormat.htm">IPV4数据报格式</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Type_of_service">IPV4服务类型TOS</a></li>
+<li>ChatGPT</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/Networking/" rel="tag"># Networking</a>
+              <a href="/blog/tags/IP-Protocol/" rel="tag"># IP Protocol</a>
+              <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
+              <a href="/blog/tags/IP%E5%8D%8F%E8%AE%AE/" rel="tag"># IP协议</a>
+              <a href="/blog/tags/IP-Datagram-Format/" rel="tag"># IP Datagram Format</a>
+              <a href="/blog/tags/IP%E6%95%B0%E6%8D%AE%E6%8A%A5%E6%A0%BC%E5%BC%8F/" rel="tag"># IP数据报格式</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/2024-05-22/classless-inter-domain-routing/" rel="prev" title="无类别域间路由CIDR">
+                  <i class="fa fa-angle-left"></i> 无类别域间路由CIDR
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备2023007354号-1 </a>
+      <img src="/blog/images/beian.png" alt=""><a href="https://beian.mps.gov.cn/#/query/webSearch?code=31011702889371" rel="noopener" target="_blank">沪公网安备31011702889371 </a>
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">维苏威的血</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/motion.js"></script><script src="/blog/js/sidebar.js"></script><script src="/blog/js/next-boot.js"></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"version":"7.1.2","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js","integrity":"sha256-stuqcu2FrjYCXDOytWFA5SoUE/r3nkp6gTglzNSlavU="}}</script>
+  <script src="/blog/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
