@@ -6,9 +6,11 @@ tags:
 - Networking
 - IP Protocol
 - IP Datagram Format
+- IP Fragmentation
 - 计算机网络
 - IP协议
 - IP数据报格式
+- IP分段
 ---
 
 IP网络的数据传输最小单元被称为IP数据报（IP Datagram），它包含IP头和数据两个部分，IP数据报作为数据会被封装进物理网络的帧中。如下面这张ER图所示：
