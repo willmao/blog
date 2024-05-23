@@ -11,15 +11,6 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/2023-04-17/aliyun-cost-down/</loc>
-    
-    <lastmod>2024-05-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.maoguangqing.site/blog/2024-05-22/classless-inter-domain-routing/</loc>
     
     <lastmod>2024-05-23</lastmod>
@@ -38,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/2024-05-17/image-formats-and-disguise/</loc>
+    <loc>https://www.maoguangqing.site/blog/2023-04-17/aliyun-cost-down/</loc>
     
     <lastmod>2024-05-23</lastmod>
     
@@ -65,6 +56,15 @@
   </url>
   
   <url>
+    <loc>https://www.maoguangqing.site/blog/2024-05-17/image-formats-and-disguise/</loc>
+    
+    <lastmod>2024-05-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.maoguangqing.site/blog/2024-05-21/ip-allocation-and-nat/</loc>
     
     <lastmod>2024-05-23</lastmod>
@@ -74,7 +74,7 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/2024-05-20/ip-routing-and-delivery/</loc>
+    <loc>https://www.maoguangqing.site/blog/2024-05-23/ip-datagram-format/</loc>
     
     <lastmod>2024-05-23</lastmod>
     
@@ -83,7 +83,7 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/2024-05-23/ip-datagram-format/</loc>
+    <loc>https://www.maoguangqing.site/blog/2024-05-20/ip-routing-and-delivery/</loc>
     
     <lastmod>2024-05-23</lastmod>
     
@@ -110,7 +110,7 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/2022-08-23/zookeeper-recipes/</loc>
+    <loc>https://www.maoguangqing.site/blog/2022-08-22/zookeeper-client/</loc>
     
     <lastmod>2024-05-23</lastmod>
     
@@ -119,7 +119,7 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/2022-08-22/zookeeper-client/</loc>
+    <loc>https://www.maoguangqing.site/blog/2022-08-23/zookeeper-recipes/</loc>
     
     <lastmod>2024-05-23</lastmod>
     
@@ -146,34 +146,6 @@
 
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/tags/Alibaba-Cloud/</loc>
-    <lastmod>2024-05-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/tags/%E9%98%BF%E9%87%8C%E4%BA%91/</loc>
-    <lastmod>2024-05-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/tags/Networking/</loc>
-    <lastmod>2024-05-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/tags/IP-Protocol/</loc>
-    <lastmod>2024-05-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.maoguangqing.site/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
     <lastmod>2024-05-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -188,20 +160,6 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/tags/HTTP-Protocol/</loc>
-    <lastmod>2024-05-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/tags/HAProxy/</loc>
-    <lastmod>2024-05-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.maoguangqing.site/blog/tags/HTTP%E5%8D%8F%E8%AE%AE/</loc>
     <lastmod>2024-05-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -209,7 +167,14 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/tags/Image/</loc>
+    <loc>https://www.maoguangqing.site/blog/tags/%E9%98%BF%E9%87%8C%E4%BA%91/</loc>
+    <lastmod>2024-05-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.maoguangqing.site/blog/tags/%E8%A7%86%E9%A2%91/</loc>
     <lastmod>2024-05-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -217,27 +182,6 @@
   
   <url>
     <loc>https://www.maoguangqing.site/blog/tags/%E5%9B%BE%E7%89%87/</loc>
-    <lastmod>2024-05-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/tags/HLS/</loc>
-    <lastmod>2024-05-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/tags/Network/</loc>
-    <lastmod>2024-05-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/tags/Socks-Protocol/</loc>
     <lastmod>2024-05-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
