@@ -29,11 +29,11 @@
 <meta property="og:description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录IP地址耗尽问题和网络地址转换（NAT）部分相关知识">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-21T22:28:05.000Z">
-<meta property="article:modified_time" content="2024-05-22T09:39:24.444Z">
+<meta property="article:modified_time" content="2024-05-23T01:54:13.950Z">
 <meta property="article:author" content="维苏威的血">
 <meta property="article:tag" content="Networking">
-<meta property="article:tag" content="计算机网络">
 <meta property="article:tag" content="IP Protocol">
+<meta property="article:tag" content="计算机网络">
 <meta property="article:tag" content="IP协议">
 <meta property="article:tag" content="IP Address Allocation">
 <meta property="article:tag" content="NAT">
@@ -203,9 +203,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-05-22 06:28:05 / 修改时间：17:39:24" itemprop="dateCreated datePublished" datetime="2024-05-22T06:28:05+08:00">2024-05-22</time>
+      <time title="创建时间：2024-05-22 06:28:05" itemprop="dateCreated datePublished" datetime="2024-05-22T06:28:05+08:00">2024-05-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-05-23 09:54:13" itemprop="dateModified" datetime="2024-05-23T09:54:13+08:00">2024-05-23</time>
     </span>
 
   
@@ -242,7 +248,7 @@
 <li>172.16.0.0到172.31.0.0 16个连续的B类网络</li>
 <li>192.168.0.0到192.168.255.0. 256个连续C类网络</li>
 </ul>
-<p>任何组织可以使用上述IP地址段，因为这些地址在网络上不是唯一的，所有在公网上提供服务的路由器，会丢掉发往这些私有IP地址的数据报文。机构内部使用私有IP地址的路由器，要么公布到私有IP的路由，要么转发包含私有IP地址的数据报文到外部路由器。</p>
+<p>任何组织可以使用上述IP地址段，因为这些地址在网络上不是唯一的，所有在公网上提供服务的路由器，会丢掉发往这些私有IP地址的数据报。机构内部使用私有IP地址的路由器，要么公布到私有IP的路由，要么转发包含私有IP地址的数据报到外部路由器。</p>
 <p>被分配了私有IP地址的主机在IP层没有直接访问外部网络的能力，想要访问外部网络，必须使用应用层网关，比如SOCKS服务或者NAT（网络地址转换）。</p>
 <h2 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h2><p>NAT又被称为IP地址伪装（IP masquerading），它提供了将私有IP地址映射到官方分配的公有IP地址的能力。有三种NAT:</p>
 <ul>
@@ -251,16 +257,16 @@
 <li>NAPT 网络地址端口转换</li>
 </ul>
 <h3 id="传统NAT"><a href="#传统NAT" class="headerlink" title="传统NAT"></a>传统NAT</h3><p>传统NAT泛指所有基于NAT的技术和实现，它基于一个事实，就是私有网络中只有一部分主机需要网络，当主机需要网络访问时，就给它分配一个外部IP地址，这样就只需要少量公网IP地址就可以满足业务需求。</p>
-<h3 id="基本NAT"><a href="#基本NAT" class="headerlink" title="基本NAT"></a>基本NAT</h3><p>基本NAT拥有一个外部IP地址池，当私有IP地址需要访问外部网络时，就从IP地址池中获取一个可用外部IP地址，将IP数据报文的源地址改成这个外部IP地址，同时记录私有IP地址和外部IP地址的映射关系。当外部网络有返回报文时，根据映射关系将数据报文转发给私有IP地址。</p>
-<p>因为IP数据报文头中包含CheckSum，修改数据报文中的源IP地址将导致数据报文的CheckSum发生变化，所以CheckSum必须重新计算一次。因为存在部分协议比如FTP协议，其源IP地址在数据报文的数据中，所以基本NAT也必须要能够识别这种情况并做处理。</p>
+<h3 id="基本NAT"><a href="#基本NAT" class="headerlink" title="基本NAT"></a>基本NAT</h3><p>基本NAT拥有一个外部IP地址池，当私有IP地址需要访问外部网络时，就从IP地址池中获取一个可用外部IP地址，将IP数据报的源地址改成这个外部IP地址，同时记录私有IP地址和外部IP地址的映射关系。当外部网络有返回报文时，根据映射关系将数据报转发给私有IP地址。</p>
+<p>因为IP数据报头中包含CheckSum，修改数据报中的源IP地址将导致数据报的CheckSum发生变化，所以CheckSum必须重新计算一次。因为存在部分协议比如FTP协议，其源IP地址在数据报的数据中，所以基本NAT也必须要能够识别这种情况并做处理。</p>
 <h3 id="NAPT"><a href="#NAPT" class="headerlink" title="NAPT"></a>NAPT</h3><p>NAPT在基本NAT的基础上增加了传输标志符，比如TCP&#x2F;UDP的端口信息，或者是ICMP的查询ID信息。因为主机&#x2F;路由器可以使用65535个端口，所以NAPT极大的减少了外部IP数量的需求。</p>
-<h3 id="NAT的限制"><a href="#NAT的限制" class="headerlink" title="NAT的限制"></a>NAT的限制</h3><p>如上所述，NAT主要通过修改IP数据报文头中的源IP信息来工作，所以它存在一些限制：</p>
+<h3 id="NAT的限制"><a href="#NAT的限制" class="headerlink" title="NAT的限制"></a>NAT的限制</h3><p>如上所述，NAT主要通过修改IP数据报头中的源IP信息来工作，所以它存在一些限制：</p>
 <ul>
 <li>对于应用协议将IP地址写入IP报文数据中的情况需要特殊处理</li>
-<li>修改IP报文需要大量计算，因为每个数据报文都要检查和修改一遍</li>
-<li>同一个会话的请求和响应数据报文必须经过同一个路由器处理</li>
+<li>修改IP报文需要大量计算，因为每个数据报都要检查和修改一遍</li>
+<li>同一个会话的请求和响应数据报必须经过同一个路由器处理</li>
 <li>不能处理乱序的TCP&#x2F;UDP分段（fragment），因为只有第一个分段中包含会话信息，后续的分段中没有端口信息中，只有和第一个分段中相同的编号信息</li>
-<li>NAT在IP数据报文中修改了IP信息，IPSEC检查数据报文的完整性会失败，在IPSEC AH协议中修改任何一个比特位都会导致检查失败，IPSEC提供了ESP协议，将数据报文封装在UDP数据报文中，只检查封装报文的完整性，这也叫NAT-T（NAT Traversal，NAT穿透）</li>
+<li>NAT在IP数据报中修改了IP信息，IPSEC检查数据报的完整性会失败，在IPSEC AH协议中修改任何一个比特位都会导致检查失败，IPSEC提供了ESP协议，将数据报封装在UDP数据报中，只检查封装报文的完整性，这也叫NAT-T（NAT Traversal，NAT穿透）</li>
 </ul>
 <blockquote>
 <p>根据上面所说，NAT破坏了网络分层模型，工作在三层的IPSEC协议需要依赖四层的UDP协议才能在NAT下工作</p>
@@ -275,8 +281,8 @@
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/blog/tags/Networking/" rel="tag"># Networking</a>
-              <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
               <a href="/blog/tags/IP-Protocol/" rel="tag"># IP Protocol</a>
+              <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
               <a href="/blog/tags/IP%E5%8D%8F%E8%AE%AE/" rel="tag"># IP协议</a>
               <a href="/blog/tags/IP-Address-Allocation/" rel="tag"># IP Address Allocation</a>
               <a href="/blog/tags/NAT/" rel="tag"># NAT</a>
