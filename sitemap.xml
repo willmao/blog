@@ -11,24 +11,6 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/2024-05-22/classless-inter-domain-routing/</loc>
-    
-    <lastmod>2024-05-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/2023-04-17/aliyun-cost-down/</loc>
-    
-    <lastmod>2024-05-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.maoguangqing.site/blog/2024-02-19/get-client-ip/</loc>
     
     <lastmod>2024-05-23</lastmod>
@@ -39,6 +21,24 @@
   
   <url>
     <loc>https://www.maoguangqing.site/blog/2024-05-17/hls-disguise/</loc>
+    
+    <lastmod>2024-05-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.maoguangqing.site/blog/2024-05-22/classless-inter-domain-routing/</loc>
+    
+    <lastmod>2024-05-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.maoguangqing.site/blog/2023-04-17/aliyun-cost-down/</loc>
     
     <lastmod>2024-05-23</lastmod>
     
@@ -65,7 +65,7 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/2024-05-23/ip-datagram-format/</loc>
+    <loc>https://www.maoguangqing.site/blog/2024-05-21/ip-allocation-and-nat/</loc>
     
     <lastmod>2024-05-23</lastmod>
     
@@ -74,7 +74,7 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/2024-05-21/ip-allocation-and-nat/</loc>
+    <loc>https://www.maoguangqing.site/blog/2024-05-23/ip-datagram-format/</loc>
     
     <lastmod>2024-05-23</lastmod>
     
@@ -119,7 +119,7 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/2022-08-19/zookeeper_start/</loc>
+    <loc>https://www.maoguangqing.site/blog/2022-08-23/zookeeper-recipes/</loc>
     
     <lastmod>2024-05-23</lastmod>
     
@@ -128,7 +128,7 @@
   </url>
   
   <url>
-    <loc>https://www.maoguangqing.site/blog/2022-08-23/zookeeper-recipes/</loc>
+    <loc>https://www.maoguangqing.site/blog/2022-08-19/zookeeper_start/</loc>
     
     <lastmod>2024-05-23</lastmod>
     
@@ -153,6 +153,27 @@
   </url>
   
   <url>
+    <loc>https://www.maoguangqing.site/blog/tags/HTTP%E5%8D%8F%E8%AE%AE/</loc>
+    <lastmod>2024-05-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.maoguangqing.site/blog/tags/HAProxy/</loc>
+    <lastmod>2024-05-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.maoguangqing.site/blog/tags/%E8%A7%86%E9%A2%91/</loc>
+    <lastmod>2024-05-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.maoguangqing.site/blog/tags/IP%E5%8D%8F%E8%AE%AE/</loc>
     <lastmod>2024-05-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -161,20 +182,6 @@
   
   <url>
     <loc>https://www.maoguangqing.site/blog/tags/%E9%98%BF%E9%87%8C%E4%BA%91/</loc>
-    <lastmod>2024-05-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/tags/HTTP%E5%8D%8F%E8%AE%AE/</loc>
-    <lastmod>2024-05-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.maoguangqing.site/blog/tags/%E8%A7%86%E9%A2%91/</loc>
     <lastmod>2024-05-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
