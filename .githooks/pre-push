@@ -5,6 +5,7 @@ branch=$(git rev-parse --abbrev-ref HEAD)
 # echo $branch
 
 if [[  ${branch} == "master" ]]; then
+  pwd
   echo "正在推送master分支，自动部署hexo blog"
-  hexo generate --deploy
+  # hexo generate --deploy
 fi
