@@ -1,0 +1,10 @@
+#!/bin/sh
+
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+# echo $branch
+
+if [[  ${branch} == "master" ]]; then
+  echo "正在推送master分支，自动部署hexo blog"
+  hexo generate --deploy
+fi
