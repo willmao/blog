@@ -5,12 +5,8 @@ excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘
 tags:
 - Networking
 - IP Protocol
-- IP Address Allocation
-- NAT
 - 计算机网络
 - IP协议
-- IP地址耗尽
-- 网络地址转换
 ---
 
 ## IP地址耗尽问题

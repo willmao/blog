@@ -5,12 +5,8 @@ excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘
 tags:
 - Networking
 - IP Protocol
-- IP Routing
-- IP Datagram Devlivery
 - 计算机网络
 - IP协议
-- IP路由
-- IP数据报分发
 ---
 
 > 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录IP数据报路由和数据传输方法相关知识
