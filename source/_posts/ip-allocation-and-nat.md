@@ -3,8 +3,6 @@ title: IP地址耗尽和NAT
 date: 2024-05-22 06:28:05
 excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录IP地址耗尽问题和网络地址转换（NAT）部分相关知识
 tags:
-- Networking
-- IP Protocol
 - 计算机网络
 - IP协议
 ---

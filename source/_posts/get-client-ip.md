@@ -3,9 +3,6 @@ title: HaProxy获取客户端真实IP
 date: 2024-02-19 14:15:37
 excerpt: 本文叙述了通过代理服务器获取客户端真实IP地址的通用方法并给出了使用HaProxy在阿里云环境下获取客户端真实IP地址的配置示例
 tags:
-- Networking
-- HTTP Protocol
-- HAProxy
 - 计算机网络
 - HTTP协议
 ---

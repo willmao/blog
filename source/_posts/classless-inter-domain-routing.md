@@ -3,8 +3,6 @@ title: 无类别域间路由CIDR
 date: 2024-05-22 14:38:27
 excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录无类别域间路由（CIDR）相关知识
 tags:
-- Networking
-- IP Protocol
 - 计算机网络
 - IP协议
 ---

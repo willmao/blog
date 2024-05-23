@@ -3,8 +3,6 @@ title: IP数据报格式
 date: 2024-05-23 09:57:47
 excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录IP数据报格式和IP数据报分段相关知识
 tags:
-- Networking
-- IP Protocol
 - 计算机网络
 - IP协议
 ---
