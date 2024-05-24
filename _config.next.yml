@@ -54,8 +54,8 @@ favicon:
   # medium: /images/favicon-32x32-next.png
   # apple_touch_icon: /images/apple-touch-icon-next.png
 
-  small: /images/lfavicon-16x16.ico
-  medium: /images/favicon-32x32.ico
+  small: /images/favicon-24x24.svg
+  medium: /images/favicon-24x24.svg
   apple_touch_icon: /images/apple-touch-icon.png
   safari_pinned_tab: /images/logo.svg
   #android_manifest: /manifest.json
