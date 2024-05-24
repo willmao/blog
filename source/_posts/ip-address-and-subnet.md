@@ -3,12 +3,8 @@ title: IP地址和IP子网划分
 date: 2024-05-20 06:21:34
 excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录IP地址和IP地址子网划分相关知识
 tags:
-- Networking
-- IP Protocol
-- IP Subnet
 - 计算机网络
 - IP协议
-- IP子网划分
 ---
 
 > 最近想重新学习一下计算机网络相关的知识，从苹果图书里找到了一本免费的IBM写的《TCP/IP Tutorial and Technical Overview》。本文简要记录一下IP地址和子网划分的相关知识。
