@@ -107,11 +107,37 @@ ICMP消息Type字段常见取值：
 - 13 Timestamp Request 时间戳请求
 - 14 Timestamp Reply 时间戳应答
 
-请求回显和回显应答：
+
+请求回显和回显应答
+
+```mermaid
+erDiagram
+    echo["Echo/Reply"] {
+        byte Type               "回显请求/响应，值为8/0"
+        byte Code               "代码，值为0"
+        bytes Checksum          "检验和，2个字节"
+        bytes ID                "标识符，2个字节"
+        bytes SequenceNumber    "序号，2个字节"
+        bytes Data              "数据"
+    }
+```
 
 发起方初始化ID、序列号和数据字段后把数据报发送给目标主机，目标主机收到后将类型改成回显应答并且把数据报再发送回数据发送方。
 
-主机不可达Type字段取值必须为3，主机不可达Code有以下取值：
+
+主机不可达
+
+```mermaid
+erDiagram
+    unreachable["Destination Unreachable"] {
+        byte Type       "不可达类型，值为3"
+        byte Code       "不可达原因代码"
+        bytes Checksum  "检验和，2个字节"
+        bytes Data      "源数据报IP首部和数据的前8字节"
+    }
+```
+
+Type字段取值必须为3，主机不可达Code有以下取值：
 
 - 0 网络不可达
 - 1 主机不可达
@@ -129,7 +155,20 @@ ICMP消息Type字段常见取值：
 - 14 主机越权
 - 15 优先权剥夺生效
 
-重定向消息Type字段值必须为5，Code取值如下：
+重定向消息
+
+```mermaid
+erDiagram
+    redirect["Redirect"] {
+        byte Type       "重定向类型，值为5"
+        byte Code       "重定向原因代码"
+        bytes Checksum  "检验和，2个字节"
+        bytes RouterIP  "路由器IP"
+        bytes Data      "源数据报IP首部和数据的前8字节"
+    }
+```
+
+Type字段值必须为5，Code取值如下：
 
 - 0 针对网络的重定向报文
 - 1 针对主机的重定向报文
@@ -142,10 +181,38 @@ ICMP消息Type字段常见取值：
 
 主机也可以主动发送路由器请求消息，路由器请求消息会被向所有路由器多播地址`224.0.0.2`或受限广播地址`255.255.255.255`发送。一般来说，每3秒发送3个路由器请求消息，当主机接收到路由器通告后，就会更新自己的默认路由。
 
+超时消息
+
+```mermaid
+erDiagram
+    time_exceeded["Time Exceeded"] {
+        byte    Type        "类型，值为11"
+        byte    Code        "超时代码"
+        bytes   Checksum    "检验和，2字节"
+        bytes   Data        "源数据报IP首部和数据的前8字节"
+    }
+```
+
 超时消息Code有两种取值：
 
 - 0 传输TTL为0超时
 - 1 分片重装超时
+
+时间戳请求和应答
+
+```mermaid
+erDiagram
+    timestamp["Timestamp Request/Reply"] {
+        byte    Type            "类型，值为13/14"
+        byte    Code            "代码，值为0"
+        bytes   Checksum        "检验和，2字节"
+        bytes   ID              "标志符，2字节"
+        bytes   SequenceNumber  "序号，2字节"
+        bytes   Originate       "起始时间戳，4字节"
+        bytes   Receive         "接收时间戳，4字节，请求时未使用"
+        bytes   Transmit        "传输时间戳，4字节，请求时未使用"
+    }
+```
 
 时间戳请求和应答主要是用来诊断和测试性能，它并不是为了同步时钟（这里和维基百科所说的不同，不过从实际使用来说，ICMP确实不能高精度的同步时钟）。发送方构造一个ICMP时间戳请求消息，设置其中的起始时间戳，然后把它发出去，接收方填充接收时间和传输时间，把ICMP消息类型改成时间戳应答并且把数据报发回给发送方。如果接收时间和传输时间差异很大的话就会有两个可见的时间差，单位是毫秒，也可以使用非标准时间。
 
