@@ -27,71 +27,8 @@ ICMP消息通过IP数据报发出，IP数据报首部中协议编号设置为1�
 erDiagram
     icmp["ICMP Message"] {
         bytes Header    "IP数据报首部，没有IP选项时为20字节"
-        bytes Message   "ICMP消息体"
+        bytes Message   "ICMP消息请求/响应数据，多个字节"
     }
-
-    echo["Echo/Reply"] {
-        byte Type               "回显请求/响应，值为8/0"
-        byte Code               "代码，值为0"
-        bytes Checksum          "检验和，2个字节"
-        bytes ID                "标识符，2个字节"
-        bytes SequenceNumber    "序号，2个字节"
-        bytes Data              "数据"
-    }
-
-    unreachable["Destination Unreachable"] {
-        byte Type       "不可达类型，值为3"
-        byte Code       "不可达原因代码"
-        bytes Checksum  "检验和，2个字节"
-        bytes Data      "源数据报IP首部和数据的前8字节"
-    }
-
-    redirect["Redirect"] {
-        byte Type       "重定向类型，值为5"
-        byte Code       "重定向原因代码"
-        bytes Checksum  "检验和，2个字节"
-        bytes RouterIP  "路由器IP"
-        bytes Data      "源数据报IP首部和数据的前8字节"
-    }
-
-    router_ar["Router Advertisement/Solicitation"] {
-        byte    Type        "类型，值为9/10"
-        byte    Code        "代码，为0"
-        bytes   Checksum    "检验和，2个字节"
-        byte    Number      "编号"
-        byte    EntryLength "条目数量"
-        bytes   TTL         "存活时间，2个字节"
-        bytes   Address1    "路由器地址1，4字节"
-        bytes   Preference1 "优先级1，4字节"
-        bytes   AddressN    "路由器地址N，4字节"
-        bytes   PreferenceN "优先级N，4字节"
-    }
-
-    time_exceeded["Time Exceeded"] {
-        byte    Type        "类型，值为11"
-        byte    Code        "超时代码"
-        bytes   Checksum    "检验和，2字节"
-        bytes   Data        "源数据报IP首部和数据的前8字节"
-    }
-
-    timestamp["Timestamp Request/Reply"] {
-        byte    Type            "类型，值为13/14"
-        byte    Code            "代码，值为0"
-        bytes   Checksum        "检验和，2字节"
-        bytes   ID              "标志符，2字节"
-        bytes   SequenceNumber  "序号，2字节"
-        bytes   Originate       "起始时间戳，4字节"
-        bytes   Receive         "接收时间戳，4字节，请求时未使用"
-        bytes   Transmit        "传输时间戳，4字节，请求时未使用"
-    }
-
-    icmp ||--|| echo : has
-    icmp ||--|| unreachable : has
-    icmp ||--|| redirect : has
-    icmp ||--|| router_ar : has
-    icmp ||--|| router_ar : has
-    icmp ||--|| time_exceeded : has
-    icmp ||--|| timestamp : has
 ```
 
 ICMP消息Type字段常见取值：
