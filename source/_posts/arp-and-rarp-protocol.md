@@ -79,16 +79,16 @@ flowchart
     check_hardware_type -- Next ---> check_protocol
 
     check_protocol -- NO --> discard
-    check_protocol -- OP --> set_flag_false
+    check_protocol -- YESOP --> set_flag_false
     check_protocol -- Next ---> check_arp_cache
 
-    check_arp_cache -- OP --> update_arp_cache
+    check_arp_cache -- YESOP --> update_arp_cache
     check_arp_cache -- NO --> check_dest_address
 
     check_dest_address -- NO ---> discard
     check_dest_address --> check_flag
 
-    check_flag -- OP --> add_arp_cache
+    check_flag -- YESOP --> add_arp_cache
     check_flag -- NO ---> check_opcode
 
     check_opcode -- YES --> generate_arp_reply
@@ -99,6 +99,8 @@ flowchart
 
     ending[结束]
 ```
+
+> 上图中`YESOP`为条件为真时执行的操作
 
 ARP请求发起主机接收到ARP应答后，执行相同的处理逻辑，因此目标主机的地址信息会被更新到ARP缓存中。上层协议发送数据报的时候，ARP模块就会知道目标主机的物理地址并发出数据报。
 
