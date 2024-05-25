@@ -16,7 +16,7 @@ TCP/IP参考模型，IETF提出的参考模型，分为4层，TCP/IP协议参考
 - 应用层（application layer），比如HTTP/FTP/DNS协议
 - 传输层（transport layer）, TCP/UDP
 - 网络互连层（internet layer），IP协议
-- 网络访问（链接）层（Network Access (link) layer），以太网、WIFI等
+- 网络访问（链路）层（network access (link) layer），以太网、WIFI等
 
 ## IP地址
 
