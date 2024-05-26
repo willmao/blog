@@ -4,7 +4,6 @@ date: 2024-05-23 09:57:47
 excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录IP数据报格式和IP数据报分段相关知识
 tags:
 - 计算机网络
-- IP协议
 ---
 
 IP网络的数据传输最小单元被称为IP数据报（IP Datagram），它包含IP首部和数据两个部分，IP数据报作为数据会被封装进物理网络的帧中。如下面这张ER图所示：

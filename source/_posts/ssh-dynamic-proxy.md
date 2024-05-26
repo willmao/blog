@@ -4,7 +4,6 @@ date: 2024-05-15 22:06:06
 excerpt: 本文简要叙述了SSH协议端口转发的原理，并重点研究了SSH动态代理的实现机制，给出了一个Go语言实现的多网卡SSH协议动态代理的实现
 tags:
 - 计算机网络
-- SSH
 ---
 
 ssh是服务器管理中常用的一种远程工具，它可以在不安全的链路上提供一定程度的安全访问。它是建立在The Secure Shell Protocol上的，ssh协议主要包含Transport、Authentication和Connection三个子RFC。因为ssh协议比较普及，而且它提供了一定的安全访问链路，所以ssh协议也常被用来穿透网络。本文主要介绍ssh协议中的端口转发功能并重点介绍动态端口转发的实现方式。

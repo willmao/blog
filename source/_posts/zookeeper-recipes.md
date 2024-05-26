@@ -3,8 +3,7 @@ title: zookeeper常用场景
 date: 2022-08-23 21:08:54
 excerpt: 本文简要叙述了ZooKeeper的一些常见实用场景，比如同步屏障、分布式队列
 tags:
-- Software
-- Zookeeper
+- 软件
 ---
 
 ## 同步屏障Barrier

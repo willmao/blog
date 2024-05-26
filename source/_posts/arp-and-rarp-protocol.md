@@ -4,7 +4,6 @@ date: 2024-05-25 07:21:46
 excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录ARP/RARP协议相关知识
 tags:
 - 计算机网络
-- IP协议
 ---
 
 地址解析协议（Address Resolution Protocol, ARP）协议是与物理网络相关的标准协议，它负责把上层协议地址（IP地址）转换成物理网络地址。RARP协议和ARP协议相反，把物理网络地址转换成上层协议地址（IP地址）。

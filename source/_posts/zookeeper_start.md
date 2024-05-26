@@ -3,8 +3,7 @@ title: zookeeper集群节点启动流程
 date: 2022-08-19 22:24:49
 excerpt: 本文简要叙述了ZooKeeper启动流程
 tags:
-- Software
-- Zookeeper
+- 软件
 ---
 
 ![Zookeeper](/images/Apache_ZooKeeper_logo.svg)

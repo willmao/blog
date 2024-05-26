@@ -3,8 +3,7 @@ title: ZooKeeper客户端基本使用
 date: 2022-08-22 21:57:36
 excerpt: 本文简要叙述了Java ZooKeeper客户端的使用方法，包括构造客户端、监听节点数据变化
 tags:
-- Software
-- Zookeeper
+- 软件
 ---
 
 ![ZooKeeper](/images/Apache_ZooKeeper_logo.svg)

@@ -4,7 +4,6 @@ date: 2024-05-25 20:00:43
 excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录BOOTP协议相关知识
 tags:
 - 计算机网络
-- IP协议
 ---
 
 ## BOOTP协议简介
