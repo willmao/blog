@@ -10,7 +10,7 @@ tags:
 
 动态主机配置协议（Dynamic Host Configuration Protocol, DHCP）提供了一种通过TCP/IP网络向网络中主机传递配置信息的机制。DHCP协议基于BOOTP协议改进，增加了自动分配可重复利用的网络地址和其它配置的能力。
 
-BOOTP协议参考：[BOOTP协议](./bootstrap-protocol.md)
+BOOTP协议参考：[BOOTP协议](bootstrap-protocol)
 
 DHCP基于BOOTP发展而来，DHCP和BOOTP使用相同的端口号，服务器使用67，客户端使用68，两种协议之间支持一定的互操作性。
 
@@ -47,7 +47,7 @@ DHCP和BOOTP消息格式基本相同，除了最后一个Options字段，DHCP把
 
 DHCP消息有如下类型：
 
-- DHCPDISCOVER 客户端发出的寻找可用DHCP服务器列表
+- DHCPDISCOVER 客户端发出的寻找可用DHCP服务器列表请求
 - DHCPOFFER DHCP服务器对客户端DHCPDISCOVER消息的应答，消息中包含分配给客户端的IP地址和其它参数
 - DHCPREQUEST 客户端给一个或多个DHCP服务器发出的请求消息，主要目的：
     - 从一个DHCP服务器请求已分配IP地址的参数并忽略其它服务器的消息
