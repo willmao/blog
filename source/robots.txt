@@ -3,5 +3,5 @@ Allow: /
 Allow: /archives/
 Disallow: /tags/
 
-Sitemap: https://www.maoguangqing.site/blog/sitemap.xml
-Sitemap: https://www.maoguangqing.site/blog/baidusitemap.xml
+Sitemap: https://www.maoguangqing.site/sitemap.xml
+Sitemap: https://www.maoguangqing.site/baidusitemap.xml
