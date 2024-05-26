@@ -4,7 +4,6 @@ date: 2024-05-24 15:02:53
 excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录ICMP协议相关知识
 tags:
 - 计算机网络
-- IP协议
 ---
 
 ## ICMP协议
