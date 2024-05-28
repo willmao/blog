@@ -51,7 +51,7 @@ erDiagram
         bytes DestIPAddress     "目的IP地址，4字节"
         bytes Zero              "填充0，1字节"
         bytes Protocol          "协议编号，1字节，TCP为6"
-        bytes UDPLength         "UDP分段长度，2字节，包括TCP首部和数据部分的长度"
+        bytes UDPLength         "UDP分段长度，2字节，包括首部和数据部分的长度"
     }
 
     udp ||--|| pseudo: calculate
