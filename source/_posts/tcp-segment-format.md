@@ -12,19 +12,21 @@ TCP分段（Segment）格式如下：
 
 ```mermaid
 erDiagram
-    bytes SourcePort    "发送方端口，2字节"
-    bytes DestPort      "接收方端口，2字节"
-    bytes SeqNumber     "序列号，4字节"
-    bytes AckNumber     "确认号，4字节"
-    bits DataOffset     "数据偏移，4位，4字节为单位"
-    bits Reserved       "保留，3位"
-    bits Flags          "标志符，9位"
-    bytes Window        "窗口大小，2字节"
-    bytes Checksum      "校验和，2字节"
-    bytes UrgentPointer "紧急指针，2字节"
-    bytes Options       "选项字段，最多40字节"
-    bytes Padding       "有选项时填充到4字节对齐"
-    bytes Data          "分段数据，可变长度"
+    tcp["TCP Segment"] {
+        bytes SourcePort    "发送方端口，2字节"
+        bytes DestPort      "接收方端口，2字节"
+        bytes SeqNumber     "序列号，4字节"
+        bytes AckNumber     "确认号，4字节"
+        bits DataOffset     "数据偏移，4位，4字节为单位"
+        bits Reserved       "保留，3位"
+        bits Flags          "标志符，9位"
+        bytes Window        "窗口大小，2字节"
+        bytes Checksum      "校验和，2字节"
+        bytes UrgentPointer "紧急指针，2字节"
+        bytes Options       "选项字段，最多40字节"
+        bytes Padding       "有选项时填充到4字节对齐"
+        bytes Data          "分段数据，可变长度"
+    }
 ```
 
 SeqNumber: 分段中第一个字节的序列号，如果是SYN分段，序列号就是起始序列号（n），分段第一个字节就是n+1，这也是为啥三次握手时ACK的值是n+1
@@ -59,4 +61,3 @@ Options: 和IP数据报选项类似，本文仅列举几种重要的类型
 - 3 窗口扩大因子 取值0-14，用来把TCP窗口的值左移的位数，使窗口值翻倍。只能出现在同步报文段中，否则将会被忽略
 - 4 SackOK 发送端支持并同意使用SACK (Selective Acknowledgment)选项
 - 5 Sack选项 允许接收方通知发送方所有已经接收到的报文段，因此发送方只需要重发丢失的报文段即可。为了防止大量报文丢失导致Sack选项数据太大，只允许报告4个分段区间，Sack选项中也值应该报告最近接收到的数据段信息
-
