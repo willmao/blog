@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 Allow: /archives/
-Disallow: /tags/
+# Disallow: /tags/
 
 Sitemap: https://www.maoguangqing.site/sitemap.xml
 Sitemap: https://www.maoguangqing.site/baidusitemap.xml
