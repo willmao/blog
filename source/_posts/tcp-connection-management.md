@@ -61,7 +61,7 @@ sequenceDiagram
     client -->> client: 接收到ACK报文后进入FIN-WAIT-2状态
     server ->> client: 3 发送完数据并设置FIN标志为1，进入LAST-ACK状态
     client ->> server: 4 发送ACK报文确认收到FIN
-    client -->> client: 后进入TIME-WAIT状态，等待TTL * 2时间之后进入CLOSED状态
+    client -->> client: 进入TIME-WAIT状态，等待MSL * 2时间之后进入CLOSED状态
     server -->> server: 收到ACK报文后直接进入CLOSED状态，关闭连接
 ```
 
