@@ -30,8 +30,8 @@ sequenceDiagram
 
 服务器端执行了Socket API中的`listen`函数后，会在服务器上建立两个队列：
 
-- SYN队列 存放完成两次握手的结果，队列长度由/proc/sys/net/ipv4/tcp_max_syn_backlog决定
-- ACCEPT队列 存放完成三次握手的结果，队列长度由listen函数的参数backlog指定
+- SYN队列 存放完成两次握手的结果，队列长度由listen函数的参数backlog指定，最大值受/proc/sys/net/ipv4/tcp_max_syn_backlog限制
+- ACCEPT队列 存放完成三次握手的结果
 
 > 如果开启了syncookies选项，backlog参数将被忽略，backlog参数还受到/proc/sys/net/core/somaxconn限制，Linux 5.4开始默认4096，之前版本是128
 
