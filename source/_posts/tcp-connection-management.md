@@ -1,5 +1,5 @@
 ---
-title: TCP协议三次握手和四次分手
+title: TCP协议三次握手和四次挥手
 date: 2024-05-29 10:10:57
 excerpt: 本文根据IBM的《TCP/IP Tutorial and Technical Overview》简要摘录TCP分段相关知识
 tags:
