@@ -7,7 +7,7 @@ date: 2024-05-30 09:52:41
 
 一名10年经验仍然感觉自己很菜的老年程序员，做过前端/后端/运维开发，目前从事运维开发工作，随时失业中。
 
-## 个人小项目
+## 小项目
 
 - [个人博客](https://github.com/willmao/blog)
 - [单机版蓝绿部署](https://github.com/willmao/blue-green-deploy) 私有项目，单机版蓝绿部署，利用HAProxy切换流量
