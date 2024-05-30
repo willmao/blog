@@ -7,6 +7,8 @@ date: 2024-05-30 09:52:41
 
 一名10年经验仍然感觉自己很菜的老年程序员，做过前端/后端/运维开发，目前从事运维开发工作，随时失业中。
 
+邮箱地址：williamsofmao@gmail.com
+
 ## 小项目
 
 - [个人博客](https://github.com/willmao/blog)
