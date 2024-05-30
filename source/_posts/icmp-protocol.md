@@ -43,7 +43,7 @@ ICMP消息Type字段常见取值：
 - 13 Timestamp Request 时间戳请求
 - 14 Timestamp Reply 时间戳应答
 - 17 地址掩码请求 已弃用
-- 18 地址掩码应答已弃用
+- 18 地址掩码应答 已弃用
 
 
 请求回显和回显应答
