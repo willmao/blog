@@ -7,4 +7,3 @@ public/
 .deploy*/
 _multiconfig.yml
 yarn.lock
-package-lock.json

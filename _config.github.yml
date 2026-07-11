@@ -1,0 +1,4 @@
+# GitHub Pages project-site overrides.
+# The primary _config.yml continues to target www.maoguangqing.site.
+url: https://willmao.github.io/blog
+root: /blog/
