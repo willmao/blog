@@ -106,8 +106,8 @@ theme: next
 deploy:
 - type: rsync
   host: aliyun-web-02
-  user: devops
-  root: /data/portal
+  user: root
+  root: /srv/service-data/portal
   port: 22
   delete: true
   verbose: true
