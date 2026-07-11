@@ -885,11 +885,17 @@ vendors:
   # The CDN provider of NexT internal scripts.
   # Available values: local | jsdelivr | unpkg | cdnjs | custom
   # Warning: If you are using the latest master branch of NexT, please set `internal: local`
-  internal: cdnjs
+  internal: local
   # The default CDN provider of third-party plugins.
   # Available values: local | jsdelivr | unpkg | cdnjs | custom
   # Dependencies for `plugins: local`: https://github.com/next-theme/plugins
   plugins: cdnjs
+  # Self-host the vendors used by this site. Hexo's scripts/local-vendors.js
+  # publishes these files from their npm packages under /lib/.
+  anime: /lib/animejs/anime.min.js
+  fontawesome: /lib/fontawesome/css/all.min.css
+  animate_css: /lib/animate.css/animate.min.css
+  mermaid: /lib/mermaid/mermaid.min.js
   # Custom CDN URL
   # For example:
   # custom_cdn_url: https://cdn.jsdelivr.net/npm/${npm_name}@${version}/${minified}
