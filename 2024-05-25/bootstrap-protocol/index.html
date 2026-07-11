@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/logo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/logo.png">
+  <link rel="mask-icon" href="/blog/images/logo.png" color="#222">
+  <meta name="google-site-verification" content="kAMU49ugolq9eGexk62waD-GnFzceUrUp1lYNhfGQkM">
+  <meta name="baidu-site-verification" content="codeva-qieQPzSCYK">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"willmao.github.io","root":"/blog/","images":"/blog/images","scheme":"Pisces","darkmode":false,"version":"8.28.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/config.min.js" defer></script>
+
+    <meta name="description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录BOOTP协议相关知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BOOTP协议">
+<meta property="og:url" content="https://willmao.github.io/blog/2024-05-25/bootstrap-protocol/index.html">
+<meta property="og:site_name" content="技术回忆录">
+<meta property="og:description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录BOOTP协议相关知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-25T12:00:43.000Z">
+<meta property="article:modified_time" content="2026-07-11T03:37:48.774Z">
+<meta property="article:author" content="维苏威的血">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://willmao.github.io/blog/2024-05-25/bootstrap-protocol/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://willmao.github.io/blog/2024-05-25/bootstrap-protocol/","path":"2024-05-25/bootstrap-protocol/","title":"BOOTP协议"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>BOOTP协议 | 技术回忆录</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FPX9Q7GCF"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1FPX9Q7GCF","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/third-party/analytics/google-analytics.min.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/third-party/analytics/baidu-analytics.min.js" defer></script>
+  <script async src="https://hm.baidu.com/hm.js?6337803c29e7f7d524a0b8785e79ead0"></script>
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/utils.min.js" defer></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/motion.min.js" defer></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/sidebar.min.js" defer></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/next-boot.min.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"version":"7.1.2","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/third-party/tags/mermaid.min.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">技术回忆录</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">那些逝去的青春，终将被人遗忘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#BOOTP%E5%8D%8F%E8%AE%AE%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">BOOTP协议简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BOOTP%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">BOOTP处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BOOTP%E6%B6%88%E6%81%AF%E6%A0%BC%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">BOOTP消息格式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BOOTP%E8%BD%AC%E5%8F%91"><span class="nav-number">3.</span> <span class="nav-text">BOOTP转发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BOOTP%E7%9A%84%E4%BC%98%E5%8A%A3"><span class="nav-number">4.</span> <span class="nav-text">BOOTP的优劣</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="维苏威的血"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">维苏威的血</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://willmao.github.io/blog/2024-05-25/bootstrap-protocol/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="维苏威的血">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="BOOTP协议 | 技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BOOTP协议
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-05-25 20:00:43" itemprop="dateCreated datePublished" datetime="2024-05-25T20:00:43+08:00">2024-05-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-07-11 11:37:48" itemprop="dateModified" datetime="2026-07-11T11:37:48+08:00">2026-07-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="BOOTP协议简介"><a href="#BOOTP协议简介" class="headerlink" title="BOOTP协议简介"></a>BOOTP协议简介</h2><p>Bootstrap Protocol(BOOTP协议)可以让客户端工作站初始化时仅需要一个最小的IP实现，客户端从BOOTP服务器去获取它的IP地址、网关地址和命名服务器地址。一般来说，BOOTP客户端和服务器需要在同一个网络中，如果需要跨子网，则需要支持BOOTP转发的路由器。</p>
+<p>BOOTP最早是用来支持无盘主机通过网络远程启动作为工作站、路由器和终端的。它仅需要一个最小的、没有配置信息的IP实现，通过这个精简IP实现去获取足够的信息并开始下载启动代码。BOOTP协议没有定义如何完成下载启动代码，不过通常都是使用简单文件传输协议（Trivial File Transfer Protocol, TFTP）。虽然BOOTP主要用于无盘主机，它也被当作一种给没有手动配置网络信息的主机分发配置的机制。</p>
+<h2 id="BOOTP处理流程"><a href="#BOOTP处理流程" class="headerlink" title="BOOTP处理流程"></a>BOOTP处理流程</h2><pre><code class="highlight mermaid">sequenceDiagram
+    participant client as BOOTP Client
+    participant server as BOOTP Server
+
+    Note over client, server: 客户端试图获取网络配置信息
+    client --&gt; client: 查询自己的硬件地址
+    client -&gt;&gt; server: 发送BOOTP请求广播
+    activate server
+    server --&gt; server: 查询客户端信息并更新ARP缓存
+    server -&gt;&gt; client: 发送BOOTP应答
+    deactivate server</code></pre>
+
+<p>如上图所示，BOOTP协议的处理流程如下：</p>
+<ul>
+<li>客户端判定自己的物理地址，通常是写在硬件的ROM中，比如MAC地址</li>
+<li>BOOTP客户端使用UDP数据报发送自己的硬件地址给BOOT服务器<ul>
+<li>如果客户端知道自己的IP地址，报文中要填上它，一般情况下客户端不知道自己的IP地址，填写0.0.0.0</li>
+<li>如果客户端不知道服务器地址，就使用受限广播地址255.255.255.255，UDP端口使用67</li>
+</ul>
+</li>
+<li>BOOTP服务器接收到数据报并在配置文件中查询客户端地址，把客户端相关配置信息写入数据报中并通过UDP端口68发送给客户端<ul>
+<li>如果客户端知道自己的IP地址并在请求中填写了，服务器就直接返回给客户端</li>
+<li>如果客户端不知道自己的IP地址并在请求中填写0.0.0.0，此时服务器需要关心自己的ARP缓存信息</li>
+<li>服务器上的ARP协议不能被用来查询客户端的IP地址，因为客户端还不知道自己的IP地址因此不能正确回应ARP请求，这是一个“鸡和蛋”的问题，一般有两种解决办法：<ul>
+<li>服务器提供机制不通过ARP自生直接更新自己的ARP缓存，然后直接发送响应数据报</li>
+<li>服务器不能更新自己的ARP缓存，它必须发送一个广播应答</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>BOOPT客户端收到请求应答，客户端会记录自己的IP地址（此后它就可以正常应答ARP请求），然后就可以开始启动过程</li>
+</ul>
+<h3 id="BOOTP消息格式"><a href="#BOOTP消息格式" class="headerlink" title="BOOTP消息格式"></a>BOOTP消息格式</h3><pre><code class="highlight mermaid">erDiagram
+    bootp[&quot;BOOTP Message&quot;] &#123;
+        bytes Code                  &quot;代码，1字节&quot;
+        bytes HWType                &quot;硬件类型，1字节&quot;
+        bytes Length                &quot;长度，1字节&quot;
+        bytes Hops                  &quot;跳数，1字节&quot;
+        bytes TransactionID         &quot;事务ID，4字节&quot;
+        bytes Seconds               &quot;秒数，2字节&quot;
+        bytes FlagsField            &quot;标志，2字节&quot;
+        IP ClientIPAddress          &quot;客户端IP，4字节&quot;
+        IP YourIPAddress            &quot;你的IP，4字节&quot;
+        IP ServerIPAddress          &quot;服务器IP，4字节&quot;
+        IP RouterIPAddress           &quot;路由器IP，4字节&quot;
+        MAC ClientHardwareAddress   &quot;客户端硬件地址，16字节&quot;
+        bytes ServerHostname        &quot;服务器名称，64字节&quot;
+        bytes BootFilename          &quot;启动代码文件名称，128字节&quot;
+        bytes VendorSpecificArea    &quot;供应商特定区域，64字节&quot;
+    &#125;</code></pre>
+
+<p>Code用于标识是BOOTP请求还是应答：</p>
+<ul>
+<li>0 请求</li>
+<li>1 应答</li>
+</ul>
+<p>HWType用于标识硬件类型，比如：</p>
+<ul>
+<li>0 以太网</li>
+<li>6 IEEE 802网络</li>
+</ul>
+<p>Length 用于标识硬件地址长度，比如以太网和令牌环网络都使用6字节</p>
+<p>Hops 用于标识数据报经历的设备跳数，BOOTP客户端会把它设置成0，中转该数据报的路由器会对它进行加1，这个标识是用来检测循环的。RFC 951建议当跳数达到3时就表明存在循环。</p>
+<p>TransactionID 一个用来匹配BOOTP请求的和应答的随机数</p>
+<p>Seconds 由客户端设置的，含义是开始从客户端开始启动过程经历的秒数</p>
+<p>FlagsField 最高位用来标识请求是广播请求。其它位必须设置成0，它们被保留作将来使用。通常BOOTP服务器会试图通过单播来传输BOOTP应答消息给客户端，目标地址是BOOTP消息中<code>YourIPAddress</code>的值，消息中的MAC地址被设置成BOOTP请求消息中的客户端硬件地址。如果主机直到自己知道自己的IP地址之后才能接收到单播IP数据报，这个广播标识位必须被设置成1来指示BOOTP服务器必须通过IP和MAC地址广播来发送BOOTP应答消息。否则，这个标识位必须被设置成0。</p>
+<p>ClientIPAddress 由客户端设置，要么是自己的IP地址，要么是0.0.0.0</p>
+<p>YourIPAddress 由服务器设置，如果客户端IP地址字段值为0.0.0.0</p>
+<p>ServerIPAddress 由服务器设置</p>
+<p>RouterIPAddress BOOTP中转代理的IP地址，不是普通的路由器IP地址，当BOOTP转发请求时由转发代理设置</p>
+<p>ClientHardwareAddress 由客户端设置，服务器会通过它来判定哪个客户端在启动</p>
+<p>ServerHostname 可选的服务器主机名称，以0x00结尾</p>
+<p>BootFilename 客户端要么让这个值保持Null，要么定义一个通用名称，比如要使用的路由器启动代码类型，服务器返回适合该客户端的启动代码的完全限定名称（Fully Qualified Name），以0x00结尾</p>
+<p>VenderSpecificName 可选供应商特定区域，客户端应该总是在前4个字节填充魔法数字。如果没有使用魔法数字，客户端应该使用99.130.83.99并紧接着填写255这个数字，剩余字节填充0。此字段也可以包含BOOTP供应商异常。这些信息可以在和IP地址一起传送给正在启动的客户端。比如，客户端可以接收默认路由器地址，域名服务器地址或者子网掩码。BOOTP和DHCP(Dynamic Host Configuration Protocol)共享相同的选项，除了DHCP有一些DHCP特定的选项。</p>
+<p>BOOTP客户端处理了BOOTP应答之后，它就可以开始下载启动代码并执行整个启动流程。一般来说客户端使用简单文件传输协议（Trivial File Transfer Protocol, TFTP）来下载启动代码。对于无盘主机来说，整个启动过程通常会使用BOOTP和TFTP协议，把从ROM中加载的最小IP协议栈替换为启动代码中包括的正常的IP协议栈和正确的客户端配置信息。</p>
+<h2 id="BOOTP转发"><a href="#BOOTP转发" class="headerlink" title="BOOTP转发"></a>BOOTP转发</h2><p>BOOTP客户端使用受限广播地址来发送BOOTP请求，它需要BOOTP服务器和客户端在同一个子网内。BOOTP转发（BOOTP Forwarding）是一种让路由器跨子网转发BOOTP请求的机制。大多数路由器都支持此选项，支持BOOTP请求转发的路由器又被叫做BOOTP中转代理。</p>
+<pre><code class="highlight mermaid">sequenceDiagram
+    participant client as BOOTP Client
+    participant relay as BOOTP Relay Agent
+    participant server as BOOTP Server
+
+    Note over client, server: 客户端试图发送BOOTP请求以获取配置信息
+
+    client --&gt;&gt; server: BOOTP请求广播
+    client -&gt;&gt; relay: BOOTP请求
+    relay --&gt; relay: 检查Hops决定是否转发此请求
+    relay --&gt; relay: 检查RouterIP字段值如果为0则填充
+    relay --&gt; relay: Hops加1
+    relay -&gt;&gt; server: 转发BOOTP请求
+    server --&gt; server: 检查RouterIP是否为0，不为0则为中转请求
+    server -&gt;&gt; relay: 构造BOOTP应答请求并通过端口67发送给BOOTP中转代理
+    relay -&gt;&gt; client: 使用广播或者单播转发BOOTP应答消息给BOOTP客户端
+</code></pre>
+
+<p>一般情况下路由器会丢掉任何包含非法源地址的数据报，比如0.0.0.0，BOOTP客户端就使用了这个地址，路由器一般也会丢掉目标地址是受限广播地址的数据报。然而，BOOTP中转代理会在端口67上接受BOOTP客户端发送的上述类型的数据报。BOOTP中转代理处理BOOTP请求的流程如下：</p>
+<ul>
+<li>检查BOOTP请求的Hops值是否达到阈值来决定否转发此请求，这个阈值一般是可配置的</li>
+<li>如果中转代理决定转发此请求，则检查消息中RouterIP值是否为0，如果值为0，则填充为接收到此请求的网卡IP地址，如果值不为0则保持不变</li>
+<li>对Hops值加1</li>
+<li>转发BOOTP请求给一个或多个BOOTP服务器，这些服务器地址是预先配置好的，通常使用单播帧来转发，有些也使用广播转发</li>
+<li>当BOOTP服务器收到BOOTP请求时，如果RouterIP值不为0，则通过端口67把BOOTP响应发送给RouterIP对应的中转代理</li>
+<li>当BOOTP中转代理收到BOOTP应答时，应答消息中包含硬件类型、长度、客户端硬件地址等足够的数据链路层信息，中转代理会把应答转发给客户端。中转代理会检查广播位是否设置，如果设置了它就通过广播来转发应答消息，否则就用YourIPAddress字段对应的IP地址通过单播来转发BOOTP应答消息</li>
+</ul>
+<p>当路由器被设置成BOOTP中转代理的时候，BOOTP转发任务和路由器在子网之间转发数据报明显不同。转发BOOTP消息可以被认为路由器作为接收BOOTP消息的最终目的地址并生成新的BOOTP消息发送给其它目的地址。</p>
+<h2 id="BOOTP的优劣"><a href="#BOOTP的优劣" class="headerlink" title="BOOTP的优劣"></a>BOOTP的优劣</h2><p>BOOTP协议允许对多个主机进行集中化配置，然而它需要为每个连接到网络中的主机预先配置IP地址，即使客户端很少在线，这意味着被分配的IP地址不能回收。使用BOOTP协议也算是一种安全措施，因为BOOTP服务器只有在客户端拥有合法MAC地址的时候才给客户端分配IP地址。</p>
+<blockquote>
+<p>BOOTP协议作为DHCP协议的前身，尽管已经被DHCP协议所替代了，然而BOOTP的基本概念和设计仍然在现代网络配置中留下了重要的遗产。</p>
+</blockquote>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-cn/BOOTP">BOOTP</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-cn/%E7%AE%80%E5%8D%95%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE">TFTP</a></li>
+<li>ChatGPT</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/2024-05-24/arp-and-rarp-protocol/" rel="prev" title="ARP协议和RARP协议">
+                  <i class="fa fa-angle-left"></i> ARP协议和RARP协议
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/2024-05-26/dhcp-protocol/" rel="next" title="DHCP协议">
+                  DHCP协议 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备2023007354号-1 </a>
+      <img src="/blog/images/beian.png" alt=""><a href="https://beian.mps.gov.cn/#/query/webSearch?code=31011702889371" rel="noopener" target="_blank">沪公网安备31011702889371 </a>
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">维苏威的血</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

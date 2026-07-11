@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/logo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/logo.png">
+  <link rel="mask-icon" href="/blog/images/logo.png" color="#222">
+  <meta name="google-site-verification" content="kAMU49ugolq9eGexk62waD-GnFzceUrUp1lYNhfGQkM">
+  <meta name="baidu-site-verification" content="codeva-qieQPzSCYK">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"willmao.github.io","root":"/blog/","images":"/blog/images","scheme":"Pisces","darkmode":false,"version":"8.28.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/config.min.js" defer></script>
+
+    <meta name="description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录ICMP协议相关知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ICMP协议">
+<meta property="og:url" content="https://willmao.github.io/blog/2024-05-24/icmp-protocol/index.html">
+<meta property="og:site_name" content="技术回忆录">
+<meta property="og:description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录ICMP协议相关知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-24T07:02:53.000Z">
+<meta property="article:modified_time" content="2026-07-11T03:37:48.774Z">
+<meta property="article:author" content="维苏威的血">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://willmao.github.io/blog/2024-05-24/icmp-protocol/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://willmao.github.io/blog/2024-05-24/icmp-protocol/","path":"2024-05-24/icmp-protocol/","title":"ICMP协议"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ICMP协议 | 技术回忆录</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FPX9Q7GCF"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1FPX9Q7GCF","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/third-party/analytics/google-analytics.min.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/third-party/analytics/baidu-analytics.min.js" defer></script>
+  <script async src="https://hm.baidu.com/hm.js?6337803c29e7f7d524a0b8785e79ead0"></script>
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/utils.min.js" defer></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/motion.min.js" defer></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/sidebar.min.js" defer></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/next-boot.min.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"version":"7.1.2","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/third-party/tags/mermaid.min.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">技术回忆录</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">那些逝去的青春，终将被人遗忘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ICMP%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.</span> <span class="nav-text">ICMP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ICMP%E6%B6%88%E6%81%AF%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">ICMP消息格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ICMP%E5%BA%94%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">ICMP应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="维苏威的血"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">维苏威的血</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://willmao.github.io/blog/2024-05-24/icmp-protocol/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="维苏威的血">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ICMP协议 | 技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ICMP协议
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-05-24 15:02:53" itemprop="dateCreated datePublished" datetime="2024-05-24T15:02:53+08:00">2024-05-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-07-11 11:37:48" itemprop="dateModified" datetime="2026-07-11T11:37:48+08:00">2026-07-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="ICMP协议"><a href="#ICMP协议" class="headerlink" title="ICMP协议"></a>ICMP协议</h2><p>当路由器或者目标主机需要通知源主机正在处理的IP数据报存在错误时，它使用互联网控制消息协议(Internet Control Message Protocol, ICMP)。ICMP协议有如下特征：</p>
+<ul>
+<li>ICMP使用IP协议这让ICMP看起来像是IP协议的上层应用协议（ICMP协议消息被封装在IP数据报中）, 然而ICMP协议是IP协议的必须部分并要求所有IP协议实现必须实现ICMP协议</li>
+<li>ICMP被用来报告错误而不是让网络更可靠，数据报仍然可以被发送并且不报告它们丢失的任何错误原因。可靠性需要使用IP协议的上层协议自己实现</li>
+<li>ICMP不能被用来报告ICMP消息的错误，这避免了死循环，ICMP查询消息有其对应的响应消息格式</li>
+<li>IP数据报分段时，ICMP消息只报告第一个分段错误，也就是说ICMP消息不会指向IP数据报分段偏移量不为0的分段</li>
+<li>ICMP消息不会响应目标地址是广播&#x2F;多播地址的数据报</li>
+<li>ICMP消息不会响应没有唯一来源IP地址的数据报，比如0.0.0.0、回环地址、广播地址或多播地址</li>
+<li>RFC 792陈述ICMP消息<code>可以(can)</code>被生成用来报告IP数据报处理错误，实际上所有发生错误时路由器总是生成ICMP消息，目标主机是否生成依赖各个平台实现</li>
+</ul>
+<h3 id="ICMP消息格式"><a href="#ICMP消息格式" class="headerlink" title="ICMP消息格式"></a>ICMP消息格式</h3><p>ICMP消息通过IP数据报发出，IP数据报首部中协议编号设置为1（ICMP），服务类型设置为0（普通），ICMP消息格式如下：</p>
+<pre><code class="highlight mermaid">erDiagram
+    icmp[&quot;ICMP Message&quot;] &#123;
+        bytes Header    &quot;IP数据报首部，没有IP选项时为20字节&quot;
+        bytes Message   &quot;ICMP消息请求/响应数据，多个字节&quot;
+    &#125;</code></pre>
+
+<p>ICMP消息Type字段常见取值：</p>
+<ul>
+<li>0 Echo Reply 回显应答，ping程序使用</li>
+<li>3 Destination Unreachable 目标地址不可达</li>
+<li>5 Redirect 重定向</li>
+<li>8 Echo 请求回显, echo请求</li>
+<li>9 Router Advertisement 路由器通告</li>
+<li>10 Router Solicitation 路由器请求</li>
+<li>11 Time Exceeded ICMP超时</li>
+<li>12 Parameter Problem 参数问题，错误IP数据报首部</li>
+<li>13 Timestamp Request 时间戳请求</li>
+<li>14 Timestamp Reply 时间戳应答</li>
+<li>17 地址掩码请求 已弃用</li>
+<li>18 地址掩码应答 已弃用</li>
+</ul>
+<p>请求回显和回显应答</p>
+<pre><code class="highlight mermaid">erDiagram
+    echo[&quot;Echo/Reply&quot;] &#123;
+        byte Type               &quot;回显请求/响应，值为8/0&quot;
+        byte Code               &quot;代码，值为0&quot;
+        bytes Checksum          &quot;检验和，2个字节&quot;
+        bytes ID                &quot;标识符，2个字节&quot;
+        bytes SequenceNumber    &quot;序号，2个字节&quot;
+        bytes Data              &quot;数据&quot;
+    &#125;</code></pre>
+
+<p>发起方初始化ID、序列号和数据字段后把数据报发送给目标主机，目标主机收到后将类型改成回显应答并且把数据报再发送回数据发送方。</p>
+<p>主机不可达</p>
+<pre><code class="highlight mermaid">erDiagram
+    unreachable[&quot;Destination Unreachable&quot;] &#123;
+        byte Type       &quot;不可达类型，值为3&quot;
+        byte Code       &quot;不可达原因代码&quot;
+        bytes Checksum  &quot;检验和，2个字节&quot;
+        bytes Data      &quot;源数据报IP首部和数据的前8字节&quot;
+    &#125;</code></pre>
+
+<p>Type字段取值必须为3，主机不可达Code有以下取值：</p>
+<ul>
+<li>0 网络不可达</li>
+<li>1 主机不可达</li>
+<li>3 端口不可达</li>
+<li>4 需要分片但是DF设置成了1</li>
+<li>5 源路由失败</li>
+<li>6 目的网络未知</li>
+<li>7 目的主机未知</li>
+<li>8 源主机被隔离</li>
+<li>9 与受到管理禁控的目的网络通信</li>
+<li>10 与受到管理禁控的目的主机通信</li>
+<li>11 对于指明的服务类型，网络不可达</li>
+<li>12 对于指明的服务类型，主机不可达</li>
+<li>13 出于管理目的禁止通信</li>
+<li>14 主机越权</li>
+<li>15 优先权剥夺生效</li>
+</ul>
+<p>重定向消息</p>
+<pre><code class="highlight mermaid">erDiagram
+    redirect[&quot;Redirect&quot;] &#123;
+        byte Type       &quot;重定向类型，值为5&quot;
+        byte Code       &quot;重定向原因代码&quot;
+        bytes Checksum  &quot;检验和，2个字节&quot;
+        bytes RouterIP  &quot;路由器IP&quot;
+        bytes Data      &quot;源数据报IP首部和数据的前8字节&quot;
+    &#125;</code></pre>
+
+<p>Type字段值必须为5，Code取值如下：</p>
+<ul>
+<li>0 针对网络的重定向报文</li>
+<li>1 针对主机的重定向报文</li>
+<li>2 针对网络和服务类型的重定向报文</li>
+<li>3 针对主机和服务类型的重定向报文</li>
+</ul>
+<p>当路由器支持路由发现协议时，路由器回定期向配置的子网通告自己的IP地址，通告一般会向整个系统多播地址<code>224.0.0.1</code>或者受限广播地址<code>255.255.255.255</code>发送。默认行为是每10分钟发送一次通告，消息TTL设置为1800秒。路由器也会响应路由器请求消息。</p>
+<blockquote>
+<p>如果IP数据报中存在路由选项，则重定向消息不会被发送，即使有更加优化的路由路径。此外，重定向消息应该仅由路由器发送，目标主机不应该发送重定向消息。</p>
+</blockquote>
+<p>主机也可以主动发送路由器请求消息，路由器请求消息会被向所有路由器多播地址<code>224.0.0.2</code>或受限广播地址<code>255.255.255.255</code>发送。一般来说，每3秒发送3个路由器请求消息，当主机接收到路由器通告后，就会更新自己的默认路由。</p>
+<p>超时消息</p>
+<pre><code class="highlight mermaid">erDiagram
+    time_exceeded[&quot;Time Exceeded&quot;] &#123;
+        byte    Type        &quot;类型，值为11&quot;
+        byte    Code        &quot;超时代码&quot;
+        bytes   Checksum    &quot;检验和，2字节&quot;
+        bytes   Data        &quot;源数据报IP首部和数据的前8字节&quot;
+    &#125;</code></pre>
+
+<p>超时消息Code有两种取值：</p>
+<ul>
+<li>0 传输TTL为0超时</li>
+<li>1 分片重装超时</li>
+</ul>
+<p>时间戳请求和应答</p>
+<pre><code class="highlight mermaid">erDiagram
+    timestamp[&quot;Timestamp Request/Reply&quot;] &#123;
+        byte    Type            &quot;类型，值为13/14&quot;
+        byte    Code            &quot;代码，值为0&quot;
+        bytes   Checksum        &quot;检验和，2字节&quot;
+        bytes   ID              &quot;标志符，2字节&quot;
+        bytes   SequenceNumber  &quot;序号，2字节&quot;
+        bytes   Originate       &quot;起始时间戳，4字节&quot;
+        bytes   Receive         &quot;接收时间戳，4字节，请求时未使用&quot;
+        bytes   Transmit        &quot;传输时间戳，4字节，请求时未使用&quot;
+    &#125;</code></pre>
+
+<p>时间戳请求和应答主要是用来诊断和测试性能，它并不是为了同步时钟（这里和维基百科所说的不同，不过从实际使用来说，ICMP确实不能高精度的同步时钟）。发送方构造一个ICMP时间戳请求消息，设置其中的起始时间戳，然后把它发出去，接收方填充接收时间和传输时间，把ICMP消息类型改成时间戳应答并且把数据报发回给发送方。如果接收时间和传输时间差异很大的话就会有两个可见的时间差，单位是毫秒，也可以使用非标准时间。</p>
+<h3 id="ICMP应用"><a href="#ICMP应用" class="headerlink" title="ICMP应用"></a>ICMP应用</h3><ol>
+<li><p>Ping</p>
+<p> Ping是最简单的TCP&#x2F;IP应用程序，它发送IP数据报到特定目标地址并测量接收数据时消耗的往返时间RTT（Round Trip Time）, ping这个单词来着使用声纳探测水下物体的操作，也是Packet InterNet Groper的缩写。一般来说，测试主机可达性的第一步就是尝试ping它。随着网络安全措施的不断增强，特定的防火墙可能会禁止ICMP协议，这会导致主机不能ping通但是却还是存在部分端口可以访问。很多资深开发都不了解这个知识点，还停留在用ping程序测试端口是否正常监听，正确的办法是用<code>nc -zv dst_ip dst_port</code>。</p>
+<p> 比如我们在阿里云安全组上设置了禁止Linux ping程序使用的389端口的访问，ping主机时IP数据报会被阿里云安全组直接丢掉，ping程序会一直等待直到IP数据包超时，一般是4秒。</p>
+</li>
+<li><p>Traceroute</p>
+<p> Traceroute是被用来查明IP数据包传输到目标主机时所经过的路由器信息。Traceroute基于ICMP和UDP协议。它向目标主机发送一个TTL为1的IP数据报，第一个路由器对TTL减1，发现TTL变成了0，就会丢弃数据报并返回ICMP超时消息，因为IP数据报中包含路由器IP地址，所以Traceroute就可以知道第一个路由器IP地址了。Traceroute使用更大的TTL（+1秒）去发送数据报，不断记录路由器信息，直到数据报成功到达目标主机。Traceroute使用UDP来发送数据，Traceroute期望目标主机上没有非标准端口33434到33463的监听，当Traceroute收到ICMP端口不可达消息时，就会认为目标主机已经探测到了。</p>
+<p> Traceroute默认只探测30个路由节点。</p>
+</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%94%E7%BD%91%E6%8E%A7%E5%88%B6%E6%B6%88%E6%81%AF%E5%8D%8F%E8%AE%AE">互联网控制消息协议</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.websitepulse.com/kb/traceroute_program">Traceroute Program</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/2024-05-23/ip-datagram-format/" rel="prev" title="IP数据报格式">
+                  <i class="fa fa-angle-left"></i> IP数据报格式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/2024-05-24/arp-and-rarp-protocol/" rel="next" title="ARP协议和RARP协议">
+                  ARP协议和RARP协议 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备2023007354号-1 </a>
+      <img src="/blog/images/beian.png" alt=""><a href="https://beian.mps.gov.cn/#/query/webSearch?code=31011702889371" rel="noopener" target="_blank">沪公网安备31011702889371 </a>
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">维苏威的血</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

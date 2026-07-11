@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/logo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/logo.png">
+  <link rel="mask-icon" href="/blog/images/logo.png" color="#222">
+  <meta name="google-site-verification" content="kAMU49ugolq9eGexk62waD-GnFzceUrUp1lYNhfGQkM">
+  <meta name="baidu-site-verification" content="codeva-qieQPzSCYK">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"willmao.github.io","root":"/blog/","images":"/blog/images","scheme":"Pisces","darkmode":false,"version":"8.28.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/config.min.js" defer></script>
+
+    <meta name="description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录传输层基本概念相关知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="传输层基本概念">
+<meta property="og:url" content="https://willmao.github.io/blog/2024-05-27/transport-layer-basic-concepts/index.html">
+<meta property="og:site_name" content="技术回忆录">
+<meta property="og:description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录传输层基本概念相关知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-27T05:54:59.000Z">
+<meta property="article:modified_time" content="2026-07-11T03:37:48.775Z">
+<meta property="article:author" content="维苏威的血">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://willmao.github.io/blog/2024-05-27/transport-layer-basic-concepts/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://willmao.github.io/blog/2024-05-27/transport-layer-basic-concepts/","path":"2024-05-27/transport-layer-basic-concepts/","title":"传输层基本概念"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>传输层基本概念 | 技术回忆录</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FPX9Q7GCF"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1FPX9Q7GCF","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/third-party/analytics/google-analytics.min.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/third-party/analytics/baidu-analytics.min.js" defer></script>
+  <script async src="https://hm.baidu.com/hm.js?6337803c29e7f7d524a0b8785e79ead0"></script>
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/utils.min.js" defer></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/motion.min.js" defer></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/sidebar.min.js" defer></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/next-boot.min.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"version":"7.1.2","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/third-party/tags/mermaid.min.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">技术回忆录</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">那些逝去的青春，终将被人遗忘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3%E5%92%8C%E5%A5%97%E6%8E%A5%E5%AD%97"><span class="nav-number">1.</span> <span class="nav-text">端口和套接字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3"><span class="nav-number">1.1.</span> <span class="nav-text">端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%97%E6%8E%A5%E5%AD%97"><span class="nav-number">1.2.</span> <span class="nav-text">套接字</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP"><span class="nav-number">2.</span> <span class="nav-text">UDP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-number">3.</span> <span class="nav-text">TCP</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="维苏威的血"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">维苏威的血</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://willmao.github.io/blog/2024-05-27/transport-layer-basic-concepts/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="维苏威的血">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="传输层基本概念 | 技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          传输层基本概念
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-05-27 13:54:59" itemprop="dateCreated datePublished" datetime="2024-05-27T13:54:59+08:00">2024-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-07-11 11:37:48" itemprop="dateModified" datetime="2026-07-11T11:37:48+08:00">2026-07-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="端口和套接字"><a href="#端口和套接字" class="headerlink" title="端口和套接字"></a>端口和套接字</h2><p>端口（Ports）和套接字（Sockets）是计算机网络中的一个抽象概念，用来为主机和进程间的连接提供统一和唯一标志的方法，无论它们的平台和进程编号。</p>
+<h3 id="端口"><a href="#端口" class="headerlink" title="端口"></a>端口</h3><p>主机上的每个想和其它进程通信的进程需要通过一个或多个端口号向TCP&#x2F;IP协议套件表明自己的身份。端口使用16个比特位表示（1到65535），被主机对主机的上层协议或者应用程序表示自己将通过此端口发送数据。一般来说有两种端口类型：</p>
+<ul>
+<li>广为人知的（Well-known）的端口 端口号从1到1023，主要用于服务器，由IANA分配，大部分此类端口只能由系统进程或者超级管理员使用。它们让客户端不需要配置就能寻找到服务器。</li>
+<li>临时端口 有些客户端连接到服务器的端口不需要使用广为人知的端口，端口信息会被封装在UDP&#x2F;TCP数据报中发送给服务器，范围从1024到65535。它不需要IANA分配，普通用户可以直接使用它。</li>
+</ul>
+<h3 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h3><p>套接字接口是通信协议中的一种API接口，它提供了一种通用通信编程接口（socket API），首先在伯克利软件包（Berkeley Software Distribution，BSD）4.2中被提出，尽管没有标准化，伯克利socket API已经成为TCP&#x2F;IP网络抽象的标准实现。</p>
+<p>它包含下面术语：</p>
+<ul>
+<li>socket 一个套接字是一种特殊的文件句柄，进程使用它来向操作系统请求网络服务</li>
+<li>socket address 一个套接字地址是三元组：（协议，本地地址，本地端口），比如（tcp，192.168.1.2，8080）</li>
+<li>conversation 会话是两个进程间的通信连接抽象</li>
+<li>association 关联是定义进程间组成连接的五元组：（协议，本地地址，本地端口，远程地址，远程端口），如（tcp，192.168.1.2，1235，192.168.1.3，8080）</li>
+<li>half-association 半关联定义连接的一端信息，如（协议，本地地址，本地端口）或者（协议，远程地址，远程端口）</li>
+</ul>
+<h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><p>用户数据报协议（User Datagram Protocol, UDP）基本上是是IP协议的应用层接口，它没有为IP层增加可靠传输、流控或者错误恢复机制。它仅仅是发送和接收数据的复用器和分用器，使用端口来分发数据报给应用程序。UDP为应用程序提供了发送数据报给其它应用程序的机制，UDP层非常薄并且非常高效，然而它需要应用程序去负责错误恢复等功能。</p>
+<p>应用程序发送数据报给另一个主机一般需要定义比IP地址更具体的指标，因为数据报一般情况下是发送给特定进程而不是整个系统。UDP协议通过端口号来实现这个功能。</p>
+<pre><code class="highlight mermaid">erDiagram
+    udp[&quot;UDP Datagram&quot;] &#123;
+        bytes SourcePort    &quot;源端口，2字节&quot;
+        bytes DestPort      &quot;目的端口，2字节&quot;
+        bytes Length        &quot;数据报长度，2字节&quot;
+        bytes Checksum      &quot;校验和，2字节&quot;
+        bytes Data          &quot;数据部分，变长&quot;
+    &#125;
+
+
+    pseudo[&quot;Pseudo IP Header&quot;] &#123;
+        bytes SourceIPAddress   &quot;源IP地址，4字节&quot;
+        bytes DestIPAddress     &quot;目的IP地址，4字节&quot;
+        bytes Zero              &quot;填充0，1字节&quot;
+        bytes Protocol          &quot;协议编号，1字节，TCP为6&quot;
+        bytes UDPLength         &quot;UDP分段长度，2字节，包括首部和数据部分的长度&quot;
+    &#125;
+
+    udp ||--|| pseudo: calculate</code></pre>
+
+<p>上述UDP数据报格式中，字段含义如下：</p>
+<ul>
+<li>SourcePort 发送进程的端口号，响应也会被发送到这个端口</li>
+<li>DestPort 目标进程的端口号</li>
+<li>Length 用户数据报的长度，包括数据报首部</li>
+<li>Chcecksum 可选字段，通过对伪IP首部、UDP首部和UDP数据部分求和然后取反</li>
+</ul>
+<blockquote>
+<p>Checksum计算中把伪IP首部计算在内的原因是它可以增强UDP协议的错误检测能力，确保数据在传输过程中的完整性。如果仅计算UDP数据报的Checksum，那网络层和传输层之间错误就没办法检测，因为UDP数据是被封装在IP数据报中传输的。虽然NAT设备会修改掉IP数据报的源IP或者端口，一定程度上减弱UDP Checksum的效果，然而Checksum并不是一种安全机制，它的设计目标是错误检测，而不是防止恶意篡改。</p>
+</blockquote>
+<p>一些使用UDP的应用层协议：</p>
+<ul>
+<li>TFTP 简单文件传输协议</li>
+<li>DNS 域名解析</li>
+<li>LDAP 轻量级目录访问协议</li>
+</ul>
+<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><p>TCP为应用程序提供了比UDP协议更多的功能，比如错误恢复、流控和可靠性。TCP协议是面向连接的协议，UDP协议是无连接协议。TCP协议没有假设底层协议（比如IP协议）是可靠的，因此TCP协议需要自己来保证可靠性。TCP协议有如下特点：</p>
+<ul>
+<li>数据流传输 对应用层来说，TCP传输的是一个连续的字节流，应用层不需要管分段的事情</li>
+<li>可靠性 TCP为传输的每个字节都分配一个序号并且期待接收方返回一个确认消息（ACK）。如果ACK在超时时间内没有收到，则发送方会重新发送分段。</li>
+<li>流控 接收方发送ACK消息的时候，同时也给发送方指明它期待接收的下一个字节序号。这个字节序号是它能保证不发生问题的最大字节序号，这种机制也叫做窗口机制。</li>
+<li>多路复用 和UDP一样使用端口实现多路复用，主要依靠源IP地址和端口号来区分不同客户端，增强了网络吞吐能力</li>
+<li>逻辑连接 可靠性和流控机制需要TCP为每个数据流初始化和维护特定状态，这些特定状态的组合被称为逻辑连接，逻辑连接由发送和接收套接字唯一确定</li>
+<li>全双工 TCP可以在发送和接收两个方向上提供并发数据流传输的能力，因为发送双发的分段序号分别设置，互不干扰，所以可以同时发送数据给对方并确认对方的数据</li>
+</ul>
+<blockquote>
+<p>个人认为，面向连接和无连接的核心区别在于面向连接需要传输双方维护数据流的状态信息，连接就是状态的逻辑抽象而已</p>
+</blockquote>
+<p>使用TCP的一些常用应用层协议：</p>
+<ul>
+<li>FTP</li>
+<li>Telnet</li>
+<li>HTTP</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/2024-05-26/dhcp-protocol/" rel="prev" title="DHCP协议">
+                  <i class="fa fa-angle-left"></i> DHCP协议
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/2024-05-28/transport-window-principle/" rel="next" title="传输窗口基本原理">
+                  传输窗口基本原理 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备2023007354号-1 </a>
+      <img src="/blog/images/beian.png" alt=""><a href="https://beian.mps.gov.cn/#/query/webSearch?code=31011702889371" rel="noopener" target="_blank">沪公网安备31011702889371 </a>
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">维苏威的血</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

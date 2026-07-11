@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/logo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/logo.png">
+  <link rel="mask-icon" href="/blog/images/logo.png" color="#222">
+  <meta name="google-site-verification" content="kAMU49ugolq9eGexk62waD-GnFzceUrUp1lYNhfGQkM">
+  <meta name="baidu-site-verification" content="codeva-qieQPzSCYK">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"willmao.github.io","root":"/blog/","images":"/blog/images","scheme":"Pisces","darkmode":false,"version":"8.28.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/config.min.js" defer></script>
+
+    <meta name="description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录ARP&#x2F;RARP协议相关知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARP协议和RARP协议">
+<meta property="og:url" content="https://willmao.github.io/blog/2024-05-24/arp-and-rarp-protocol/index.html">
+<meta property="og:site_name" content="技术回忆录">
+<meta property="og:description" content="本文根据IBM的《TCP&#x2F;IP Tutorial and Technical Overview》简要摘录ARP&#x2F;RARP协议相关知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-24T23:21:46.000Z">
+<meta property="article:modified_time" content="2026-07-11T03:37:48.774Z">
+<meta property="article:author" content="维苏威的血">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://willmao.github.io/blog/2024-05-24/arp-and-rarp-protocol/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://willmao.github.io/blog/2024-05-24/arp-and-rarp-protocol/","path":"2024-05-24/arp-and-rarp-protocol/","title":"ARP协议和RARP协议"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ARP协议和RARP协议 | 技术回忆录</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FPX9Q7GCF"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-1FPX9Q7GCF","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/third-party/analytics/google-analytics.min.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/third-party/analytics/baidu-analytics.min.js" defer></script>
+  <script async src="https://hm.baidu.com/hm.js?6337803c29e7f7d524a0b8785e79ead0"></script>
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/utils.min.js" defer></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/motion.min.js" defer></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/sidebar.min.js" defer></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/next-boot.min.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"version":"7.1.2","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-next/8.28.0/third-party/tags/mermaid.min.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">技术回忆录</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">那些逝去的青春，终将被人遗忘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ARP%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.</span> <span class="nav-text">ARP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ARP%E5%8D%8F%E8%AE%AE%E6%95%B0%E6%8D%AE%E5%8C%85"><span class="nav-number">1.1.</span> <span class="nav-text">ARP协议数据包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ARP%E6%95%B0%E6%8D%AE%E5%8C%85%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">ARP数据包处理流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Proxy-ARP"><span class="nav-number">1.3.</span> <span class="nav-text">Proxy-ARP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RARP%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.</span> <span class="nav-text">RARP协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="维苏威的血"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">维苏威的血</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://willmao.github.io/blog/2024-05-24/arp-and-rarp-protocol/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="维苏威的血">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ARP协议和RARP协议 | 技术回忆录">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ARP协议和RARP协议
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-05-25 07:21:46" itemprop="dateCreated datePublished" datetime="2024-05-25T07:21:46+08:00">2024-05-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-07-11 11:37:48" itemprop="dateModified" datetime="2026-07-11T11:37:48+08:00">2026-07-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>地址解析协议（Address Resolution Protocol, ARP）协议是与物理网络相关的标准协议，它负责把上层协议地址（IP地址）转换成物理网络地址。RARP协议和ARP协议相反，把物理网络地址转换成上层协议地址（IP地址）。</p>
+<h2 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h2><p>在单个物理网络中，每个主机通过物理硬件地址和网络中的其它地址通信。上层协议地址是以一种符号地址被记录的（IP地址）。当主机想向另一个IP地址是w.x.y.z的主机发送IP数据报时，网卡驱动器不理解这个地址的含义。</p>
+<p>因此，物理网络层提供了ARP模块来将IP地址翻译成物理网络地址，ARP模块使用一个查询表（也叫ARP缓存）来进行这个翻译操作。当IP地址在ARP缓存中不存在时，ARP模块就会发送一个ARP请求的广播。如果网络中某一个主机的IP地址和ARP请求中的IP地址相同，它就会发送ARP应答给ARP请求发起主机，ARP应答中包含发送方主机的物理地址和源路由信息（如果数据报跨越了网桥）。发起主机会把目标主机的物理地址和路由信息存储在ARP缓存中，接下来的所有到该目标主机的数据报就可以转换成物理地址，网卡驱动器就可以发送IP数据报了。</p>
+<blockquote>
+<p>一个例外的情况就是异步传输模式（Asynchronous Transfer Mode, ATM），ARP请求不能像上述过程一样被实现。因此ATM网络中的主机在初始化的时候必须显式注册ARP服务器来解析IP地址到物理地址。</p>
+</blockquote>
+<p>ARP协议定义在RFC 826中，它仅仅描述了ARP协议的功能，并没有定义它的实现。它的实现很大程度上依赖对特定网络类型的网卡驱动，功能一般集成在网卡微代码中。</p>
+<blockquote>
+<p>虽然ARP协议用来解析IP地址和MAC地址的映射关系，看起来是工作在网络层，然而它的操作是在数据链路层，其实现的代码也是在网卡驱动中，它应该属于数据链路层。</p>
+</blockquote>
+<h3 id="ARP协议数据包"><a href="#ARP协议数据包" class="headerlink" title="ARP协议数据包"></a>ARP协议数据包</h3><p>当应用程序想向特定IP地址发送数据时，IP路由机制首先就会决定数据报的下一跳IP地址和需要使用哪个网卡来发送数据。ARP模块试图从ARP缓存中查询下一跳对应的48位物理地址（MAC地址），如果ARP缓存中没找到，它会暂存数据报，然后生成ARP请求数据包并在网络中进行广播，得到ARP应答之后网卡从应答数据包中提取IP地址和MAC地址并更新ARP缓存，然后将暂存的数据报发送给目标MAC。</p>
+<p>ARP数据包的格式如下：</p>
+<pre><code class="highlight mermaid">erDiagram
+    arp[&quot;ARP Request/Reply&quot;] &#123;
+        bytes DestAddress           &quot;目标以太网地址，6字节，ff:ff:ff:ff:ff:ff，广播地址&quot;
+        bytes SourceAddress         &quot;源以太网地址，6字节&quot;
+        bytes FrameType             &quot;物理帧类型，2字节&quot;
+        bytes HardwareType          &quot;硬件类型，2字节&quot;
+        bytes ProtocolType          &quot;协议类型，2字节&quot;
+        bytes HardwareAddressLength &quot;硬件地址长度，1字节&quot;
+        bytes ProtocolAddressLength &quot;协议地址长度，1字节&quot;
+        bytes OperationCode         &quot;操作码，2字节&quot;
+        bytes SourceHardwareAddress &quot;源硬件地址，6字节&quot;
+        bytes SourceProtocolAddress &quot;源协议地址，4字节&quot;
+        bytes DestHardwareAddress   &quot;目标硬件地址，6字节&quot;
+        bytes DestHardwareAddress   &quot;目标协议地址，4字节&quot;
+    &#125;
+</code></pre>
+
+<p>协议类型取值为IP或ARP</p>
+<p>操作码取值为：</p>
+<ul>
+<li>1 ARP请求</li>
+<li>2 ARP应答</li>
+</ul>
+<p>源协议&#x2F;目标协议地址，当使用TCP&#x2F;IP协议的时候，它们就是IPV4地址。</p>
+<h3 id="ARP数据包处理流程"><a href="#ARP数据包处理流程" class="headerlink" title="ARP数据包处理流程"></a>ARP数据包处理流程</h3><pre><code class="highlight mermaid">flowchart
+    start[开始]
+    check_hardware_type[本机是否拥有指定硬件类型？]
+    check_protocol[本机是否支持协议？]
+    check_arp_cache[协议/发送方是否在本机ARP缓存中？]
+    check_dest_address[本机是否时目标协议地址？]
+    check_flag[flag是否为false？]
+    check_opcode[是否是ARP请求？]
+
+    discard[丢包]
+    set_flag_false[设置flag=false]
+    update_arp_cache[ARP缓存更新中发起方MAC地址，设置flag=true]
+    add_arp_cache[ARP缓存中新增发起方信息]
+    generate_arp_reply[构造ARP应答数据包]
+
+    start--&gt; check_hardware_type
+    check_hardware_type -- NO ---&gt; discard
+    check_hardware_type -- Next ---&gt; check_protocol
+
+    check_protocol -- NO --&gt; discard
+    check_protocol -- YESOP --&gt; set_flag_false
+    check_protocol -- Next ---&gt; check_arp_cache
+
+    check_arp_cache -- YESOP --&gt; update_arp_cache
+    check_arp_cache -- NO --&gt; check_dest_address
+
+    check_dest_address -- NO ---&gt; discard
+    check_dest_address --&gt; check_flag
+
+    check_flag -- YESOP --&gt; add_arp_cache
+    check_flag -- NO ---&gt; check_opcode
+
+    check_opcode -- YES --&gt; generate_arp_reply
+    check_opcode -- NO ---&gt; discard
+
+    generate_arp_reply --&gt; ending
+    discard --&gt; ending
+
+    ending[结束]</code></pre>
+
+<blockquote>
+<p>上图中<code>YESOP</code>为条件为真时执行的操作</p>
+</blockquote>
+<p>ARP请求发起主机接收到ARP应答后，执行相同的处理逻辑，因此目标主机的地址信息会被更新到ARP缓存中。上层协议发送数据报的时候，ARP模块就会知道目标主机的物理地址并发出数据报。</p>
+<p>ARP缓存采用老化机制，在一段时间内如果ARP表某一行没有被使用，就会被删除，这样可以减少ARP缓存的大小，加快查询速度。</p>
+<p>有一种特殊的ARP请求，被称为无回报的ARP请求（Gratuitous ARP），它向网络中的主机发送ARP请求查询自己的IP地址，主机向网络中发送这种ARP请求来确定自己的IP地址是唯一可用，作用：</p>
+<ul>
+<li>确定网络中是否有其它主机使用了该IP，如果有应答则产生错误消息</li>
+<li>更新其它主机的ARP缓存，网络中的其它主机收到此类ARP请求后可以（具体以来平台实现）将该ARP请求中的IP地址和MAC地址更新到ARP缓存中，不过为了防止ARP欺骗攻击，一般需要更多的安全检查</li>
+</ul>
+<h3 id="Proxy-ARP"><a href="#Proxy-ARP" class="headerlink" title="Proxy-ARP"></a>Proxy-ARP</h3><p>当网络进行了子网划分时，ARP协议处理逻辑不变，因为每个IP数据报首先要经过IP路由算法，路由算法选择使用哪个网卡发送数据报，此后ARP模块和网卡驱动的MAC地址开始关联。</p>
+<p>Proxy-ARP协议是构建子网划分的另一种方法，它通过修改路由器的路由算法来避免修改原始的IP路由算法，主机不需要识别子网划分。</p>
+<p>当一个物理网络划分了不同子网之后，不同子网中的主机不需要知道子网划分的存在，它们之间的跨子网通信流程如下图所示：</p>
+<pre><code class="highlight mermaid">sequenceDiagram
+    participant A as 主机A/192.168.1.2
+    participant R as Router
+    participant B as 主机B/192.168.2.2
+
+    Note over A, B: 主机A准备发送IP数据报给B
+
+    A -&gt;&gt; R: 发送ARP请求广播询问B的MAC地址
+    A --&gt;&gt; B: 发送ARP请求广播询问B的MAC地址，B不会收到ARP请求
+    R -&gt;&gt; A: 目标地址在另一个子网中且存在，将路由器MAC地址作为ARP应答返回给A
+    A -&gt;&gt; R: 将发送给B的数据报发送给路由器R
+    R -&gt;&gt; B: 路由器转发数据报给B</code></pre>
+
+<p>上述过程过程就是透明子网划分：</p>
+<ul>
+<li>普通主机（A&#x2F;B）不知道子网的存在，它们仍然仅使用网络编号进行路由</li>
+<li>子网之间的路由器必须支持：<ul>
+<li>子网划分路由算法</li>
+<li>ARP模块需要修改，需要可以代替其它主机应答跨子网ARP请求</li>
+</ul>
+</li>
+</ul>
+<h2 id="RARP协议"><a href="#RARP协议" class="headerlink" title="RARP协议"></a>RARP协议</h2><p>逆地址解析协议（Reverse Address Resolution Protocol，RARP）是一种网络相关的协议，被被用来将MAC地址转换成IP地址。</p>
+<p>有些主机，比如无盘工作站，当启动时不知道自己的IP地址。为了确定自己的IP地址，它们使用一种和ARP协议类似的协议，不过主机MAC地址作为已知参数，IP地址作为查询参数。它和ARP协议的根本区别是RARP服务器必须在网络中存在，并要提前配置一个保存了物理地址和协议地址映射的数据库。</p>
+<p>RARP查询和ARP查询工作方法相同，它们的数据包格式也相同，不过数据包中使用了不同的操作代码：</p>
+<ul>
+<li>3 RARP请求</li>
+<li>4 RARP应答</li>
+</ul>
+<p>此外，RARP数据包的物理帧类型是0x8035，ARP是0x0806。</p>
+<p>它们概念上的不同导致了以下特性：</p>
+<ul>
+<li>ARP协议仅假设每个主机都知道自己的物理地址和协议地址，RARP协议需要一个或多个主机维护物理地址和协议地址的数据库</li>
+<li>因为RARP的数据库可能很大，RARP服务器的部分功能通常由网卡微代码意外的其它进程实现，网卡驱动负责接收和传输RARP帧</li>
+<li>RARP数据库由其它软件手动创建和更新</li>
+<li>网络中可能存在多个RARP服务器，RARP请求发起方仅使用第一个RARP应答并会丢掉其它的应答</li>
+</ul>
+<p>注释：</p>
+<p>在计算机网络中，datagram和packet通常解释为：</p>
+<ul>
+<li>datagram 数据报，通常用于描述在不可靠传输协议（如UDP）中独立传输的数据单元</li>
+<li>packet 数据包，则是一个更广泛的术语，可以用于描述在各种网络协议（包括TCP和UDP）中传输的数据单元</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%9C%B0%E5%9D%80%E8%A7%A3%E6%9E%90%E5%8D%8F%E8%AE%AE">地址解析协议</a></li>
+<li>ChatGPT</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/2024-05-24/icmp-protocol/" rel="prev" title="ICMP协议">
+                  <i class="fa fa-angle-left"></i> ICMP协议
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/2024-05-25/bootstrap-protocol/" rel="next" title="BOOTP协议">
+                  BOOTP协议 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备2023007354号-1 </a>
+      <img src="/blog/images/beian.png" alt=""><a href="https://beian.mps.gov.cn/#/query/webSearch?code=31011702889371" rel="noopener" target="_blank">沪公网安备31011702889371 </a>
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">维苏威的血</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
