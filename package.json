@@ -30,7 +30,7 @@
     "hexo-renderer-stylus": "^3.0.0",
     "hexo-server": "^3.0.0",
     "hexo-theme-next": "^8.28.0",
-    "mermaid": "^11.16.0"
+    "mermaid": "^11.17.1"
   },
   "devDependencies": {
     "hexo-deployer-rsync": "^3.0.0"
